@@ -5,7 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: '/app_kas_bendahara_ipl/',
+    base: '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
