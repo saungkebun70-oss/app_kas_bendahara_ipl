@@ -1,4 +1,4 @@
-import type { DatabaseState, ResidentUnit } from '../types/finance';
+import type { DatabaseState, ResidentUnit } from '../types/finance.ts';
 import { formatMonthLabel, formatRupiah } from './finance.ts';
 
 export interface ResidentQRISPaymentInfo {
@@ -13,7 +13,6 @@ export interface ResidentQRISPaymentInfo {
   qrisImageUrl: string;
   qrisFileName: string;
 }
-
 const DEFAULT_EVALUATION_MONTHS = ['2026-07', '2026-08', '2026-09', '2026-10'];
 const ALL_SEMESTER_MONTHS = ['2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
 
