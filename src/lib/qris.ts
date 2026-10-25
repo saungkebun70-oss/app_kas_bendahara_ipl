@@ -1,5 +1,5 @@
 import type { DatabaseState, ResidentUnit } from '../types/finance';
-import { formatMonthLabel, formatRupiah } from './finance';
+import { formatMonthLabel, formatRupiah } from './finance.ts';
 
 export interface ResidentQRISPaymentInfo {
   unitId: string;
