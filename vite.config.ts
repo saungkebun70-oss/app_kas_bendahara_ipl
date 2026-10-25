@@ -5,7 +5,6 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // Tambahkan baris base ini sesuai dengan nama repository GitHub Anda
     base: '/app_kas_bendahara_ipl/',
     plugins: [react(), tailwindcss()],
     resolve: {
