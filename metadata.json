@@ -1,0 +1,8 @@
+{
+  "name": "Saung Kebun Finance",
+  "description": "Manage residential dues, track real-time balances, automate WhatsApp billing, and generate quarterly PDF financial reports for 55 units.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
