@@ -7,7 +7,7 @@ import type {
   LedgerTransaction,
   ResidentUnit,
   SecurityGuardReport,
-} from '../types/finance';
+} from '../types/finance.ts';
 
 export const INDONESIAN_MONTHS = [
   'Januari',
@@ -871,5 +871,5 @@ export function getPublishedSecurityReports(
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export { getUnitUnpaidMonths } from './qris';
+export { getUnitUnpaidMonths } from './qris.ts';
 
