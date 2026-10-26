@@ -569,7 +569,7 @@ test('resident payment confirmation submission and admin approval lifecycle crea
 
   // Approve confirmation
   pendingConfirmation.status = 'DISETUJUI';
-  pendingConfirmation.verifiedBy = 'Ratna Sari Dewi, S.E. (Bendahara)';
+  pendingConfirmation.verifiedBy = 'Andriansyah (Bendahara)';
   pendingConfirmation.verifiedAt = new Date().toISOString();
   pendingConfirmation.resultingReceiptNumber = receiptNo;
 
@@ -585,7 +585,7 @@ test('resident payment confirmation submission and admin approval lifecycle crea
     unitId: pendingConfirmation.unitId,
     paymentMethod: pendingConfirmation.paymentMethod,
     description: `Pembayaran Iuran 1 Bulan (2026-10) Unit A-05 via konfirmasi transfer warga`,
-    recordedBy: `Verifikasi Admin: Ratna Sari Dewi, S.E. (Bendahara)`,
+    recordedBy: `Verifikasi Admin: Andriansyah (Bendahara)`,
     createdAt: new Date().toISOString(),
   });
 

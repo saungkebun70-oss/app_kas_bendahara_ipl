@@ -134,7 +134,7 @@
       "block": "A",
       "houseNumber": "09",
       "streetName": "Jl. Saung Melati",
-      "headOfFamily": "Ratna Sari Dewi, S.E.",
+      "headOfFamily": "Andriansyah",
       "nik": "3201011906881009",
       "kkNumber": "3201010409192009",
       "whatsapp": "0878-8410-3296",
@@ -904,7 +904,7 @@
       "unitId": "A-01",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-01 (Erlangga) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0001",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -918,7 +918,7 @@
       "unitId": "A-02",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-02 (Budi Santoso) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0002",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -932,7 +932,7 @@
       "unitId": "A-03",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-03 (Dr. Rina Kusumawardhani) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0003",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -946,7 +946,7 @@
       "unitId": "A-04",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-04 (Agus Pratama Putra) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0004",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -960,7 +960,7 @@
       "unitId": "A-05",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-05 (Dedi Kurniawan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0005",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -974,7 +974,7 @@
       "unitId": "A-06",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-06 (Siti Nurhaliza Rahma) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0006",
       "createdAt": "2026-07-06T09:00:00.000Z"
     },
@@ -988,7 +988,7 @@
       "unitId": "A-07",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-07 (Ir. Bambang Suryono) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0007",
       "createdAt": "2026-07-07T09:00:00.000Z"
     },
@@ -1002,7 +1002,7 @@
       "unitId": "A-08",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-08 (Fajar Nugroho) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0008",
       "createdAt": "2026-07-08T09:00:00.000Z"
     },
@@ -1015,8 +1015,8 @@
       "amount": 100000,
       "unitId": "A-09",
       "paymentMethod": "Transfer BCA Kas",
-      "description": "Iuran bulanan lingkungan A-09 (Ratna Sari Dewi, S.E.) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "description": "Iuran bulanan lingkungan A-09 (Andriansyah) periode 2026-07",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0009",
       "createdAt": "2026-07-09T09:00:00.000Z"
     },
@@ -1030,7 +1030,7 @@
       "unitId": "A-10",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-10 (Eko Prasetyo) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0010",
       "createdAt": "2026-07-10T09:00:00.000Z"
     },
@@ -1044,7 +1044,7 @@
       "unitId": "A-11",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-11 (Lukman Hakim) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0011",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -1058,7 +1058,7 @@
       "unitId": "A-12",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-12 (Wahyu Hidayatullah) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0012",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -1072,7 +1072,7 @@
       "unitId": "A-13",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-13 (Yuniarti Puspitasari) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0013",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -1086,7 +1086,7 @@
       "unitId": "A-14",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-14 (Rizky Ramadhan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0014",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -1100,7 +1100,7 @@
       "unitId": "A-15",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-15 (Taufik Ismail) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0015",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1114,7 +1114,7 @@
       "unitId": "B-01",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-01 (Irfan Maulana) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0016",
       "createdAt": "2026-07-06T09:00:00.000Z"
     },
@@ -1128,7 +1128,7 @@
       "unitId": "B-02",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-02 (Hendra Gunawan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0017",
       "createdAt": "2026-07-07T09:00:00.000Z"
     },
@@ -1142,7 +1142,7 @@
       "unitId": "B-03",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-03 (Dewi Sartika Putri) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0018",
       "createdAt": "2026-07-08T09:00:00.000Z"
     },
@@ -1156,7 +1156,7 @@
       "unitId": "B-04",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-04 (Arif Budiman, M.M.) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0019",
       "createdAt": "2026-07-09T09:00:00.000Z"
     },
@@ -1170,7 +1170,7 @@
       "unitId": "B-05",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-05 (Surya Darmawan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0020",
       "createdAt": "2026-07-10T09:00:00.000Z"
     },
@@ -1184,7 +1184,7 @@
       "unitId": "B-06",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-06 (Nadia Permatasari) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0021",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -1198,7 +1198,7 @@
       "unitId": "B-07",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-07 (Joko Susilo) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0022",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -1212,7 +1212,7 @@
       "unitId": "B-08",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-08 (Fitriani Hasanah) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0023",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -1226,7 +1226,7 @@
       "unitId": "B-09",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-09 (Reza Pahlevi) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0024",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -1240,7 +1240,7 @@
       "unitId": "B-10",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-10 (Antonius Wijaya) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0025",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1254,7 +1254,7 @@
       "unitId": "B-11",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-11 (Sri Wahyuni) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0026",
       "createdAt": "2026-07-06T09:00:00.000Z"
     },
@@ -1268,7 +1268,7 @@
       "unitId": "B-12",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-12 (Dimas Anggara) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0027",
       "createdAt": "2026-07-07T09:00:00.000Z"
     },
@@ -1282,7 +1282,7 @@
       "unitId": "B-13",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-13 (Muhamad Ridwan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0028",
       "createdAt": "2026-07-08T09:00:00.000Z"
     },
@@ -1296,7 +1296,7 @@
       "unitId": "B-14",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-14 (Lestari Handayani) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0029",
       "createdAt": "2026-07-09T09:00:00.000Z"
     },
@@ -1310,7 +1310,7 @@
       "unitId": "B-15",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-15 (Bayu Setiawan) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0030",
       "createdAt": "2026-07-10T09:00:00.000Z"
     },
@@ -1324,7 +1324,7 @@
       "unitId": "C-01",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-01 (Adi Nugraha) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0031",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -1338,7 +1338,7 @@
       "unitId": "C-02",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-02 (Kartika Chandra) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0032",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -1352,7 +1352,7 @@
       "unitId": "C-03",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-03 (Zulkifli Mansyur) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0033",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -1366,7 +1366,7 @@
       "unitId": "C-04",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-04 (Indah Permata Sari) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0034",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -1380,7 +1380,7 @@
       "unitId": "C-05",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-05 (Heri Susanto) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0035",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1394,7 +1394,7 @@
       "unitId": "C-06",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-06 (Gita Savitri) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0036",
       "createdAt": "2026-07-06T09:00:00.000Z"
     },
@@ -1408,7 +1408,7 @@
       "unitId": "C-07",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-07 (Yusuf Mansurudin) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0037",
       "createdAt": "2026-07-07T09:00:00.000Z"
     },
@@ -1422,7 +1422,7 @@
       "unitId": "C-08",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-08 (Putri Ayu Lestari) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0038",
       "createdAt": "2026-07-08T09:00:00.000Z"
     },
@@ -1436,7 +1436,7 @@
       "unitId": "C-09",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-09 (Andi Firmansyah) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0039",
       "createdAt": "2026-07-09T09:00:00.000Z"
     },
@@ -1450,7 +1450,7 @@
       "unitId": "C-10",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-10 (Denny Sumargo Putra) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0040",
       "createdAt": "2026-07-10T09:00:00.000Z"
     },
@@ -1464,7 +1464,7 @@
       "unitId": "C-11",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-11 (Novi Rahmawati) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0041",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -1478,7 +1478,7 @@
       "unitId": "C-12",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-12 (Candra Wijaya) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0042",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -1492,7 +1492,7 @@
       "unitId": "C-13",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-13 (Samsul Bahri) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0043",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -1506,7 +1506,7 @@
       "unitId": "C-14",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-14 (Maya Estianty Putri) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0044",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -1520,7 +1520,7 @@
       "unitId": "C-15",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-15 (Rama Pradipta) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0045",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1534,7 +1534,7 @@
       "unitId": "D-01",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-01 (Kurnia Meiga Saputra) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0046",
       "createdAt": "2026-07-06T09:00:00.000Z"
     },
@@ -1548,7 +1548,7 @@
       "unitId": "D-02",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-02 (Galih Ginanjar) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0047",
       "createdAt": "2026-07-07T09:00:00.000Z"
     },
@@ -1562,7 +1562,7 @@
       "unitId": "D-03",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-03 (Ayu Tingkir Sari) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0048",
       "createdAt": "2026-07-08T09:00:00.000Z"
     },
@@ -1576,7 +1576,7 @@
       "unitId": "D-04",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-04 (Bagus Purwanto) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0049",
       "createdAt": "2026-07-09T09:00:00.000Z"
     },
@@ -1590,7 +1590,7 @@
       "unitId": "D-05",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-05 (Farhan Syahputra) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0050",
       "createdAt": "2026-07-10T09:00:00.000Z"
     },
@@ -1604,7 +1604,7 @@
       "unitId": "D-06",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-06 (Wulan Guritno Putri) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0051",
       "createdAt": "2026-07-01T09:00:00.000Z"
     },
@@ -1618,7 +1618,7 @@
       "unitId": "D-07",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-07 (Teguh Karya) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0052",
       "createdAt": "2026-07-02T09:00:00.000Z"
     },
@@ -1632,7 +1632,7 @@
       "unitId": "D-08",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-08 (Dian Sastrowardoyo) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0053",
       "createdAt": "2026-07-03T09:00:00.000Z"
     },
@@ -1646,7 +1646,7 @@
       "unitId": "D-09",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-09 (Anwar Sanusi) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0054",
       "createdAt": "2026-07-04T09:00:00.000Z"
     },
@@ -1660,7 +1660,7 @@
       "unitId": "D-10",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-10 (Melati Kusuma) periode 2026-07",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0055",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1674,7 +1674,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Kontribusi pemakaian Pendopo Saung Kebun untuk acara keluarga Blok B",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0056",
       "createdAt": "2026-07-14T09:00:00.000Z"
     },
@@ -1688,7 +1688,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Token listrik PJU gerbang utama, pos jaga, dan pompa air taman Saung Kebun",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0057",
       "createdAt": "2026-07-05T09:00:00.000Z"
     },
@@ -1702,7 +1702,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Pemangkasan pohon peneduh, pupuk tanaman kebun warga, dan solar mesin rumput",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0058",
       "createdAt": "2026-07-18T09:00:00.000Z"
     },
@@ -1716,7 +1716,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Retribusi pengangkutan sampah 55 rumah (2x seminggu) & kantong pilah",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0059",
       "createdAt": "2026-07-25T09:00:00.000Z"
     },
@@ -1730,7 +1730,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Honorarium petugas keamanan shift siang & malam (2 personel) Juli 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0060",
       "createdAt": "2026-07-28T09:00:00.000Z"
     },
@@ -1744,7 +1744,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Cetak buku kas, kwitansi cadangan, dan konsumsi rapat pengurus bulanan",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0061",
       "createdAt": "2026-07-30T09:00:00.000Z"
     },
@@ -1758,7 +1758,7 @@
       "unitId": "A-01",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-01 (Erlangga) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0062",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -1772,7 +1772,7 @@
       "unitId": "A-02",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-02 (Budi Santoso) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0063",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -1786,7 +1786,7 @@
       "unitId": "A-03",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-03 (Dr. Rina Kusumawardhani) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0064",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -1800,7 +1800,7 @@
       "unitId": "A-04",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-04 (Agus Pratama Putra) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0065",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -1814,7 +1814,7 @@
       "unitId": "A-05",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-05 (Dedi Kurniawan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0066",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -1828,7 +1828,7 @@
       "unitId": "A-06",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-06 (Siti Nurhaliza Rahma) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0067",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -1842,7 +1842,7 @@
       "unitId": "A-07",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-07 (Ir. Bambang Suryono) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0068",
       "createdAt": "2026-08-07T09:00:00.000Z"
     },
@@ -1856,7 +1856,7 @@
       "unitId": "A-08",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-08 (Fajar Nugroho) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0069",
       "createdAt": "2026-08-08T09:00:00.000Z"
     },
@@ -1869,8 +1869,8 @@
       "amount": 100000,
       "unitId": "A-09",
       "paymentMethod": "Transfer BCA Kas",
-      "description": "Iuran bulanan lingkungan A-09 (Ratna Sari Dewi, S.E.) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "description": "Iuran bulanan lingkungan A-09 (Andriansyah) periode 2026-08",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0070",
       "createdAt": "2026-08-09T09:00:00.000Z"
     },
@@ -1884,7 +1884,7 @@
       "unitId": "A-10",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-10 (Eko Prasetyo) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0071",
       "createdAt": "2026-08-10T09:00:00.000Z"
     },
@@ -1898,7 +1898,7 @@
       "unitId": "A-11",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-11 (Lukman Hakim) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0072",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -1912,7 +1912,7 @@
       "unitId": "A-12",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-12 (Wahyu Hidayatullah) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0073",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -1926,7 +1926,7 @@
       "unitId": "A-13",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-13 (Yuniarti Puspitasari) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0074",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -1940,7 +1940,7 @@
       "unitId": "A-14",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-14 (Rizky Ramadhan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0075",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -1954,7 +1954,7 @@
       "unitId": "A-15",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-15 (Taufik Ismail) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0076",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -1968,7 +1968,7 @@
       "unitId": "B-01",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-01 (Irfan Maulana) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0077",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -1982,7 +1982,7 @@
       "unitId": "B-02",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-02 (Hendra Gunawan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0078",
       "createdAt": "2026-08-07T09:00:00.000Z"
     },
@@ -1996,7 +1996,7 @@
       "unitId": "B-03",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-03 (Dewi Sartika Putri) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0079",
       "createdAt": "2026-08-08T09:00:00.000Z"
     },
@@ -2010,7 +2010,7 @@
       "unitId": "B-04",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-04 (Arif Budiman, M.M.) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0080",
       "createdAt": "2026-08-09T09:00:00.000Z"
     },
@@ -2024,7 +2024,7 @@
       "unitId": "B-05",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-05 (Surya Darmawan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0081",
       "createdAt": "2026-08-10T09:00:00.000Z"
     },
@@ -2038,7 +2038,7 @@
       "unitId": "B-06",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-06 (Nadia Permatasari) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0082",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -2052,7 +2052,7 @@
       "unitId": "B-07",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-07 (Joko Susilo) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0083",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -2066,7 +2066,7 @@
       "unitId": "B-08",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-08 (Fitriani Hasanah) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0084",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -2080,7 +2080,7 @@
       "unitId": "B-09",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-09 (Reza Pahlevi) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0085",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -2094,7 +2094,7 @@
       "unitId": "B-10",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-10 (Antonius Wijaya) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0086",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -2108,7 +2108,7 @@
       "unitId": "B-11",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-11 (Sri Wahyuni) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0087",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -2122,7 +2122,7 @@
       "unitId": "B-12",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-12 (Dimas Anggara) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0088",
       "createdAt": "2026-08-07T09:00:00.000Z"
     },
@@ -2136,7 +2136,7 @@
       "unitId": "B-13",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-13 (Muhamad Ridwan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0089",
       "createdAt": "2026-08-08T09:00:00.000Z"
     },
@@ -2150,7 +2150,7 @@
       "unitId": "B-14",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-14 (Lestari Handayani) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0090",
       "createdAt": "2026-08-09T09:00:00.000Z"
     },
@@ -2164,7 +2164,7 @@
       "unitId": "B-15",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-15 (Bayu Setiawan) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0091",
       "createdAt": "2026-08-10T09:00:00.000Z"
     },
@@ -2178,7 +2178,7 @@
       "unitId": "C-01",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-01 (Adi Nugraha) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0092",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -2192,7 +2192,7 @@
       "unitId": "C-02",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-02 (Kartika Chandra) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0093",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -2206,7 +2206,7 @@
       "unitId": "C-03",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-03 (Zulkifli Mansyur) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0094",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -2220,7 +2220,7 @@
       "unitId": "C-04",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-04 (Indah Permata Sari) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0095",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -2234,7 +2234,7 @@
       "unitId": "C-05",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-05 (Heri Susanto) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0096",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -2248,7 +2248,7 @@
       "unitId": "C-06",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-06 (Gita Savitri) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0097",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -2262,7 +2262,7 @@
       "unitId": "C-07",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-07 (Yusuf Mansurudin) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0098",
       "createdAt": "2026-08-07T09:00:00.000Z"
     },
@@ -2276,7 +2276,7 @@
       "unitId": "C-08",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-08 (Putri Ayu Lestari) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0099",
       "createdAt": "2026-08-08T09:00:00.000Z"
     },
@@ -2290,7 +2290,7 @@
       "unitId": "C-09",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-09 (Andi Firmansyah) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0100",
       "createdAt": "2026-08-09T09:00:00.000Z"
     },
@@ -2304,7 +2304,7 @@
       "unitId": "C-10",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-10 (Denny Sumargo Putra) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0101",
       "createdAt": "2026-08-10T09:00:00.000Z"
     },
@@ -2318,7 +2318,7 @@
       "unitId": "C-11",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-11 (Novi Rahmawati) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0102",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -2332,7 +2332,7 @@
       "unitId": "C-12",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-12 (Candra Wijaya) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0103",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -2346,7 +2346,7 @@
       "unitId": "C-13",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-13 (Samsul Bahri) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0104",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -2360,7 +2360,7 @@
       "unitId": "C-14",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-14 (Maya Estianty Putri) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0105",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -2374,7 +2374,7 @@
       "unitId": "C-15",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-15 (Rama Pradipta) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0106",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -2388,7 +2388,7 @@
       "unitId": "D-01",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-01 (Kurnia Meiga Saputra) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0107",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -2402,7 +2402,7 @@
       "unitId": "D-02",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-02 (Galih Ginanjar) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0108",
       "createdAt": "2026-08-07T09:00:00.000Z"
     },
@@ -2416,7 +2416,7 @@
       "unitId": "D-03",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-03 (Ayu Tingkir Sari) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0109",
       "createdAt": "2026-08-08T09:00:00.000Z"
     },
@@ -2430,7 +2430,7 @@
       "unitId": "D-04",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-04 (Bagus Purwanto) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0110",
       "createdAt": "2026-08-09T09:00:00.000Z"
     },
@@ -2444,7 +2444,7 @@
       "unitId": "D-05",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-05 (Farhan Syahputra) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0111",
       "createdAt": "2026-08-10T09:00:00.000Z"
     },
@@ -2458,7 +2458,7 @@
       "unitId": "D-06",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-06 (Wulan Guritno Putri) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0112",
       "createdAt": "2026-08-01T09:00:00.000Z"
     },
@@ -2472,7 +2472,7 @@
       "unitId": "D-07",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-07 (Teguh Karya) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0113",
       "createdAt": "2026-08-02T09:00:00.000Z"
     },
@@ -2486,7 +2486,7 @@
       "unitId": "D-08",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-08 (Dian Sastrowardoyo) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0114",
       "createdAt": "2026-08-03T09:00:00.000Z"
     },
@@ -2500,7 +2500,7 @@
       "unitId": "D-09",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-09 (Anwar Sanusi) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0115",
       "createdAt": "2026-08-04T09:00:00.000Z"
     },
@@ -2514,7 +2514,7 @@
       "unitId": "D-10",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-10 (Melati Kusuma) periode 2026-08",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0116",
       "createdAt": "2026-08-05T09:00:00.000Z"
     },
@@ -2528,7 +2528,7 @@
       "unitId": null,
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Donasi sukarela warga untuk semarak kebersihan & pengecatan gapura Saung Kebun",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0117",
       "createdAt": "2026-08-12T09:00:00.000Z"
     },
@@ -2542,7 +2542,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Pembayaran listrik PJU jalan lingkungan Blok A–D dan pos satpam",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0118",
       "createdAt": "2026-08-06T09:00:00.000Z"
     },
@@ -2556,7 +2556,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Pengecatan kanstin jalan utama, portal Blok C, dan penggantian 4 lampu LED PJU",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0119",
       "createdAt": "2026-08-15T09:00:00.000Z"
     },
@@ -2570,7 +2570,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Biaya operasional kebersihan lingkungan & armada pengangkut sampah Agustus",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0120",
       "createdAt": "2026-08-25T09:00:00.000Z"
     },
@@ -2584,7 +2584,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Honorarium petugas keamanan lingkungan Saung Kebun Agustus 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0121",
       "createdAt": "2026-08-28T09:00:00.000Z"
     },
@@ -2598,7 +2598,7 @@
       "unitId": "A-01",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-01 (Erlangga) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0122",
       "createdAt": "2026-09-01T09:00:00.000Z"
     },
@@ -2612,7 +2612,7 @@
       "unitId": "A-02",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-02 (Budi Santoso) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0123",
       "createdAt": "2026-09-02T09:00:00.000Z"
     },
@@ -2626,7 +2626,7 @@
       "unitId": "A-03",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-03 (Dr. Rina Kusumawardhani) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0124",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -2640,7 +2640,7 @@
       "unitId": "A-04",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-04 (Agus Pratama Putra) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0125",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -2654,7 +2654,7 @@
       "unitId": "A-05",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-05 (Dedi Kurniawan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0126",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -2668,7 +2668,7 @@
       "unitId": "A-06",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-06 (Siti Nurhaliza Rahma) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0127",
       "createdAt": "2026-09-06T09:00:00.000Z"
     },
@@ -2682,7 +2682,7 @@
       "unitId": "A-07",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-07 (Ir. Bambang Suryono) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0128",
       "createdAt": "2026-09-07T09:00:00.000Z"
     },
@@ -2696,7 +2696,7 @@
       "unitId": "A-08",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-08 (Fajar Nugroho) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0129",
       "createdAt": "2026-09-08T09:00:00.000Z"
     },
@@ -2709,8 +2709,8 @@
       "amount": 100000,
       "unitId": "A-09",
       "paymentMethod": "Transfer BCA Kas",
-      "description": "Iuran bulanan lingkungan A-09 (Ratna Sari Dewi, S.E.) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "description": "Iuran bulanan lingkungan A-09 (Andriansyah) periode 2026-09",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0130",
       "createdAt": "2026-09-09T09:00:00.000Z"
     },
@@ -2724,7 +2724,7 @@
       "unitId": "A-10",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-10 (Eko Prasetyo) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0131",
       "createdAt": "2026-09-10T09:00:00.000Z"
     },
@@ -2738,7 +2738,7 @@
       "unitId": "A-11",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-11 (Lukman Hakim) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0132",
       "createdAt": "2026-09-01T09:00:00.000Z"
     },
@@ -2752,7 +2752,7 @@
       "unitId": "A-13",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-13 (Yuniarti Puspitasari) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0133",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -2766,7 +2766,7 @@
       "unitId": "A-14",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-14 (Rizky Ramadhan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0134",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -2780,7 +2780,7 @@
       "unitId": "A-15",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-15 (Taufik Ismail) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0135",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -2794,7 +2794,7 @@
       "unitId": "B-01",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-01 (Irfan Maulana) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0136",
       "createdAt": "2026-09-06T09:00:00.000Z"
     },
@@ -2808,7 +2808,7 @@
       "unitId": "B-02",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-02 (Hendra Gunawan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0137",
       "createdAt": "2026-09-07T09:00:00.000Z"
     },
@@ -2822,7 +2822,7 @@
       "unitId": "B-03",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-03 (Dewi Sartika Putri) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0138",
       "createdAt": "2026-09-08T09:00:00.000Z"
     },
@@ -2836,7 +2836,7 @@
       "unitId": "B-04",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-04 (Arif Budiman, M.M.) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0139",
       "createdAt": "2026-09-09T09:00:00.000Z"
     },
@@ -2850,7 +2850,7 @@
       "unitId": "B-05",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-05 (Surya Darmawan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0140",
       "createdAt": "2026-09-10T09:00:00.000Z"
     },
@@ -2864,7 +2864,7 @@
       "unitId": "B-06",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-06 (Nadia Permatasari) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0141",
       "createdAt": "2026-09-01T09:00:00.000Z"
     },
@@ -2878,7 +2878,7 @@
       "unitId": "B-07",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-07 (Joko Susilo) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0142",
       "createdAt": "2026-09-02T09:00:00.000Z"
     },
@@ -2892,7 +2892,7 @@
       "unitId": "B-08",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-08 (Fitriani Hasanah) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0143",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -2906,7 +2906,7 @@
       "unitId": "B-09",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-09 (Reza Pahlevi) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0144",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -2920,7 +2920,7 @@
       "unitId": "B-10",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-10 (Antonius Wijaya) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0145",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -2934,7 +2934,7 @@
       "unitId": "B-11",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-11 (Sri Wahyuni) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0146",
       "createdAt": "2026-09-06T09:00:00.000Z"
     },
@@ -2948,7 +2948,7 @@
       "unitId": "B-12",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-12 (Dimas Anggara) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0147",
       "createdAt": "2026-09-07T09:00:00.000Z"
     },
@@ -2962,7 +2962,7 @@
       "unitId": "B-13",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-13 (Muhamad Ridwan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0148",
       "createdAt": "2026-09-08T09:00:00.000Z"
     },
@@ -2976,7 +2976,7 @@
       "unitId": "B-15",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-15 (Bayu Setiawan) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0149",
       "createdAt": "2026-09-10T09:00:00.000Z"
     },
@@ -2990,7 +2990,7 @@
       "unitId": "C-01",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-01 (Adi Nugraha) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0150",
       "createdAt": "2026-09-01T09:00:00.000Z"
     },
@@ -3004,7 +3004,7 @@
       "unitId": "C-02",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-02 (Kartika Chandra) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0151",
       "createdAt": "2026-09-02T09:00:00.000Z"
     },
@@ -3018,7 +3018,7 @@
       "unitId": "C-03",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-03 (Zulkifli Mansyur) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0152",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -3032,7 +3032,7 @@
       "unitId": "C-04",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-04 (Indah Permata Sari) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0153",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -3046,7 +3046,7 @@
       "unitId": "C-05",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-05 (Heri Susanto) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0154",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -3060,7 +3060,7 @@
       "unitId": "C-06",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-06 (Gita Savitri) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0155",
       "createdAt": "2026-09-06T09:00:00.000Z"
     },
@@ -3074,7 +3074,7 @@
       "unitId": "C-07",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-07 (Yusuf Mansurudin) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0156",
       "createdAt": "2026-09-07T09:00:00.000Z"
     },
@@ -3088,7 +3088,7 @@
       "unitId": "C-08",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-08 (Putri Ayu Lestari) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0157",
       "createdAt": "2026-09-08T09:00:00.000Z"
     },
@@ -3102,7 +3102,7 @@
       "unitId": "C-09",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-09 (Andi Firmansyah) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0158",
       "createdAt": "2026-09-09T09:00:00.000Z"
     },
@@ -3116,7 +3116,7 @@
       "unitId": "C-10",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-10 (Denny Sumargo Putra) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0159",
       "createdAt": "2026-09-10T09:00:00.000Z"
     },
@@ -3130,7 +3130,7 @@
       "unitId": "C-12",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-12 (Candra Wijaya) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0160",
       "createdAt": "2026-09-02T09:00:00.000Z"
     },
@@ -3144,7 +3144,7 @@
       "unitId": "C-13",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-13 (Samsul Bahri) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0161",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -3158,7 +3158,7 @@
       "unitId": "C-14",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-14 (Maya Estianty Putri) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0162",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -3172,7 +3172,7 @@
       "unitId": "C-15",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-15 (Rama Pradipta) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0163",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -3186,7 +3186,7 @@
       "unitId": "D-01",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-01 (Kurnia Meiga Saputra) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0164",
       "createdAt": "2026-09-06T09:00:00.000Z"
     },
@@ -3200,7 +3200,7 @@
       "unitId": "D-02",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-02 (Galih Ginanjar) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0165",
       "createdAt": "2026-09-07T09:00:00.000Z"
     },
@@ -3214,7 +3214,7 @@
       "unitId": "D-03",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-03 (Ayu Tingkir Sari) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0166",
       "createdAt": "2026-09-08T09:00:00.000Z"
     },
@@ -3228,7 +3228,7 @@
       "unitId": "D-04",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-04 (Bagus Purwanto) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0167",
       "createdAt": "2026-09-09T09:00:00.000Z"
     },
@@ -3242,7 +3242,7 @@
       "unitId": "D-05",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-05 (Farhan Syahputra) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0168",
       "createdAt": "2026-09-10T09:00:00.000Z"
     },
@@ -3256,7 +3256,7 @@
       "unitId": "D-06",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-06 (Wulan Guritno Putri) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0169",
       "createdAt": "2026-09-01T09:00:00.000Z"
     },
@@ -3270,7 +3270,7 @@
       "unitId": "D-07",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-07 (Teguh Karya) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0170",
       "createdAt": "2026-09-02T09:00:00.000Z"
     },
@@ -3284,7 +3284,7 @@
       "unitId": "D-08",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-08 (Dian Sastrowardoyo) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0171",
       "createdAt": "2026-09-03T09:00:00.000Z"
     },
@@ -3298,7 +3298,7 @@
       "unitId": "D-09",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-09 (Anwar Sanusi) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0172",
       "createdAt": "2026-09-04T09:00:00.000Z"
     },
@@ -3312,7 +3312,7 @@
       "unitId": "D-10",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-10 (Melati Kusuma) periode 2026-09",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0173",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -3326,7 +3326,7 @@
       "unitId": null,
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Penerbitan 6 stiker kendaraan tambahan warga Perumahan Saung Kebun",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0174",
       "createdAt": "2026-09-16T09:00:00.000Z"
     },
@@ -3340,7 +3340,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Tagihan listrik penerangan jalan umum (PJU) & air taman saung September 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0175",
       "createdAt": "2026-09-05T09:00:00.000Z"
     },
@@ -3354,7 +3354,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Perawatan gazebo saung kebun, pembersihan saluran drainase menjelang musim hujan",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0176",
       "createdAt": "2026-09-19T09:00:00.000Z"
     },
@@ -3368,7 +3368,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Operasional pengangkutan sampah rumah tangga 55 unit September 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0177",
       "createdAt": "2026-09-25T09:00:00.000Z"
     },
@@ -3382,7 +3382,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Honorarium petugas keamanan lingkungan Saung Kebun September 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0178",
       "createdAt": "2026-09-28T09:00:00.000Z"
     },
@@ -3396,7 +3396,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Penyusunan dan penggandaan dokumen LPJ Triwulan III untuk arsip pengurus",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0179",
       "createdAt": "2026-09-30T09:00:00.000Z"
     },
@@ -3410,7 +3410,7 @@
       "unitId": "A-01",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-01 (Erlangga) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0180",
       "createdAt": "2026-10-01T09:00:00.000Z"
     },
@@ -3424,7 +3424,7 @@
       "unitId": "A-02",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-02 (Budi Santoso) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0181",
       "createdAt": "2026-10-02T09:00:00.000Z"
     },
@@ -3438,7 +3438,7 @@
       "unitId": "A-03",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-03 (Dr. Rina Kusumawardhani) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0182",
       "createdAt": "2026-10-03T09:00:00.000Z"
     },
@@ -3452,7 +3452,7 @@
       "unitId": "A-04",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-04 (Agus Pratama Putra) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0183",
       "createdAt": "2026-10-04T09:00:00.000Z"
     },
@@ -3466,7 +3466,7 @@
       "unitId": "A-06",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-06 (Siti Nurhaliza Rahma) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0184",
       "createdAt": "2026-10-06T09:00:00.000Z"
     },
@@ -3480,7 +3480,7 @@
       "unitId": "A-07",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-07 (Ir. Bambang Suryono) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0185",
       "createdAt": "2026-10-07T09:00:00.000Z"
     },
@@ -3494,7 +3494,7 @@
       "unitId": "A-08",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan A-08 (Fajar Nugroho) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0186",
       "createdAt": "2026-10-08T09:00:00.000Z"
     },
@@ -3507,8 +3507,8 @@
       "amount": 100000,
       "unitId": "A-09",
       "paymentMethod": "Transfer BCA Kas",
-      "description": "Iuran bulanan lingkungan A-09 (Ratna Sari Dewi, S.E.) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "description": "Iuran bulanan lingkungan A-09 (Andriansyah) periode 2026-10",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0187",
       "createdAt": "2026-10-09T09:00:00.000Z"
     },
@@ -3522,7 +3522,7 @@
       "unitId": "A-10",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-10 (Eko Prasetyo) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0188",
       "createdAt": "2026-10-10T09:00:00.000Z"
     },
@@ -3536,7 +3536,7 @@
       "unitId": "A-11",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan A-11 (Lukman Hakim) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0189",
       "createdAt": "2026-10-01T09:00:00.000Z"
     },
@@ -3550,7 +3550,7 @@
       "unitId": "A-13",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan A-13 (Yuniarti Puspitasari) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0190",
       "createdAt": "2026-10-03T09:00:00.000Z"
     },
@@ -3564,7 +3564,7 @@
       "unitId": "A-14",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan A-14 (Rizky Ramadhan) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0191",
       "createdAt": "2026-10-04T09:00:00.000Z"
     },
@@ -3578,7 +3578,7 @@
       "unitId": "B-01",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-01 (Irfan Maulana) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0192",
       "createdAt": "2026-10-06T09:00:00.000Z"
     },
@@ -3592,7 +3592,7 @@
       "unitId": "B-02",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-02 (Hendra Gunawan) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0193",
       "createdAt": "2026-10-07T09:00:00.000Z"
     },
@@ -3606,7 +3606,7 @@
       "unitId": "B-03",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-03 (Dewi Sartika Putri) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0194",
       "createdAt": "2026-10-08T09:00:00.000Z"
     },
@@ -3620,7 +3620,7 @@
       "unitId": "B-05",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-05 (Surya Darmawan) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0195",
       "createdAt": "2026-10-10T09:00:00.000Z"
     },
@@ -3634,7 +3634,7 @@
       "unitId": "B-06",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-06 (Nadia Permatasari) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0196",
       "createdAt": "2026-10-01T09:00:00.000Z"
     },
@@ -3648,7 +3648,7 @@
       "unitId": "B-07",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-07 (Joko Susilo) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0197",
       "createdAt": "2026-10-02T09:00:00.000Z"
     },
@@ -3662,7 +3662,7 @@
       "unitId": "B-08",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-08 (Fitriani Hasanah) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0198",
       "createdAt": "2026-10-03T09:00:00.000Z"
     },
@@ -3676,7 +3676,7 @@
       "unitId": "B-10",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan B-10 (Antonius Wijaya) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0199",
       "createdAt": "2026-10-05T09:00:00.000Z"
     },
@@ -3690,7 +3690,7 @@
       "unitId": "B-11",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-11 (Sri Wahyuni) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0200",
       "createdAt": "2026-10-06T09:00:00.000Z"
     },
@@ -3704,7 +3704,7 @@
       "unitId": "B-12",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan B-12 (Dimas Anggara) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0201",
       "createdAt": "2026-10-07T09:00:00.000Z"
     },
@@ -3718,7 +3718,7 @@
       "unitId": "B-13",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan B-13 (Muhamad Ridwan) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0202",
       "createdAt": "2026-10-08T09:00:00.000Z"
     },
@@ -3732,7 +3732,7 @@
       "unitId": "B-15",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan B-15 (Bayu Setiawan) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0203",
       "createdAt": "2026-10-10T09:00:00.000Z"
     },
@@ -3746,7 +3746,7 @@
       "unitId": "C-01",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-01 (Adi Nugraha) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0204",
       "createdAt": "2026-10-01T09:00:00.000Z"
     },
@@ -3760,7 +3760,7 @@
       "unitId": "C-02",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-02 (Kartika Chandra) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0205",
       "createdAt": "2026-10-02T09:00:00.000Z"
     },
@@ -3774,7 +3774,7 @@
       "unitId": "C-04",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-04 (Indah Permata Sari) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0206",
       "createdAt": "2026-10-04T09:00:00.000Z"
     },
@@ -3788,7 +3788,7 @@
       "unitId": "C-05",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-05 (Heri Susanto) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0207",
       "createdAt": "2026-10-05T09:00:00.000Z"
     },
@@ -3802,7 +3802,7 @@
       "unitId": "C-06",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-06 (Gita Savitri) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0208",
       "createdAt": "2026-10-06T09:00:00.000Z"
     },
@@ -3816,7 +3816,7 @@
       "unitId": "C-07",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan C-07 (Yusuf Mansurudin) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0209",
       "createdAt": "2026-10-07T09:00:00.000Z"
     },
@@ -3830,7 +3830,7 @@
       "unitId": "C-09",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-09 (Andi Firmansyah) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0210",
       "createdAt": "2026-10-09T09:00:00.000Z"
     },
@@ -3844,7 +3844,7 @@
       "unitId": "C-10",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-10 (Denny Sumargo Putra) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0211",
       "createdAt": "2026-10-10T09:00:00.000Z"
     },
@@ -3858,7 +3858,7 @@
       "unitId": "C-12",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan C-12 (Candra Wijaya) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0212",
       "createdAt": "2026-10-02T09:00:00.000Z"
     },
@@ -3872,7 +3872,7 @@
       "unitId": "C-13",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan C-13 (Samsul Bahri) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0213",
       "createdAt": "2026-10-03T09:00:00.000Z"
     },
@@ -3886,7 +3886,7 @@
       "unitId": "C-14",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan C-14 (Maya Estianty Putri) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0214",
       "createdAt": "2026-10-04T09:00:00.000Z"
     },
@@ -3900,7 +3900,7 @@
       "unitId": "D-01",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-01 (Kurnia Meiga Saputra) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0215",
       "createdAt": "2026-10-06T09:00:00.000Z"
     },
@@ -3914,7 +3914,7 @@
       "unitId": "D-02",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-02 (Galih Ginanjar) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0216",
       "createdAt": "2026-10-07T09:00:00.000Z"
     },
@@ -3928,7 +3928,7 @@
       "unitId": "D-03",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-03 (Ayu Tingkir Sari) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0217",
       "createdAt": "2026-10-08T09:00:00.000Z"
     },
@@ -3942,7 +3942,7 @@
       "unitId": "D-04",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-04 (Bagus Purwanto) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0218",
       "createdAt": "2026-10-09T09:00:00.000Z"
     },
@@ -3956,7 +3956,7 @@
       "unitId": "D-05",
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Iuran bulanan lingkungan D-05 (Farhan Syahputra) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0219",
       "createdAt": "2026-10-10T09:00:00.000Z"
     },
@@ -3970,7 +3970,7 @@
       "unitId": "D-07",
       "paymentMethod": "Tunai Bendahara",
       "description": "Iuran bulanan lingkungan D-07 (Teguh Karya) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0220",
       "createdAt": "2026-10-02T09:00:00.000Z"
     },
@@ -3984,7 +3984,7 @@
       "unitId": "D-08",
       "paymentMethod": "Transfer BCA Kas",
       "description": "Iuran bulanan lingkungan D-08 (Dian Sastrowardoyo) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0221",
       "createdAt": "2026-10-03T09:00:00.000Z"
     },
@@ -3998,7 +3998,7 @@
       "unitId": "D-10",
       "paymentMethod": "Transfer Mandiri",
       "description": "Iuran bulanan lingkungan D-10 (Melati Kusuma) periode 2026-10",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0222",
       "createdAt": "2026-10-05T09:00:00.000Z"
     },
@@ -4012,7 +4012,7 @@
       "unitId": null,
       "paymentMethod": "QRIS Saung Kebun",
       "description": "Sewa fasilitas Saung Kebun untuk arisan gabungan & pengajian warga",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0223",
       "createdAt": "2026-10-11T09:00:00.000Z"
     },
@@ -4026,7 +4026,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Pembayaran listrik PJU Blok A–D dan pompa sumur taman Oktober 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0224",
       "createdAt": "2026-10-05T09:00:00.000Z"
     },
@@ -4040,7 +4040,7 @@
       "unitId": null,
       "paymentMethod": "Tunai Bendahara",
       "description": "Perbaikan engsel portal otomatis gerbang depan & servis CCTV pos satpam",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0225",
       "createdAt": "2026-10-14T09:00:00.000Z"
     },
@@ -4054,7 +4054,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Retribusi kebersihan & armada sampah lingkungan Oktober 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0226",
       "createdAt": "2026-10-20T09:00:00.000Z"
     },
@@ -4068,7 +4068,7 @@
       "unitId": null,
       "paymentMethod": "Transfer BCA Kas",
       "description": "Honorarium petugas keamanan lingkungan Saung Kebun Oktober 2026",
-      "recordedBy": "Ratna Sari Dewi, S.E.",
+      "recordedBy": "Andriansyah",
       "id": "TRX-0227",
       "createdAt": "2026-10-22T09:00:00.000Z"
     },
@@ -4223,7 +4223,7 @@
       "eventDate": "2026-11-01",
       "location": "Pendopo Utama Perumahan Saung Kebun",
       "content": "Penyampaian laporan pertanggungjawaban (LPJ) kas lingkungan periode Juli–September 2026 serta pembahasan rencana peremajaan lampu penerangan jalan umum (PJU) LED dan kamera CCTV gerbang.",
-      "authorName": "Ratna Sari Dewi, S.E. (Bendahara Pengurus)",
+      "authorName": "Andriansyah (Bendahara Pengurus)",
       "published": true,
       "createdAt": "2026-10-22T14:30:00.000Z"
     },

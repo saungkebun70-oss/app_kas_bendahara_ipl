@@ -45,8 +45,9 @@ export const ReceiptPreviewModal: React.FC<ReceiptPreviewModalProps> = ({
 
   if (!open || !resident || !transaction) return null;
 
-  const recordedByDisplay = (transaction.recordedBy || state.settings.treasurerName)
-    .replace(/H\.\s*Hendra Wijaya,?\s*S\.T\./gi, state.settings.chairpersonName || 'Erlangga');
+  const recordedByDisplay = (transaction.recordedBy || state.settings.treasurerName || 'Admin — Ketua Paguyuban (Erlangga)')
+    .replace(/Ratna\s*Sari\s*Dewi,?\s*S\.E\./gi, state.settings.treasurerName || 'Andriansyah')
+    .replace(/H\.\s*Hendra\s*Wijaya,?\s*S\.T\./gi, state.settings.chairpersonName || 'Erlangga');
 
   const handleDownload = () => {
     const filename = downloadUnitReceiptPDF(state, resident, transaction);
@@ -245,7 +246,7 @@ export const ReceiptPreviewModal: React.FC<ReceiptPreviewModalProps> = ({
                     • Bukti kwitansi resmi yang sah dari ketua pengurus saung kebun
                   </p>
                   <p className="italic">
-                    • Dicatat oleh: Admin — Ketua Paguyuban (Erlangga)
+                    • Dicatat oleh: {recordedByDisplay}
                   </p>
                 </div>
 

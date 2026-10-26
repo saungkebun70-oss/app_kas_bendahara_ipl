@@ -125,6 +125,26 @@ async function startServer() {
     res.json(dbState);
   });
 
+  app.get('/api/health', (_req, res) => {
+    try {
+      const isDbPresent = fs.existsSync(DB_FILE);
+      res.json({
+        status: 'ok',
+        database: isDbPresent ? 'connected' : 'memory_only',
+        totalResidents: dbState.residents.length,
+        totalTransactions: dbState.transactions.length,
+        timestamp: new Date().toISOString(),
+        uptimeSeconds: Math.floor(process.uptime()),
+      });
+    } catch (err: unknown) {
+      res.status(500).json({
+        status: 'error',
+        database: 'disconnected',
+        error: err instanceof Error ? err.message : 'Unknown database error',
+      });
+    }
+  });
+
   app.post('/api/transactions', (req, res) => {
     const {
       date,
@@ -1237,7 +1257,7 @@ Kembalikan kategori utama yang paling sesuai dengan uraian transaksi tersebut, b
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`  ➜  Local:   http://localhost:${PORT}/`);
     console.log(`  ➜  Network: http://0.0.0.0:${PORT}/`);
   });

@@ -23,7 +23,7 @@ const RESIDENT_NAMES_55: string[] = [
   'Siti Nurhaliza Rahma',
   'Ir. Bambang Suryono',
   'Fajar Nugroho',
-  'Ratna Sari Dewi, S.E.',
+  'Andriansyah',
   'Eko Prasetyo',
   'Lukman Hakim',
   'Wahyu Hidayatullah',
@@ -94,7 +94,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   dueDayOfMonth: 10,
   openingBalance2026: 14250000,
   chairpersonName: 'Erlangga',
-  treasurerName: 'Ratna Sari Dewi, S.E.',
+  treasurerName: 'Andriansyah',
   secretaryName: 'Irfan Maulana',
   supervisorName: 'Ir. Bambang Suryono',
   bankAccountInfo: 'BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)',
@@ -140,7 +140,7 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     location: 'Pendopo Utama Perumahan Saung Kebun',
     content:
       'Penyampaian laporan pertanggungjawaban (LPJ) kas lingkungan periode Juli–September 2026 serta pembahasan rencana peremajaan lampu penerangan jalan umum (PJU) LED dan kamera CCTV gerbang.',
-    authorName: 'Ratna Sari Dewi, S.E. (Bendahara Pengurus)',
+    authorName: 'Andriansyah (Bendahara Pengurus)',
     published: true,
     createdAt: '2026-10-22T14:30:00.000Z',
   },
@@ -302,7 +302,7 @@ export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
     status: 'DISETUJUI',
     submittedAt: '2026-10-05T08:30:00.000Z',
     verifiedAt: '2026-10-05T09:00:00.000Z',
-    verifiedBy: 'Ratna Sari Dewi, S.E. (Bendahara)',
+    verifiedBy: 'Andriansyah (Bendahara)',
     resultingTransactionId: 'TRX-20261005-001',
     resultingReceiptNumber: 'SK/KW/2026/10/A01',
   },
@@ -402,7 +402,7 @@ export function createSeedDatabase(): DatabaseState {
         unitId: res.id,
         paymentMethod: method,
         description: `Iuran bulanan lingkungan ${res.id} (${res.headOfFamily}) periode ${periodMonth}`,
-        recordedBy: 'Ratna Sari Dewi, S.E.',
+        recordedBy: 'Andriansyah',
       });
     });
   };
@@ -419,7 +419,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Kontribusi pemakaian Pendopo Saung Kebun untuk acara keluarga Blok B',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/07/01',
@@ -431,7 +431,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Token listrik PJU gerbang utama, pos jaga, dan pompa air taman Saung Kebun',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/07/02',
@@ -443,7 +443,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Pemangkasan pohon peneduh, pupuk tanaman kebun warga, dan solar mesin rumput',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/07/03',
@@ -455,7 +455,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Retribusi pengangkutan sampah 55 rumah (2x seminggu) & kantong pilah',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/07/04',
@@ -467,7 +467,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Honorarium petugas keamanan shift siang & malam (2 personel) Juli 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/07/05',
@@ -479,7 +479,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Cetak buku kas, kwitansi cadangan, dan konsumsi rapat pengurus bulanan',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
 
   // --- AGUSTUS 2026 ---
@@ -494,7 +494,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'QRIS Saung Kebun',
     description: 'Donasi sukarela warga untuk semarak kebersihan & pengecatan gapura Saung Kebun',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/08/01',
@@ -506,7 +506,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Pembayaran listrik PJU jalan lingkungan Blok A–D dan pos satpam',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/08/02',
@@ -518,7 +518,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Pengecatan kanstin jalan utama, portal Blok C, dan penggantian 4 lampu LED PJU',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/08/03',
@@ -530,7 +530,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Biaya operasional kebersihan lingkungan & armada pengangkut sampah Agustus',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/08/04',
@@ -542,7 +542,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Honorarium petugas keamanan lingkungan Saung Kebun Agustus 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
 
   // --- SEPTEMBER 2026 ---
@@ -557,7 +557,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'QRIS Saung Kebun',
     description: 'Penerbitan 6 stiker kendaraan tambahan warga Perumahan Saung Kebun',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/09/01',
@@ -569,7 +569,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Tagihan listrik penerangan jalan umum (PJU) & air taman saung September 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/09/02',
@@ -581,7 +581,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Perawatan gazebo saung kebun, pembersihan saluran drainase menjelang musim hujan',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/09/03',
@@ -593,7 +593,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Operasional pengangkutan sampah rumah tangga 55 unit September 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/09/04',
@@ -605,7 +605,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Honorarium petugas keamanan lingkungan Saung Kebun September 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/09/05',
@@ -617,7 +617,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Penyusunan dan penggandaan dokumen LPJ Triwulan III untuk arsip pengurus',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
 
   // --- OKTOBER 2026 ---
@@ -632,7 +632,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'QRIS Saung Kebun',
     description: 'Sewa fasilitas Saung Kebun untuk arisan gabungan & pengajian warga',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/10/01',
@@ -644,7 +644,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Pembayaran listrik PJU Blok A–D dan pompa sumur taman Oktober 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/10/02',
@@ -656,7 +656,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Tunai Bendahara',
     description: 'Perbaikan engsel portal otomatis gerbang depan & servis CCTV pos satpam',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/10/03',
@@ -668,7 +668,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Retribusi kebersihan & armada sampah lingkungan Oktober 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
   pushTrx({
     receiptNumber: 'SK/OUT/2026/10/04',
@@ -680,7 +680,7 @@ export function createSeedDatabase(): DatabaseState {
     unitId: null,
     paymentMethod: 'Transfer BCA Kas',
     description: 'Honorarium petugas keamanan lingkungan Saung Kebun Oktober 2026',
-    recordedBy: 'Ratna Sari Dewi, S.E.',
+    recordedBy: 'Andriansyah',
   });
 
   const whatsappLogs: WhatsAppNotificationLog[] = [

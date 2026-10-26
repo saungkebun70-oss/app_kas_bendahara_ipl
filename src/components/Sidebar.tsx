@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react';
 import type { AuthSession } from '../lib/auth';
+import { DatabaseHealthIndicator } from './DatabaseHealthIndicator';
 
 export type NavTab =
   | 'dashboard'
@@ -326,45 +327,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </nav>
 
-        {/* Direct Portal Links Box */}
-        <div className="px-3 py-2 bg-black/20 border-t border-white/10">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-sky-200/70 mb-1.5 px-1">
-            <Link2 className="w-3 h-3 text-[#5eead4]" />
-            <span>Tautan Portal Langsung</span>
-          </div>
-          <div className="grid grid-cols-3 gap-1">
-            <a
-              href="#admin"
-              data-testid="portal-link-admin"
-              onClick={onLogout}
-              className="px-1.5 py-1 text-center rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-sky-100 transition-colors"
-              title="Portal Khusus Pengurus Admin / Bendahara"
-            >
-              #admin
-            </a>
-            <a
-              href="#warga"
-              data-testid="portal-link-warga"
-              onClick={onLogout}
-              className="px-1.5 py-1 text-center rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-[#5eead4] transition-colors"
-              title="Portal Khusus Warga"
-            >
-              #warga
-            </a>
-            <a
-              href="#keamanan"
-              data-testid="portal-link-keamanan"
-              onClick={onLogout}
-              className="px-1.5 py-1 text-center rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-amber-200 transition-colors"
-              title="Portal Khusus Pos Satpam"
-            >
-              #keamanan
-            </a>
-          </div>
-        </div>
-
         {/* Bottom Logged-In User & Actions */}
         <div className="p-4 space-y-2.5 bg-black/10 backdrop-blur-xs border-t border-white/15">
+          <div className="flex items-center justify-between px-1 pb-1 border-b border-white/10">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-200/70">
+              Koneksi Server
+            </span>
+            <DatabaseHealthIndicator />
+          </div>
+
           <div className="flex items-center gap-2.5 px-1">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
               {session.isAdmin || isSatpam ? (

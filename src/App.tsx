@@ -19,6 +19,7 @@ import { WargaPortalView } from './components/WargaPortalView';
 import { PublicationsManagerView } from './components/PublicationsManagerView';
 import { ReceiptPreviewModal } from './components/ReceiptPreviewModal';
 import { AdminPaymentVerificationModal } from './components/AdminPaymentVerificationModal';
+import { DatabaseHealthIndicator } from './components/DatabaseHealthIndicator';
 
 const AUTH_STORAGE_KEY = 'saung_kebun_auth_session_v1';
 
@@ -34,7 +35,7 @@ export default function App() {
         return {
           role: 'bendahara',
           isAdmin: true,
-          displayName: 'Ratna Sari Dewi, S.E.',
+          displayName: 'Andriansyah',
           roleLabel: 'Admin — Bendahara Pengurus',
           unitId: 'A-09',
           loginAt: new Date().toISOString(),
@@ -207,13 +208,16 @@ export default function App() {
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="rounded-lg border border-white/25 bg-white/10 px-2.5 py-1.5 text-xs font-semibold text-white"
-        >
-          Keluar
-        </button>
+        <div className="flex items-center gap-2">
+          <DatabaseHealthIndicator />
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-lg border border-white/25 bg-white/10 px-2.5 py-1.5 text-xs font-semibold text-white"
+          >
+            Keluar
+          </button>
+        </div>
       </div>
 
       <Sidebar

@@ -24,10 +24,9 @@ interface AddTransactionModalProps {
 }
 
 const PAYMENT_METHODS: PaymentMethod[] = [
-  'Transfer BCA Kas',
-  'QRIS Saung Kebun',
-  'Transfer Mandiri',
-  'Tunai Bendahara',
+  'Transfer Bank',
+  'QRIS',
+  'Tunai',
 ];
 
 const PERIOD_OPTIONS = ['2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
@@ -47,7 +46,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [incomeCategory, setIncomeCategory] = useState<IncomeCategory>('Sewa Saung Warga');
   const [expenseCategory, setExpenseCategory] = useState<ExpenseCategory>('Perawatan Taman & Saung');
   const [amountStr, setAmountStr] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer BCA Kas');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer Bank');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);

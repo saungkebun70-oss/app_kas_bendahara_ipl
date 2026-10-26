@@ -475,8 +475,13 @@ export function buildUnitReceiptPDFDoc(
   doc.setTextColor(100, 116, 139);
   doc.text('Catatan:', 12, finalY);
   doc.setFont('helvetica', 'italic');
+  const recordedByText = transaction.recordedBy
+    ? transaction.recordedBy
+        .replace(/Ratna\s*Sari\s*Dewi,?\s*S\.E\./gi, state.settings.treasurerName || 'Andriansyah')
+        .replace(/H\.\s*Hendra\s*Wijaya,?\s*S\.T\./gi, state.settings.chairpersonName || 'Erlangga')
+    : `Admin — Bendahara Pengurus (${state.settings.treasurerName || 'Andriansyah'})`;
   doc.text('• Bukti kwitansi resmi yang sah dari ketua pengurus saung kebun', 12, finalY + 4);
-  doc.text('• Dicatat oleh: Admin — Ketua Paguyuban (Erlangga)', 12, finalY + 8);
+  doc.text(`• Dicatat oleh: ${recordedByText}`, 12, finalY + 8);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);

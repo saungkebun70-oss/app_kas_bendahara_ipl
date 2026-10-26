@@ -28,10 +28,9 @@ interface WargaPaymentConfirmationModalProps {
 }
 
 const PAYMENT_METHODS: PaymentMethod[] = [
-  'Transfer BCA Kas',
-  'QRIS Saung Kebun',
-  'Transfer Mandiri',
-  'Tunai Bendahara',
+  'Transfer Bank',
+  'QRIS',
+  'Tunai',
 ];
 
 export const WargaPaymentConfirmationModal: React.FC<WargaPaymentConfirmationModalProps> = ({
@@ -51,7 +50,7 @@ export const WargaPaymentConfirmationModal: React.FC<WargaPaymentConfirmationMod
   const [customAmount, setCustomAmount] = useState<string>(
     String((unpaidMonths.length > 0 ? 1 : 1) * monthlyFee)
   );
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer BCA Kas');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer Bank');
   const [transferDate, setTransferDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [senderBank, setSenderBank] = useState<string>('Bank BCA');
   const [senderAccountName, setSenderAccountName] = useState<string>(resident.headOfFamily);

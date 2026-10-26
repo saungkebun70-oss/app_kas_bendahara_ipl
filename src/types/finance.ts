@@ -3,6 +3,9 @@ export type BlockCode = 'A' | 'B' | 'C' | 'D';
 export type OccupancyStatus = 'Dihuni Pemilik' | 'Dikontrakkan' | 'Kosong Terawat';
 
 export type PaymentMethod =
+  | 'Transfer Bank'
+  | 'QRIS'
+  | 'Tunai'
   | 'Transfer BCA Kas'
   | 'QRIS Saung Kebun'
   | 'Transfer Mandiri'

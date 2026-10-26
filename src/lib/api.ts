@@ -51,6 +51,29 @@ export const api = {
     return handleJson<DatabaseState>(res);
   },
 
+  async getHealth(): Promise<{
+    status: string;
+    database: string;
+    totalResidents: number;
+    totalTransactions: number;
+    timestamp: string;
+    uptimeSeconds: number;
+    latencyMs: number;
+  }> {
+    const t0 = performance.now();
+    const res = await fetch('/api/health');
+    const latencyMs = Math.round(performance.now() - t0);
+    const data = await handleJson<{
+      status: string;
+      database: string;
+      totalResidents: number;
+      totalTransactions: number;
+      timestamp: string;
+      uptimeSeconds: number;
+    }>(res);
+    return { ...data, latencyMs };
+  },
+
   async createTransaction(payload: CreateTransactionPayload): Promise<DatabaseState> {
     const res = await fetch('/api/transactions', {
       method: 'POST',

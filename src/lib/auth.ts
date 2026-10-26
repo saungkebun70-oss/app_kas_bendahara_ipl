@@ -95,7 +95,7 @@ export function authenticateAdmin(
   }
 
   if (input.adminRole === 'bendahara') {
-    const validUser = username === 'bendahara' || username === 'ratna';
+    const validUser = username === 'bendahara' || username === 'andriansyah' || username === 'ratna';
     const validPass =
       password === ADMIN_CREDENTIALS.bendahara.password ||
       password === ADMIN_CREDENTIALS.bendahara.defaultPin;
