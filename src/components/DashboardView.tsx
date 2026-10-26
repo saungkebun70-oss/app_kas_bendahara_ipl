@@ -906,7 +906,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             </div>
 
-            <div className="overflow-x-auto max-h-[360px] overflow-y-auto mt-2 rounded-lg">
+            <div className="overflow-x-auto max-h-[350px] overflow-y-auto mt-2 rounded-lg table-scroll-container">
               <table className="w-full border-collapse text-left text-xs">
                 <thead className="sticky top-0 z-10 bg-white/95 backdrop-blur-xs">
                   <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">

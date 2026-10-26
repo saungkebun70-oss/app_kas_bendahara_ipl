@@ -207,7 +207,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto max-h-[62vh] overflow-y-auto rounded-b-xl">
+          <div className="overflow-x-auto max-h-[520px] xl:max-h-[600px] overflow-y-auto rounded-b-xl table-scroll-container border-t border-stone-100">
             <table className="w-full border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs shadow-2xs">
                 <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">

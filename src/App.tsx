@@ -630,7 +630,7 @@ export default function App() {
         />
       )}
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Aesthetic Mobile & Tablet Bottom Navigation Bar */}
       <BottomNav
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -639,6 +639,11 @@ export default function App() {
         pendingVerificationCount={pendingConfirmationsCount}
         onOpenMobileMenu={() => setMobileMenuOpen(true)}
         onLogout={handleLogout}
+        onOpenAddModal={() => {
+          setAddModalPresetMode('iuran');
+          setAddModalOpen(true);
+        }}
+        onOpenUnitModal={(unitId, showQRIS) => handleOpenUnitModal(unitId, Boolean(showQRIS))}
       />
     </div>
   );

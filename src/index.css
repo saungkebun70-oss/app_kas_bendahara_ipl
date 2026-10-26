@@ -30,21 +30,29 @@
   }
 }
 
-/* Custom sleek scrollbar for tables and bounded containers */
+/* Custom sleek scrollbar for tables and bounded containers on PC, Tablet & Mobile */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(241, 245, 249, 0.7);
   border-radius: 9999px;
 }
 
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.55);
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.6);
+  background: rgba(100, 116, 139, 0.85);
+}
+
+/* Dedicated aesthetic table scroll container */
+.table-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.55) rgba(241, 245, 249, 0.7);
 }

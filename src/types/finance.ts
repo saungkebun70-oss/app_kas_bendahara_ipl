@@ -97,6 +97,10 @@ export interface AdminSettings {
     hPlus5Overdue: boolean;
   };
   whatsappTemplate: string;
+  whatsappPaymentLink?: string;
+  whatsappPaymentInstructions?: string;
+  autoReminderTriggerDay?: number;
+  autoReminderLastRunAt?: string;
   qrisImageUrl?: string;
   qrisFileName?: string;
   qrisMerchantName?: string;
