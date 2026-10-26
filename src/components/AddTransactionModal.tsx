@@ -223,7 +223,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       aria-modal="true"
       aria-labelledby="add-trx-modal-title"
     >
-      <div className="w-full max-w-lg rounded-xl border border-stone-200 bg-white shadow-xl">
+      <div className="w-full max-w-lg rounded-xl border border-stone-200 bg-white shadow-xl max-h-[92vh] overflow-y-auto">
         <div className="flex items-center justify-between border-b border-stone-200 px-6 py-4">
           <h2 id="add-trx-modal-title" className="font-display text-lg font-bold text-slate-900">
             Catat Transaksi Kas Saung Kebun

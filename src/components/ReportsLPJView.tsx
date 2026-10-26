@@ -304,10 +304,10 @@ export const ReportsLPJView: React.FC<ReportsLPJViewProps> = ({
               <h3 className="text-xs font-semibold text-slate-600 mb-3">
                 1. Rincian Rekapitulasi Bulanan dalam {quarterlyLPJ.title}
               </h3>
-              <div className="overflow-x-auto border border-stone-200 rounded-xl">
+              <div className="overflow-x-auto max-h-[380px] overflow-y-auto border border-stone-200 rounded-xl">
                 <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-stone-50 border-b border-stone-200 text-xs font-semibold text-slate-600">
+                  <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs">
+                    <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">
                       <th className="py-2.5 px-4">Bulan</th>
                       <th className="py-2.5 px-4 text-right">Iuran Warga</th>
                       <th className="py-2.5 px-4 text-right">Pemasukan Lain</th>
@@ -514,10 +514,10 @@ export const ReportsLPJView: React.FC<ReportsLPJViewProps> = ({
                 Tercantum penuh di dokumen PDF
               </span>
             </div>
-            <div className="overflow-x-auto border border-stone-200 rounded-xl">
+            <div className="overflow-x-auto max-h-[420px] overflow-y-auto border border-stone-200 rounded-xl">
               <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-stone-50 border-b border-stone-200 text-xs font-semibold text-slate-600">
+                <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs">
+                  <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">
                     <th className="py-2.5 px-4">Tanggal</th>
                     <th className="py-2.5 px-4">No. Bukti</th>
                     <th className="py-2.5 px-4">Kategori</th>

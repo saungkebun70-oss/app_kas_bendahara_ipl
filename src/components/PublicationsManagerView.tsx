@@ -579,10 +579,10 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
+          <div className="overflow-x-auto max-h-[460px] overflow-y-auto rounded-xl border border-slate-200">
             <table className="w-full border-collapse text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-500">
+              <thead className="sticky top-0 z-10 bg-slate-100/95 backdrop-blur-xs">
+                <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-600">
                   <th className="py-2.5 pl-4 pr-3">Unit Rumah</th>
                   <th className="px-3 py-2.5">Nama Kepala Keluarga</th>
                   <th className="px-3 py-2.5">Bulan Menunggak</th>

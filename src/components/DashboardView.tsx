@@ -26,6 +26,8 @@ import {
 } from '../lib/finance';
 import type { NavTab } from './Sidebar';
 import { ExpenseCategoryBarChart } from './ExpenseCategoryBarChart';
+import { MultiUserPresenceCard } from './MultiUserPresenceCard';
+import type { PresenceSummary } from '../lib/api';
 
 interface DashboardViewProps {
   state: DatabaseState;
@@ -38,6 +40,8 @@ interface DashboardViewProps {
   onSelectUnit: (unitId: string, openQRIS?: boolean) => void;
   isAdmin: boolean;
   onOpenVerification?: () => void;
+  presenceSummary?: PresenceSummary | null;
+  onRefreshPresence?: () => void;
 }
 
 const AVAILABLE_MONTHS = ['2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
@@ -53,6 +57,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onSelectUnit,
   isAdmin,
   onOpenVerification,
+  presenceSummary,
+  onRefreshPresence,
 }) => {
   const [txScope, setTxScope] = useState<'ALL' | 'income' | 'expense'>('ALL');
 
@@ -415,6 +421,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <span>Buka Verifikasi Bukti</span>
               </button>
             </div>
+          )}
+
+          {/* Real-Time Multi-User Presence Monitor for Admin (Warga & Keamanan) */}
+          {isAdmin && (
+            <MultiUserPresenceCard
+              presence={presenceSummary || null}
+              onRefresh={onRefreshPresence}
+            />
           )}
 
           {/* TOP SUMMARY CARD: Total Collected vs. Target Revenue for the Selected Month */}
@@ -892,10 +906,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             </div>
 
-            <div className="overflow-x-auto mt-2">
+            <div className="overflow-x-auto max-h-[360px] overflow-y-auto mt-2 rounded-lg">
               <table className="w-full border-collapse text-left text-xs">
-                <thead>
-                  <tr className="border-b border-slate-100 text-[11px] font-medium text-slate-400">
+                <thead className="sticky top-0 z-10 bg-white/95 backdrop-blur-xs">
+                  <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
                     <th className="py-3 pr-3">Date and ref</th>
                     <th className="px-3 py-3">Payment method</th>
                     <th className="px-3 py-3">Operation &amp; Unit</th>

@@ -804,10 +804,10 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
             </span>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-[62vh] overflow-y-auto rounded-b-2xl">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-stone-200 bg-stone-50/70 text-xs font-semibold text-slate-600">
+            <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs shadow-2xs">
+              <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">
                 <th className="py-3 px-4">Tanggal &amp; Bukti</th>
                 <th className="py-3 px-4">Periode &amp; LPJ</th>
                 <th className="py-3 px-4">Kategori</th>

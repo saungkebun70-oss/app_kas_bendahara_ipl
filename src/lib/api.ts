@@ -31,6 +31,29 @@ export interface BatchIuranPayload {
   recordedBy?: string;
 }
 
+export interface PresenceSummary {
+  totalOnline: number;
+  wargaCount: number;
+  wargaList: Array<{
+    unitId: string;
+    displayName: string;
+    lastSeenSecondsAgo: number;
+  }>;
+  satpamCount: number;
+  satpamList: Array<{
+    displayName: string;
+    roleLabel: string;
+    lastSeenSecondsAgo: number;
+  }>;
+  adminCount: number;
+  adminList: Array<{
+    displayName: string;
+    roleLabel: string;
+    lastSeenSecondsAgo: number;
+  }>;
+  timestamp: string;
+}
+
 async function handleJson<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let errMsg = `Permintaan gagal (${res.status})`;
@@ -72,6 +95,35 @@ export const api = {
       uptimeSeconds: number;
     }>(res);
     return { ...data, latencyMs };
+  },
+
+  async sendPresenceHeartbeat(payload: {
+    sessionId: string;
+    role: string;
+    roleLabel?: string;
+    displayName?: string;
+    unitId?: string;
+  }): Promise<PresenceSummary> {
+    const res = await fetch('/api/presence/heartbeat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return handleJson<PresenceSummary>(res);
+  },
+
+  async getPresenceSummary(): Promise<PresenceSummary> {
+    const res = await fetch('/api/presence/summary');
+    return handleJson<PresenceSummary>(res);
+  },
+
+  async sendPresenceLogout(sessionId: string): Promise<PresenceSummary> {
+    const res = await fetch('/api/presence/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    });
+    return handleJson<PresenceSummary>(res);
   },
 
   async createTransaction(payload: CreateTransactionPayload): Promise<DatabaseState> {

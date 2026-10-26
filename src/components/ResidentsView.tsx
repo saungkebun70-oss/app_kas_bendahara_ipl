@@ -207,10 +207,10 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[62vh] overflow-y-auto rounded-b-xl">
             <table className="w-full border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-stone-200 bg-stone-50/80 text-xs font-semibold text-slate-600">
+              <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs shadow-2xs">
+                <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">
                   <th className="py-3 pl-5 pr-3">Unit</th>
                   <th className="px-3 py-3">Kepala Keluarga &amp; NIK</th>
                   <th className="px-3 py-3">Alamat &amp; Hunian</th>

@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react';
 import type { AuthSession } from '../lib/auth';
+import type { PresenceSummary } from '../lib/api';
 import { DatabaseHealthIndicator } from './DatabaseHealthIndicator';
 
 export type NavTab =
@@ -40,6 +41,7 @@ interface SidebarProps {
   onCloseMobile: () => void;
   pendingVerificationCount?: number;
   onOpenVerification?: () => void;
+  presenceSummary?: PresenceSummary | null;
 }
 
 const MANAGE_NAV_ITEMS: Array<{
@@ -75,6 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile,
   pendingVerificationCount,
   onOpenVerification,
+  presenceSummary,
 }) => {
   const handleSelect = (id: NavTab) => {
     onSelectTab(id);
@@ -335,6 +338,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
             <DatabaseHealthIndicator />
           </div>
+
+          {session.isAdmin && presenceSummary && (
+            <div className="flex items-center justify-between text-[10px] text-sky-200/90 px-2 py-1 rounded-lg bg-white/10 border border-white/10">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+                </span>
+                <span>Online:</span>
+              </span>
+              <span className="font-bold text-[#5eead4] tabular-nums">
+                {presenceSummary.wargaCount} Warga · {presenceSummary.satpamCount} Satpam
+              </span>
+            </div>
+          )}
 
           <div className="flex items-center gap-2.5 px-1">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20 text-white">

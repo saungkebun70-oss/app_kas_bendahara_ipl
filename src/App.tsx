@@ -20,46 +20,94 @@ import { PublicationsManagerView } from './components/PublicationsManagerView';
 import { ReceiptPreviewModal } from './components/ReceiptPreviewModal';
 import { AdminPaymentVerificationModal } from './components/AdminPaymentVerificationModal';
 import { DatabaseHealthIndicator } from './components/DatabaseHealthIndicator';
+import { BottomNav } from './components/BottomNav';
+import type { PresenceSummary } from './lib/api';
 
-const AUTH_STORAGE_KEY = 'saung_kebun_auth_session_v1';
+const STORAGE_KEYS = {
+  admin: 'saung_kebun_session_admin_v2',
+  warga: 'saung_kebun_session_warga_v2',
+  satpam: 'saung_kebun_session_satpam_v2',
+} as const;
+
+function getCurrentPortalRole(): 'warga' | 'satpam' | 'admin' {
+  try {
+    const hash = window.location.hash.toLowerCase();
+    if (hash === '#warga') return 'warga';
+    if (hash === '#keamanan' || hash === '#satpam') return 'satpam';
+    const search = new URLSearchParams(window.location.search);
+    const p = search.get('portal');
+    if (p === 'warga') return 'warga';
+    if (p === 'keamanan' || p === 'satpam') return 'satpam';
+    if (p === 'admin') return 'admin';
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('warga')) return 'warga';
+    if (path.includes('keamanan') || path.includes('satpam')) return 'satpam';
+  } catch {}
+  return 'admin';
+}
+
+function getClientSessionId(): string {
+  let id = sessionStorage.getItem('saung_kebun_client_session_id');
+  if (!id) {
+    id = `SES-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    sessionStorage.setItem('saung_kebun_client_session_id', id);
+  }
+  return id;
+}
+
+function isSessionMatchingPortal(s: AuthSession, portal: 'warga' | 'satpam' | 'admin'): boolean {
+  if (portal === 'warga') return s.role === 'warga';
+  if (portal === 'satpam') return s.role === 'satpam';
+  return s.isAdmin || s.role === 'ketua' || s.role === 'bendahara';
+}
+
+function loadSessionForCurrentPortal(): AuthSession | null {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('autostart') === '1') {
+      return {
+        role: 'bendahara',
+        isAdmin: true,
+        displayName: 'Andriansyah',
+        roleLabel: 'Admin — Bendahara Pengurus',
+        unitId: 'A-09',
+        loginAt: new Date().toISOString(),
+      };
+    }
+    if (params.get('warga') === '1') {
+      return {
+        role: 'warga',
+        isAdmin: false,
+        displayName: 'Agus Pratama Putra',
+        roleLabel: 'Warga Unit A-05',
+        unitId: 'A-05',
+        loginAt: new Date().toISOString(),
+      };
+    }
+
+    const portal = getCurrentPortalRole();
+    const tabRaw = sessionStorage.getItem(`saung_kebun_session_${portal}`);
+    if (tabRaw) {
+      const parsed = JSON.parse(tabRaw) as AuthSession;
+      if (isSessionMatchingPortal(parsed, portal)) return parsed;
+    }
+
+    const localRaw = localStorage.getItem(STORAGE_KEYS[portal]);
+    if (localRaw) {
+      const parsed = JSON.parse(localRaw) as AuthSession;
+      if (isSessionMatchingPortal(parsed, portal)) return parsed;
+    }
+  } catch {}
+  return null;
+}
 
 export default function App() {
   const [db, setDb] = useState<DatabaseState | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [session, setSession] = useState<AuthSession | null>(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('autostart') === '1') {
-        return {
-          role: 'bendahara',
-          isAdmin: true,
-          displayName: 'Andriansyah',
-          roleLabel: 'Admin — Bendahara Pengurus',
-          unitId: 'A-09',
-          loginAt: new Date().toISOString(),
-        };
-      }
-      if (params.get('warga') === '1') {
-        return {
-          role: 'warga',
-          isAdmin: false,
-          displayName: 'Agus Pratama Putra',
-          roleLabel: 'Warga Unit A-05',
-          unitId: 'A-05',
-          loginAt: new Date().toISOString(),
-        };
-      }
-      const saved = localStorage.getItem(AUTH_STORAGE_KEY);
-      if (saved) {
-        return JSON.parse(saved) as AuthSession;
-      }
-    } catch {
-      // ignore storage errors
-    }
-    return null;
-  });
+  const [session, setSession] = useState<AuthSession | null>(loadSessionForCurrentPortal);
+  const [presenceSummary, setPresenceSummary] = useState<PresenceSummary | null>(null);
 
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [selectedMonth, setSelectedMonth] = useState<string>('2026-10');
@@ -92,6 +140,55 @@ export default function App() {
     loadDatabase();
   }, [loadDatabase]);
 
+  // Handle URL hash changes (e.g. switching between #warga, #keamanan, #admin)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const targetSession = loadSessionForCurrentPortal();
+      setSession(targetSession);
+      if (targetSession?.role === 'satpam') {
+        setActiveTab('publications');
+      } else {
+        setActiveTab('dashboard');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Multi-User Presence Heartbeat Effect
+  const pingPresence = useCallback(async () => {
+    const portal = getCurrentPortalRole();
+    if (!session) {
+      // Even when logged out, if viewing admin portal, fetch active presence
+      if (portal === 'admin') {
+        try {
+          const sum = await api.getPresenceSummary();
+          setPresenceSummary(sum);
+        } catch {}
+      }
+      return;
+    }
+
+    try {
+      const sum = await api.sendPresenceHeartbeat({
+        sessionId: getClientSessionId(),
+        role: session.role,
+        roleLabel: session.roleLabel,
+        displayName: session.displayName,
+        unitId: session.unitId || undefined,
+      });
+      setPresenceSummary(sum);
+    } catch {
+      // ignore transient network hiccups
+    }
+  }, [session]);
+
+  useEffect(() => {
+    pingPresence();
+    const interval = setInterval(pingPresence, 15000);
+    return () => clearInterval(interval);
+  }, [pingPresence]);
+
   const handleLoginSuccess = (newSession: AuthSession) => {
     setSession(newSession);
     if (newSession.role === 'satpam') {
@@ -99,22 +196,32 @@ export default function App() {
     } else {
       setActiveTab('dashboard');
     }
+    const portal = newSession.role === 'warga' ? 'warga' : newSession.role === 'satpam' ? 'satpam' : 'admin';
     try {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(newSession));
-    } catch {
-      // ignore
-    }
+      localStorage.setItem(STORAGE_KEYS[portal], JSON.stringify(newSession));
+      sessionStorage.setItem(`saung_kebun_session_${portal}`, JSON.stringify(newSession));
+    } catch {}
+
+    // Trigger immediate presence heartbeat on login
+    api.sendPresenceHeartbeat({
+      sessionId: getClientSessionId(),
+      role: newSession.role,
+      roleLabel: newSession.roleLabel,
+      displayName: newSession.displayName,
+      unitId: newSession.unitId || undefined,
+    }).then(setPresenceSummary).catch(() => {});
   };
 
   const handleLogout = () => {
+    const portal = getCurrentPortalRole();
+    try {
+      localStorage.removeItem(STORAGE_KEYS[portal]);
+      sessionStorage.removeItem(`saung_kebun_session_${portal}`);
+      api.sendPresenceLogout(getClientSessionId()).then(setPresenceSummary).catch(() => {});
+    } catch {}
     setSession(null);
     setSelectedUnitId(null);
     setOpenUnitWithQRIS(false);
-    try {
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-    } catch {
-      // ignore
-    }
   };
 
   const handleOpenUnitModal = (unitId: string, showQRIS = false) => {
@@ -231,9 +338,10 @@ export default function App() {
         onCloseMobile={() => setMobileMenuOpen(false)}
         pendingVerificationCount={pendingConfirmationsCount}
         onOpenVerification={() => setVerificationModalOpen(true)}
+        presenceSummary={presenceSummary}
       />
 
-      <main className="flex-1 min-w-0 w-full">
+      <main className="flex-1 min-w-0 w-full pb-20 lg:pb-0">
         {isWarga ? (
           <WargaPortalView
             state={db}
@@ -309,6 +417,8 @@ export default function App() {
             onSelectUnit={(unitId, showQRIS) => handleOpenUnitModal(unitId, Boolean(showQRIS))}
             isAdmin={isAdmin}
             onOpenVerification={() => setVerificationModalOpen(true)}
+            presenceSummary={presenceSummary}
+            onRefreshPresence={pingPresence}
           />
         ) : (
           <div className="p-4 sm:p-6 lg:p-8 max-w-[1440px] mx-auto w-full">
@@ -519,6 +629,17 @@ export default function App() {
           onStateUpdate={setDb}
         />
       )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <BottomNav
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        session={session}
+        unpaidCount={unpaidBillingItems.length}
+        pendingVerificationCount={pendingConfirmationsCount}
+        onOpenMobileMenu={() => setMobileMenuOpen(true)}
+        onLogout={handleLogout}
+      />
     </div>
   );
 }

@@ -145,6 +145,106 @@ async function startServer() {
     }
   });
 
+  // Real-time Multi-User Presence Tracker
+  interface ActivePresenceSession {
+    sessionId: string;
+    role: string;
+    roleLabel: string;
+    displayName: string;
+    unitId?: string;
+    lastSeen: number;
+  }
+
+  const activeSessions = new Map<string, ActivePresenceSession>();
+
+  function cleanupStaleSessions(): void {
+    const cutoff = Date.now() - 45000;
+    for (const [id, sess] of activeSessions.entries()) {
+      if (sess.lastSeen < cutoff) {
+        activeSessions.delete(id);
+      }
+    }
+  }
+
+  function getPresenceSummary() {
+    cleanupStaleSessions();
+    const now = Date.now();
+    const sessions = Array.from(activeSessions.values());
+
+    const wargaList = sessions
+      .filter((s) => s.role === 'warga')
+      .map((s) => ({
+        unitId: s.unitId || '-',
+        displayName: s.displayName,
+        lastSeenSecondsAgo: Math.max(0, Math.round((now - s.lastSeen) / 1000)),
+      }));
+
+    const satpamList = sessions
+      .filter((s) => s.role === 'satpam')
+      .map((s) => ({
+        displayName: s.displayName,
+        roleLabel: s.roleLabel,
+        lastSeenSecondsAgo: Math.max(0, Math.round((now - s.lastSeen) / 1000)),
+      }));
+
+    const adminList = sessions
+      .filter((s) => s.role === 'admin' || s.role === 'ketua' || s.role === 'bendahara')
+      .map((s) => ({
+        displayName: s.displayName,
+        roleLabel: s.roleLabel,
+        lastSeenSecondsAgo: Math.max(0, Math.round((now - s.lastSeen) / 1000)),
+      }));
+
+    return {
+      totalOnline: sessions.length,
+      wargaCount: wargaList.length,
+      wargaList,
+      satpamCount: satpamList.length,
+      satpamList,
+      adminCount: adminList.length,
+      adminList,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  app.post('/api/presence/heartbeat', (req, res) => {
+    const { sessionId, role, roleLabel, displayName, unitId } = req.body as {
+      sessionId?: string;
+      role?: string;
+      roleLabel?: string;
+      displayName?: string;
+      unitId?: string;
+    };
+
+    if (!sessionId || !role) {
+      res.status(400).json({ error: 'sessionId and role are required' });
+      return;
+    }
+
+    activeSessions.set(sessionId, {
+      sessionId,
+      role,
+      roleLabel: roleLabel || role,
+      displayName: displayName || 'Pengguna',
+      unitId,
+      lastSeen: Date.now(),
+    });
+
+    res.json(getPresenceSummary());
+  });
+
+  app.get('/api/presence/summary', (_req, res) => {
+    res.json(getPresenceSummary());
+  });
+
+  app.post('/api/presence/logout', (req, res) => {
+    const { sessionId } = req.body as { sessionId?: string };
+    if (sessionId) {
+      activeSessions.delete(sessionId);
+    }
+    res.json(getPresenceSummary());
+  });
+
   app.post('/api/transactions', (req, res) => {
     const {
       date,

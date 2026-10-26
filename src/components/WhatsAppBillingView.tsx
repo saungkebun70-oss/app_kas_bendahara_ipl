@@ -188,7 +188,7 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-stone-100">
+            <div className="divide-y divide-stone-100 max-h-[500px] overflow-y-auto pr-1">
               {unpaidList.map((item) => {
                 const isSelected =
                   activePreviewItem?.resident.id === item.resident.id;
