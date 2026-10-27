@@ -105,8 +105,12 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     dueDate: true,
     hPlus5Overdue: true,
   },
+  autoReminderTriggerDay: 10,
+  whatsappPaymentLink: 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga',
+  whatsappPaymentInstructions:
+    '1. Transfer Bank BCA Rek: 7410-8892-10 a/n Kas Perumahan Saung Kebun\n2. Atau Scan QRIS resmi Saung Kebun via link Portal Warga di bawah\n3. Unggah bukti pembayaran melalui link Portal Warga agar otomatis terverifikasi',
   whatsappTemplate:
-    'Assalamualaikum Bapak/Ibu *{nama}* (Unit *{unit}* - {alamat}), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *{periode}* sebesar *{nominal}* (jatuh tempo setiap tanggal {jatuh_tempo}). Pembayaran dapat ditransfer melalui *{rekening}*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.',
+    'Assalamualaikum Bapak/Ibu *{nama}* (Unit *{unit}* - {alamat}), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan bahwa tagihan iuran bulanan periode *{periode}* sebesar *{nominal}* telah jatuh tempo (setiap tanggal {jatuh_tempo}).\n\n*Cara & Instruksi Pembayaran:*\n{instruksi_bayar}\n\n*Link Portal Warga & QRIS:*\n{link_bayar}\n\nTerima kasih atas partisipasi Bapak/Ibu menjaga kebersihan & keamanan lingkungan Saung Kebun.',
   qrisImageUrl: DEFAULT_QRIS_IMAGE_DATA_URL,
   qrisFileName: 'QRIS-Standar-Saung-Kebun.svg',
   qrisMerchantName: 'KAS PERUMAHAN SAUNG KEBUN',

@@ -634,3 +634,28 @@ test('admin can publish and unpublish monthly reports and quarterly LPJ for resi
   assert.equal(db.settings.publishedQuarterlyLPJ.includes('2026-Q4'), false);
 });
 
+test('automated WhatsApp billing system formats payment links, instructions, and unpaid overdue details accurately', () => {
+  const db = createSeedDatabase();
+  assert.equal(db.settings.autoWhatsappEnabled, true);
+  assert.equal(db.settings.dueDayOfMonth, 10);
+  assert.equal(db.settings.autoReminderTriggerDay, 10);
+  assert.ok(db.settings.whatsappPaymentLink?.includes('#warga'));
+  assert.ok(db.settings.whatsappPaymentInstructions?.includes('QRIS'));
+
+  const unpaidItems = getUnpaidResidentsForBilling(db, '2026-10');
+  assert.ok(unpaidItems.length > 0, 'Seed data has unpaid residents in October 2026');
+
+  const firstUnpaid = unpaidItems[0];
+  assert.ok(firstUnpaid.totalArrears >= 100000);
+  assert.ok(firstUnpaid.formattedMessage.includes('100.000') || firstUnpaid.formattedMessage.includes('Rp'));
+  assert.ok(firstUnpaid.formattedMessage.includes(firstUnpaid.resident.headOfFamily));
+  assert.ok(firstUnpaid.formattedMessage.includes(firstUnpaid.resident.id));
+  assert.ok(firstUnpaid.formattedMessage.includes('Link Pembayaran & QRIS') || firstUnpaid.formattedMessage.includes('#warga'));
+  assert.ok(firstUnpaid.formattedMessage.includes('BCA') || firstUnpaid.formattedMessage.includes('Transfer'));
+
+  // Verify wa.me URL format
+  assert.ok(firstUnpaid.waWebUrl.startsWith('https://wa.me/62'));
+  assert.ok(firstUnpaid.waWebUrl.includes('text='));
+});
+
+

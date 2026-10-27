@@ -525,6 +525,215 @@ async function startServer() {
     res.json({ state: dbState, sentCount: logsToAdd.length });
   });
 
+  // Automated WhatsApp Reminder System
+  function checkAndRunAutomatedReminders(
+    force = false,
+    targetPeriod?: string
+  ): {
+    sentCount: number;
+    logs: WhatsAppNotificationLog[];
+    eligibleCount: number;
+    dueDay: number;
+    period: string;
+    message: string;
+  } {
+    const settings = dbState.settings;
+    if (!settings.autoWhatsappEnabled && !force) {
+      return {
+        sentCount: 0,
+        logs: [],
+        eligibleCount: 0,
+        dueDay: settings.dueDayOfMonth || 10,
+        period: targetPeriod || '2026-10',
+        message: 'Otomasi WhatsApp dinonaktifkan dalam Pengaturan Admin.',
+      };
+    }
+
+    const now = new Date();
+    const currentDay = now.getDate();
+    const period = targetPeriod || '2026-10';
+    const dueDay = settings.dueDayOfMonth || 10;
+    const triggerDay = settings.autoReminderTriggerDay || dueDay;
+
+    if (!force) {
+      const isExactDue = currentDay === dueDay;
+      const isTriggerDay = currentDay === triggerDay;
+      const isHMinus3 =
+        settings.autoReminderSchedule?.hMinus3 &&
+        currentDay === Math.max(1, dueDay - 3);
+      const isHPlus5 =
+        settings.autoReminderSchedule?.hPlus5Overdue &&
+        currentDay === dueDay + 5;
+      const isPastDue = currentDay >= dueDay;
+
+      const isEligibleDate =
+        isExactDue || isTriggerDay || isHMinus3 || isHPlus5 || isPastDue;
+      if (!isEligibleDate) {
+        return {
+          sentCount: 0,
+          logs: [],
+          eligibleCount: 0,
+          dueDay,
+          period,
+          message: `Hari ini (tanggal ${currentDay}) belum mencapai jadwal penagihan (jatuh tempo tanggal ${dueDay}).`,
+        };
+      }
+    }
+
+    const paidUnits = new Set<string>();
+    for (const t of dbState.transactions) {
+      if (
+        t.type === 'income' &&
+        t.category === 'Iuran Bulanan Warga' &&
+        t.unitId &&
+        t.periodMonth === period
+      ) {
+        paidUnits.add(t.unitId);
+      }
+    }
+
+    const unpaidResidents = dbState.residents.filter((r) => !paidUnits.has(r.id));
+    if (unpaidResidents.length === 0) {
+      return {
+        sentCount: 0,
+        logs: [],
+        eligibleCount: 0,
+        dueDay,
+        period,
+        message: `Seluruh 55 unit warga sudah lunas untuk periode ${period}.`,
+      };
+    }
+
+    const todayStr = now.toISOString().split('T')[0];
+    const nowIso = now.toISOString();
+    const logsToAdd: WhatsAppNotificationLog[] = [];
+    const remindedIds = new Set<string>();
+
+    const linkBayar =
+      settings.whatsappPaymentLink ||
+      'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+    const instruksiBayar =
+      settings.whatsappPaymentInstructions ||
+      `1. Transfer Bank BCA: ${settings.bankAccountInfo}\n2. Atau Scan QRIS via link Portal Warga di bawah\n3. Unggah bukti transfer melalui Portal Warga agar diverifikasi`;
+    const feeNominal = settings.monthlyFee || 100000;
+    const formattedFee = `Rp ${feeNominal.toLocaleString('id-ID')}`;
+
+    for (const resident of unpaidResidents) {
+      if (!force && resident.lastRemindedAt && resident.lastRemindedAt.startsWith(todayStr)) {
+        continue;
+      }
+
+      const template =
+        settings.whatsappTemplate ||
+        'Assalamualaikum Bapak/Ibu *{nama}* (Unit *{unit}*), tagihan iuran bulanan periode *{periode}* sebesar *{nominal}* telah jatuh tempo (tanggal {jatuh_tempo}).\n\n*Cara Pembayaran:*\n{instruksi_bayar}\n\n*Link Portal Warga:*\n{link_bayar}';
+
+      const message = template
+        .replace(/\{nama\}/g, resident.headOfFamily)
+        .replace(/\{unit\}/g, resident.id)
+        .replace(/\{alamat\}/g, resident.streetName)
+        .replace(/\{periode\}/g, period === '2026-10' ? 'Oktober 2026' : period)
+        .replace(/\{nominal\}/g, formattedFee)
+        .replace(/\{jatuh_tempo\}/g, String(dueDay))
+        .replace(/\{rekening\}/g, settings.bankAccountInfo)
+        .replace(/\{link_bayar\}/g, linkBayar)
+        .replace(/\{instruksi_bayar\}/g, instruksiBayar);
+
+      logsToAdd.push({
+        id: `WA-AUTO-${Date.now()}-${logsToAdd.length + 1}`,
+        sentAt: nowIso,
+        unitId: resident.id,
+        residentName: resident.headOfFamily,
+        whatsapp: resident.whatsapp,
+        periodMonth: period,
+        arrearsMonths: [period],
+        totalBilled: feeNominal,
+        message,
+        triggerType: 'Otomatis Terjadwal',
+        status: 'Terkirim',
+      });
+      remindedIds.add(resident.id);
+    }
+
+    if (logsToAdd.length > 0) {
+      dbState = {
+        ...dbState,
+        residents: dbState.residents.map((r) =>
+          remindedIds.has(r.id) ? { ...r, lastRemindedAt: nowIso } : r
+        ),
+        whatsappLogs: [...logsToAdd, ...dbState.whatsappLogs],
+        settings: {
+          ...dbState.settings,
+          autoReminderLastRunAt: nowIso,
+        },
+      };
+      saveDatabase(dbState);
+    }
+
+    return {
+      sentCount: logsToAdd.length,
+      logs: logsToAdd,
+      eligibleCount: unpaidResidents.length,
+      dueDay,
+      period,
+      message:
+        logsToAdd.length > 0
+          ? `Otomasi berhasil mengirimkan ${logsToAdd.length} pesan pengingat WhatsApp ke warga belum bayar.`
+          : 'Semua warga yang belum membayar sudah diingatkan hari ini.',
+    };
+  }
+
+  // Automatic background reminder runner (checks every 30 minutes)
+  setInterval(() => {
+    try {
+      checkAndRunAutomatedReminders(false);
+    } catch (err) {
+      console.error('Background automated WhatsApp error:', err);
+    }
+  }, 30 * 60 * 1000);
+
+  app.post('/api/whatsapp/auto-remind', (req, res) => {
+    const { force, periodMonth } = req.body as {
+      force?: boolean;
+      periodMonth?: string;
+    };
+    const result = checkAndRunAutomatedReminders(force ?? true, periodMonth);
+    res.json({
+      state: dbState,
+      ...result,
+    });
+  });
+
+  app.get('/api/whatsapp/auto-status', (_req, res) => {
+    const period = '2026-10';
+    const paidUnits = new Set<string>();
+    for (const t of dbState.transactions) {
+      if (
+        t.type === 'income' &&
+        t.category === 'Iuran Bulanan Warga' &&
+        t.unitId &&
+        t.periodMonth === period
+      ) {
+        paidUnits.add(t.unitId);
+      }
+    }
+    const unpaidCount = dbState.residents.filter((r) => !paidUnits.has(r.id)).length;
+
+    res.json({
+      autoWhatsappEnabled: dbState.settings.autoWhatsappEnabled,
+      dueDayOfMonth: dbState.settings.dueDayOfMonth,
+      autoReminderTriggerDay:
+        dbState.settings.autoReminderTriggerDay ?? dbState.settings.dueDayOfMonth,
+      autoReminderSchedule: dbState.settings.autoReminderSchedule,
+      autoReminderLastRunAt: dbState.settings.autoReminderLastRunAt,
+      unpaidCount,
+      monthlyFee: dbState.settings.monthlyFee,
+      whatsappPaymentLink: dbState.settings.whatsappPaymentLink,
+      whatsappPaymentInstructions: dbState.settings.whatsappPaymentInstructions,
+      activePeriodMonth: period,
+      serverTime: new Date().toISOString(),
+    });
+  });
+
   app.put('/api/settings', (req, res) => {
     const incoming = req.body as Partial<AdminSettings>;
     const monthlyFee = Number(incoming.monthlyFee);

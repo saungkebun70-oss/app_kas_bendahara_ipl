@@ -241,7 +241,7 @@
       "vehiclePlate": "F 1358 SGB",
       "joinedYear": 2021,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "B-01",
@@ -306,7 +306,7 @@
       "vehiclePlate": "F 1426 TKP",
       "joinedYear": 2019,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "B-05",
@@ -387,7 +387,7 @@
       "vehiclePlate": "F 1511 TKP",
       "joinedYear": 2024,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "B-10",
@@ -468,7 +468,7 @@
       "vehiclePlate": "F 1596 TKP",
       "joinedYear": 2023,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "B-15",
@@ -533,7 +533,7 @@
       "vehiclePlate": "F 1664 BGR",
       "joinedYear": 2021,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "C-04",
@@ -663,7 +663,7 @@
       "vehiclePlate": "F 1800 SK",
       "joinedYear": 2023,
       "notes": "Iuran dibayar oleh penyewa bulanan",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "C-12",
@@ -825,7 +825,7 @@
       "vehiclePlate": "F 1970 SK",
       "joinedYear": 2021,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "D-07",
@@ -874,7 +874,7 @@
       "vehiclePlate": "F 2021 TKP",
       "joinedYear": 2024,
       "notes": "Warga tetap aktif paguyuban",
-      "lastRemindedAt": "2026-10-10T08:30:00.000Z"
+      "lastRemindedAt": "2026-10-27T08:14:37.703Z"
     },
     {
       "id": "D-10",
@@ -4145,6 +4145,126 @@
   ],
   "whatsappLogs": [
     {
+      "id": "WA-AUTO-1793088877709-1",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "A-15",
+      "residentName": "Taufik Ismail",
+      "whatsapp": "0821-8410-4118",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Taufik Ismail* (Unit *A-15* - Jl. Saung Melati), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-2",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "B-04",
+      "residentName": "Arif Budiman, M.M.",
+      "whatsapp": "0878-8410-4666",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Arif Budiman, M.M.* (Unit *B-04* - Jl. Kebun Asri), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-3",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "B-09",
+      "residentName": "Reza Pahlevi",
+      "whatsapp": "0878-8410-5351",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Reza Pahlevi* (Unit *B-09* - Jl. Kebun Asri), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-4",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "B-14",
+      "residentName": "Lestari Handayani",
+      "whatsapp": "0878-8410-6036",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Lestari Handayani* (Unit *B-14* - Jl. Kebun Asri), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-5",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "C-03",
+      "residentName": "Zulkifli Mansyur",
+      "whatsapp": "0857-8410-6584",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Zulkifli Mansyur* (Unit *C-03* - Jl. Saung Cendana), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-6",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "C-11",
+      "residentName": "Novi Rahmawati",
+      "whatsapp": "0812-8410-7680",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Novi Rahmawati* (Unit *C-11* - Jl. Saung Cendana), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-7",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "D-06",
+      "residentName": "Wulan Guritno Putri",
+      "whatsapp": "0812-8410-9050",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Wulan Guritno Putri* (Unit *D-06* - Jl. Kebun Kenanga), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
+      "id": "WA-AUTO-1793088877709-8",
+      "sentAt": "2026-10-27T08:14:37.703Z",
+      "unitId": "D-09",
+      "residentName": "Anwar Sanusi",
+      "whatsapp": "0878-8410-9461",
+      "periodMonth": "2026-10",
+      "arrearsMonths": [
+        "2026-10"
+      ],
+      "totalBilled": 100000,
+      "message": "Assalamualaikum Bapak/Ibu *Anwar Sanusi* (Unit *D-09* - Jl. Kebun Kenanga), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *Oktober 2026* sebesar *Rp 100.000* (jatuh tempo setiap tanggal 10). Pembayaran dapat ditransfer melalui *BCA 7410-8892-10 a.n. Kas Perumahan Saung Kebun (QRIS Tersedia)*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
+      "triggerType": "Otomatis Terjadwal",
+      "status": "Terkirim"
+    },
+    {
       "id": "WA-202610-001",
       "sentAt": "2026-10-10T08:30:00.000Z",
       "unitId": "A-12",
@@ -4195,6 +4315,9 @@
       "dueDate": true,
       "hPlus5Overdue": true
     },
+    "autoReminderTriggerDay": 10,
+    "whatsappPaymentLink": "https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga",
+    "whatsappPaymentInstructions": "1. Transfer Bank BCA Rek: 7410-8892-10 a/n Kas Perumahan Saung Kebun\n2. Atau Scan QRIS resmi Saung Kebun via link Portal Warga di bawah\n3. Unggah bukti pembayaran melalui link Portal Warga agar otomatis terverifikasi",
     "whatsappTemplate": "Assalamualaikum Bapak/Ibu *{nama}* (Unit *{unit}* - {alamat}), kami dari Pengurus *Perumahan Saung Kebun* mengingatkan tagihan iuran lingkungan periode *{periode}* sebesar *{nominal}* (jatuh tempo setiap tanggal {jatuh_tempo}). Pembayaran dapat ditransfer melalui *{rekening}*. Terima kasih atas partisipasi Bapak/Ibu menjaga kenyamanan lingkungan kita.",
     "qrisImageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20400%22%20width%3D%22320%22%20height%3D%22400%22%3E%0A%20%20%3Crect%20width%3D%22320%22%20height%3D%22400%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23cbd5e1%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22320%22%20height%3D%2268%22%20rx%3D%2216%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%2248%22%20width%3D%22320%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2234%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2220%22%3EQRIS%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2253%22%20fill%3D%22%235eead4%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2210%22%3EQR%20Code%20Standar%20Pembayaran%20Nasional%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%22246%22%20y%3D%2218%22%20width%3D%2252%22%20height%3D%2230%22%20rx%3D%226%22%20fill%3D%22%231547b8%22%20stroke%3D%22%2338d3c3%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Ctext%20x%3D%22272%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2213%22%3EGPN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20fill%3D%22%230f172a%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2215%22%3EKAS%20PERUMAHAN%20SAUNG%20KEBUN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22114%22%20text-anchor%3D%22middle%22%20fill%3D%22%23475569%22%20font-family%3D%22monospace%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3ENMID%3A%20ID1026000550070%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%2255%22%20y%3D%22128%22%20width%3D%22210%22%20height%3D%22210%22%20rx%3D%2210%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23e2e8f0%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%22202%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%22216%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22275%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22289%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%230b2273%22%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22172%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22142%22%20y%3D%22155%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22155%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22167%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22182%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22100%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22132%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22165%22%20y%3D%22205%22%20width%3D%2215%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22195%22%20y%3D%22205%22%20width%3D%2225%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22230%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22225%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%2292%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22122%22%20y%3D%22228%22%20width%3D%2215%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22212%22%20y%3D%22225%22%20width%3D%2212%22%20height%3D%2222%22%2F%3E%3Crect%20x%3D%22236%22%20y%3D%22225%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22252%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22110%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22146%22%20y%3D%22248%22%20width%3D%2228%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22186%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22220%22%20y%3D%22252%22%20width%3D%2230%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22275%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22156%22%20y%3D%22275%22%20width%3D%2224%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22192%22%20y%3D%22275%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22222%22%20y%3D%22275%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22298%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22168%22%20y%3D%22298%22%20width%3D%2214%22%20height%3D%2224%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22298%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22232%22%20y%3D%22298%22%20width%3D%2218%22%20height%3D%2224%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22314%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22314%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22362%22%20text-anchor%3D%22middle%22%20fill%3D%22%231547b8%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3EIuran%20Bulanan%20Warga%20Rp%20100.000%20%2F%20Rumah%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22380%22%20text-anchor%3D%22middle%22%20fill%3D%22%2364748b%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%3EBCA%20%C2%B7%20Mandiri%20%C2%B7%20BRI%20%C2%B7%20BNI%20%C2%B7%20GoPay%20%C2%B7%20OVO%20%C2%B7%20DANA%20%C2%B7%20ShopeePay%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
     "qrisFileName": "QRIS-Standar-Saung-Kebun.svg",
@@ -4202,7 +4325,17 @@
     "qrisNmid": "ID1026000550070",
     "qrisUpdatedAt": "2026-10-25T01:09:56.618Z",
     "publishArrearsToResidents": true,
-    "hiddenArrearsUnitIds": []
+    "hiddenArrearsUnitIds": [],
+    "publishedMonthlyReports": [
+      "2026-07",
+      "2026-08",
+      "2026-09",
+      "2026-10"
+    ],
+    "publishedQuarterlyLPJ": [
+      "2026-Q3"
+    ],
+    "autoReminderLastRunAt": "2026-10-27T08:14:37.703Z"
   },
   "announcements": [
     {
@@ -4337,6 +4470,50 @@
       "status": "Aktif",
       "joinedDate": "2024-05-15",
       "notes": "Petugas pengganti libur dan bantuan pengamanan acara warga"
+    }
+  ],
+  "paymentConfirmations": [
+    {
+      "id": "CONF-2026-001",
+      "unitId": "A-05",
+      "residentName": "Agus Pratama Putra",
+      "whatsapp": "081298765435",
+      "periodMonths": [
+        "2026-10"
+      ],
+      "amount": 100000,
+      "paymentMethod": "Transfer BCA Kas",
+      "transferDate": "2026-10-24",
+      "senderBank": "Bank BCA",
+      "senderAccountName": "Agus Pratama Putra",
+      "notes": "Iuran bulan Oktober 2026 via m-BCA mohon diverifikasi",
+      "proofImageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20400%22%20width%3D%22320%22%20height%3D%22400%22%3E%0A%20%20%3Crect%20width%3D%22320%22%20height%3D%22400%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23cbd5e1%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22320%22%20height%3D%2268%22%20rx%3D%2216%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%2248%22%20width%3D%22320%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2234%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2220%22%3EQRIS%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2253%22%20fill%3D%22%235eead4%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2210%22%3EQR%20Code%20Standar%20Pembayaran%20Nasional%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%22246%22%20y%3D%2218%22%20width%3D%2252%22%20height%3D%2230%22%20rx%3D%226%22%20fill%3D%22%231547b8%22%20stroke%3D%22%2338d3c3%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Ctext%20x%3D%22272%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2213%22%3EGPN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20fill%3D%22%230f172a%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2215%22%3EKAS%20PERUMAHAN%20SAUNG%20KEBUN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22114%22%20text-anchor%3D%22middle%22%20fill%3D%22%23475569%22%20font-family%3D%22monospace%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3ENMID%3A%20ID1026000550070%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%2255%22%20y%3D%22128%22%20width%3D%22210%22%20height%3D%22210%22%20rx%3D%2210%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23e2e8f0%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%22202%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%22216%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22275%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22289%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%230b2273%22%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22172%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22142%22%20y%3D%22155%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22155%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22167%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22182%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22100%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22132%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22165%22%20y%3D%22205%22%20width%3D%2215%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22195%22%20y%3D%22205%22%20width%3D%2225%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22230%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22225%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%2292%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22122%22%20y%3D%22228%22%20width%3D%2215%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22212%22%20y%3D%22225%22%20width%3D%2212%22%20height%3D%2222%22%2F%3E%3Crect%20x%3D%22236%22%20y%3D%22225%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22252%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22110%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22146%22%20y%3D%22248%22%20width%3D%2228%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22186%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22220%22%20y%3D%22252%22%20width%3D%2230%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22275%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22156%22%20y%3D%22275%22%20width%3D%2224%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22192%22%20y%3D%22275%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22222%22%20y%3D%22275%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22298%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22168%22%20y%3D%22298%22%20width%3D%2214%22%20height%3D%2224%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22298%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22232%22%20y%3D%22298%22%20width%3D%2218%22%20height%3D%2224%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22314%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22314%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22362%22%20text-anchor%3D%22middle%22%20fill%3D%22%231547b8%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3EIuran%20Bulanan%20Warga%20Rp%20100.000%20%2F%20Rumah%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22380%22%20text-anchor%3D%22middle%22%20fill%3D%22%2364748b%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%3EBCA%20%C2%B7%20Mandiri%20%C2%B7%20BRI%20%C2%B7%20BNI%20%C2%B7%20GoPay%20%C2%B7%20OVO%20%C2%B7%20DANA%20%C2%B7%20ShopeePay%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+      "proofFileName": "bukti-transfer-bca-A05.png",
+      "status": "MENUNGGU_VERIFIKASI",
+      "submittedAt": "2026-10-24T10:15:00.000Z"
+    },
+    {
+      "id": "CONF-2026-002",
+      "unitId": "A-01",
+      "residentName": "Erlangga",
+      "whatsapp": "081298765431",
+      "periodMonths": [
+        "2026-10"
+      ],
+      "amount": 100000,
+      "paymentMethod": "Transfer BCA Kas",
+      "transferDate": "2026-10-05",
+      "senderBank": "Bank BCA",
+      "senderAccountName": "Erlangga",
+      "notes": "Iuran bulan Oktober 2026 unit A-01",
+      "proofImageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20400%22%20width%3D%22320%22%20height%3D%22400%22%3E%0A%20%20%3Crect%20width%3D%22320%22%20height%3D%22400%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23cbd5e1%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22320%22%20height%3D%2268%22%20rx%3D%2216%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%2248%22%20width%3D%22320%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2234%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2220%22%3EQRIS%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%2224%22%20y%3D%2253%22%20fill%3D%22%235eead4%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2210%22%3EQR%20Code%20Standar%20Pembayaran%20Nasional%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%22246%22%20y%3D%2218%22%20width%3D%2252%22%20height%3D%2230%22%20rx%3D%226%22%20fill%3D%22%231547b8%22%20stroke%3D%22%2338d3c3%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Ctext%20x%3D%22272%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ffffff%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2213%22%3EGPN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20fill%3D%22%230f172a%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2215%22%3EKAS%20PERUMAHAN%20SAUNG%20KEBUN%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22114%22%20text-anchor%3D%22middle%22%20fill%3D%22%23475569%22%20font-family%3D%22monospace%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3ENMID%3A%20ID1026000550070%3C%2Ftext%3E%0A%20%20%3Crect%20x%3D%2255%22%20y%3D%22128%22%20width%3D%22210%22%20height%3D%22210%22%20rx%3D%2210%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23e2e8f0%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%22202%22%20y%3D%22143%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%22216%22%20y%3D%22157%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Crect%20x%3D%2270%22%20y%3D%22275%22%20width%3D%2248%22%20height%3D%2248%22%20fill%3D%22none%22%20stroke%3D%22%230b2273%22%20stroke-width%3D%227%22%2F%3E%0A%20%20%3Crect%20x%3D%2284%22%20y%3D%22289%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22%230b2273%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%230b2273%22%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22172%22%20y%3D%22143%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22142%22%20y%3D%22155%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22155%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22167%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22162%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22167%22%20width%3D%2210%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22152%22%20y%3D%22182%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22182%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22100%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22132%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%22165%22%20y%3D%22205%22%20width%3D%2215%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22195%22%20y%3D%22205%22%20width%3D%2225%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22230%22%20y%3D%22205%22%20width%3D%2220%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22225%22%20width%3D%2210%22%20height%3D%2220%22%2F%3E%3Crect%20x%3D%2292%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22122%22%20y%3D%22228%22%20width%3D%2215%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22182%22%20y%3D%22225%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22212%22%20y%3D%22225%22%20width%3D%2212%22%20height%3D%2222%22%2F%3E%3Crect%20x%3D%22236%22%20y%3D%22225%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2270%22%20y%3D%22252%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22110%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22146%22%20y%3D%22248%22%20width%3D%2228%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22186%22%20y%3D%22252%22%20width%3D%2222%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22220%22%20y%3D%22252%22%20width%3D%2230%22%20height%3D%2210%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22275%22%20width%3D%2214%22%20height%3D%2214%22%2F%3E%3Crect%20x%3D%22156%22%20y%3D%22275%22%20width%3D%2224%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22192%22%20y%3D%22275%22%20width%3D%2218%22%20height%3D%2218%22%2F%3E%3Crect%20x%3D%22222%22%20y%3D%22275%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22298%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22168%22%20y%3D%22298%22%20width%3D%2214%22%20height%3D%2224%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22298%22%20width%3D%2228%22%20height%3D%2212%22%2F%3E%3Crect%20x%3D%22232%22%20y%3D%22298%22%20width%3D%2218%22%20height%3D%2224%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%22132%22%20y%3D%22314%22%20width%3D%2224%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%22194%22%20y%3D%22314%22%20width%3D%2228%22%20height%3D%2210%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22362%22%20text-anchor%3D%22middle%22%20fill%3D%22%231547b8%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2211%22%3EIuran%20Bulanan%20Warga%20Rp%20100.000%20%2F%20Rumah%3C%2Ftext%3E%0A%20%20%3Ctext%20x%3D%22160%22%20y%3D%22380%22%20text-anchor%3D%22middle%22%20fill%3D%22%2364748b%22%20font-family%3D%22sans-serif%22%20font-size%3D%2210%22%3EBCA%20%C2%B7%20Mandiri%20%C2%B7%20BRI%20%C2%B7%20BNI%20%C2%B7%20GoPay%20%C2%B7%20OVO%20%C2%B7%20DANA%20%C2%B7%20ShopeePay%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+      "proofFileName": "struk-transfer-A01.png",
+      "status": "DISETUJUI",
+      "submittedAt": "2026-10-05T08:30:00.000Z",
+      "verifiedAt": "2026-10-05T09:00:00.000Z",
+      "verifiedBy": "Andriansyah (Bendahara)",
+      "resultingTransactionId": "TRX-20261005-001",
+      "resultingReceiptNumber": "SK/KW/2026/10/A01"
     }
   ]
 }

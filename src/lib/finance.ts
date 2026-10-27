@@ -739,8 +739,15 @@ export function formatWhatsAppReminderMessage(
     nominal: string;
     jatuhTempo: number;
     rekening: string;
+    linkBayar?: string;
+    instruksiBayar?: string;
   }
 ): string {
+  const link = params.linkBayar || 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+  const instruksi =
+    params.instruksiBayar ||
+    `1. Transfer Bank BCA: ${params.rekening}\n2. Atau Scan QRIS via link Portal Warga\n3. Unggah bukti pembayaran melalui link Portal Warga`;
+
   return template
     .replace(/\{nama\}/g, params.nama)
     .replace(/\{unit\}/g, params.unit)
@@ -748,7 +755,9 @@ export function formatWhatsAppReminderMessage(
     .replace(/\{periode\}/g, params.periode)
     .replace(/\{nominal\}/g, params.nominal)
     .replace(/\{jatuh_tempo\}/g, String(params.jatuhTempo))
-    .replace(/\{rekening\}/g, params.rekening);
+    .replace(/\{rekening\}/g, params.rekening)
+    .replace(/\{link_bayar\}/g, link)
+    .replace(/\{instruksi_bayar\}/g, instruksi);
 }
 
 export function getUnpaidResidentsForBilling(
@@ -805,6 +814,8 @@ export function getUnpaidResidentsForBilling(
       nominal: formatRupiah(totalArrears),
       jatuhTempo: settings.dueDayOfMonth,
       rekening: settings.bankAccountInfo,
+      linkBayar: settings.whatsappPaymentLink,
+      instruksiBayar: settings.whatsappPaymentInstructions,
     });
 
     const waWebUrl = `https://wa.me/${normalizedWaPhone}?text=${encodeURIComponent(

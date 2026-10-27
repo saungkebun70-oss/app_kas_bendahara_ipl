@@ -192,6 +192,53 @@ export const api = {
     return handleJson<{ state: DatabaseState; sentCount: number }>(res);
   },
 
+  async runAutomatedWhatsAppReminders(payload?: {
+    force?: boolean;
+    periodMonth?: string;
+  }): Promise<{
+    state: DatabaseState;
+    sentCount: number;
+    eligibleCount: number;
+    dueDay: number;
+    period: string;
+    message: string;
+  }> {
+    const res = await fetch('/api/whatsapp/auto-remind', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? { force: true }),
+    });
+    return handleJson<{
+      state: DatabaseState;
+      sentCount: number;
+      eligibleCount: number;
+      dueDay: number;
+      period: string;
+      message: string;
+    }>(res);
+  },
+
+  async getWhatsAppAutoStatus(): Promise<{
+    autoWhatsappEnabled: boolean;
+    dueDayOfMonth: number;
+    autoReminderTriggerDay: number;
+    autoReminderSchedule: {
+      hMinus3: boolean;
+      dueDate: boolean;
+      hPlus5Overdue: boolean;
+    };
+    autoReminderLastRunAt?: string;
+    unpaidCount: number;
+    monthlyFee: number;
+    whatsappPaymentLink?: string;
+    whatsappPaymentInstructions?: string;
+    activePeriodMonth: string;
+    serverTime: string;
+  }> {
+    const res = await fetch('/api/whatsapp/auto-status');
+    return handleJson(res);
+  },
+
   async updateSettings(settings: AdminSettings): Promise<DatabaseState> {
     const res = await fetch('/api/settings', {
       method: 'PUT',

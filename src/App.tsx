@@ -549,6 +549,15 @@ export default function App() {
                   return res.sentCount;
                 }}
                 onQuickPayUnit={handleQuickPaySingleMonth}
+                onTriggerAutomatedReminders={async (periodMonth) => {
+                  const res = await api.runAutomatedWhatsAppReminders({
+                    force: true,
+                    periodMonth: periodMonth || selectedMonth,
+                  });
+                  setDb(res.state);
+                  return { sentCount: res.sentCount, message: res.message };
+                }}
+                onNavigateToSettings={() => setActiveTab('settings')}
               />
             )}
 
@@ -563,6 +572,14 @@ export default function App() {
                 onResetDemoData={async () => {
                   const resetData = await api.resetDatabase();
                   setDb(resetData);
+                }}
+                onTriggerAutomatedReminders={async () => {
+                  const res = await api.runAutomatedWhatsAppReminders({
+                    force: true,
+                    periodMonth: selectedMonth,
+                  });
+                  setDb(res.state);
+                  return { sentCount: res.sentCount, message: res.message };
                 }}
               />
             )}

@@ -9,14 +9,19 @@ import {
   Copy,
   Sparkles,
   CheckCheck,
+  Bot,
+  Settings,
+  RefreshCw,
 } from 'lucide-react';
 import type { DatabaseState } from '../types/finance';
 import {
   formatRupiah,
   formatMonthLabel,
+  formatShortDate,
   getUnpaidResidentsForBilling,
   type UnpaidResidentBillingItem,
 } from '../lib/finance';
+import { api } from '../lib/api';
 
 interface WhatsAppBillingViewProps {
   state: DatabaseState;
@@ -29,6 +34,8 @@ interface WhatsAppBillingViewProps {
     items: UnpaidResidentBillingItem[]
   ) => Promise<number>;
   onQuickPayUnit: (unitId: string, periodMonth: string) => Promise<void>;
+  onTriggerAutomatedReminders?: (periodMonth?: string) => Promise<{ sentCount: number; message: string }>;
+  onNavigateToSettings?: () => void;
 }
 
 export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
@@ -39,12 +46,39 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
   onSendSingleReminder,
   onSendBroadcastReminders,
   onQuickPayUnit,
+  onTriggerAutomatedReminders,
+  onNavigateToSettings,
 }) => {
   const [selectedUnitId, setSelectedUnitId] = useState<string>('');
   const [sendingId, setSendingId] = useState<string | null>(null);
   const [broadcasting, setBroadcasting] = useState(false);
+  const [runningAuto, setRunningAuto] = useState(false);
   const [bannerMessage, setBannerMessage] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleRunAutoReminders = async () => {
+    if (!isAdmin) return;
+    setRunningAuto(true);
+    try {
+      if (onTriggerAutomatedReminders) {
+        const res = await onTriggerAutomatedReminders(activePeriodMonth);
+        setBannerMessage(res.message);
+      } else {
+        const res = await api.runAutomatedWhatsAppReminders({
+          force: true,
+          periodMonth: activePeriodMonth,
+        });
+        setBannerMessage(res.message);
+      }
+      setTimeout(() => setBannerMessage(null), 6000);
+    } catch (err) {
+      setBannerMessage(
+        err instanceof Error ? err.message : 'Gagal memproses pengingat otomatis'
+      );
+    } finally {
+      setRunningAuto(false);
+    }
+  };
 
   const unpaidList = useMemo(
     () => getUnpaidResidentsForBilling(state, activePeriodMonth),
@@ -156,6 +190,114 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
         </div>
       )}
 
+      {/* Automated WhatsApp Reminder Status Banner */}
+      <div className="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-900 text-white rounded-2xl p-5 shadow-sm space-y-3 border border-emerald-800">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-emerald-300 shrink-0">
+              <Bot className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="font-display text-sm sm:text-base font-bold text-white">
+                  Otomasi Pengingat Tagihan WhatsApp Saung Kebun
+                </h2>
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    state.settings.autoWhatsappEnabled
+                      ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30'
+                      : 'bg-white/10 text-slate-300 border border-white/10'
+                  }`}
+                >
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      state.settings.autoWhatsappEnabled
+                        ? 'bg-emerald-400 animate-pulse'
+                        : 'bg-slate-400'
+                    }`}
+                  />
+                  <span>
+                    {state.settings.autoWhatsappEnabled ? 'Sistem Aktif' : 'Otomasi Mati'}
+                  </span>
+                </span>
+              </div>
+              <p className="text-xs text-emerald-100/80 mt-0.5">
+                Pengingat otomatis dievaluasi secara berkala di latar belakang untuk warga yang belum bayar iuran {formatRupiah(state.settings.monthlyFee)} saat jatuh tempo tanggal {state.settings.dueDayOfMonth}.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {isAdmin && (
+              <button
+                type="button"
+                disabled={runningAuto}
+                onClick={handleRunAutoReminders}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 disabled:opacity-50 transition-colors shadow-xs cursor-pointer"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${runningAuto ? 'animate-spin' : ''}`} />
+                <span>{runningAuto ? 'Memproses Otomasi...' : 'Jalankan Pengingat Otomatis'}</span>
+              </button>
+            )}
+
+            {onNavigateToSettings && (
+              <button
+                type="button"
+                onClick={onNavigateToSettings}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer"
+              >
+                <Settings className="w-3.5 h-3.5" />
+                <span>Pengaturan Otomasi</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Details row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/10 text-xs">
+          <div className="bg-white/5 rounded-lg p-2">
+            <span className="text-[10px] text-emerald-200/70 block uppercase tracking-wider font-semibold">
+              Jatuh Tempo Iuran
+            </span>
+            <span className="font-mono font-bold text-white text-xs">
+              Tanggal {state.settings.dueDayOfMonth} tiap bulan
+            </span>
+          </div>
+
+          <div className="bg-white/5 rounded-lg p-2">
+            <span className="text-[10px] text-emerald-200/70 block uppercase tracking-wider font-semibold">
+              Tarif Iuran Wajib
+            </span>
+            <span className="font-mono font-bold text-white text-xs">
+              {formatRupiah(state.settings.monthlyFee)} / rumah
+            </span>
+          </div>
+
+          <div className="bg-white/5 rounded-lg p-2">
+            <span className="text-[10px] text-emerald-200/70 block uppercase tracking-wider font-semibold">
+              Warga Belum Bayar
+            </span>
+            <span className="font-mono font-bold text-amber-300 text-xs">
+              {unpaidList.length} dari {state.residents.length} rumah
+            </span>
+          </div>
+
+          <div className="bg-white/5 rounded-lg p-2">
+            <span className="text-[10px] text-emerald-200/70 block uppercase tracking-wider font-semibold">
+              Pemeriksaan Terakhir
+            </span>
+            <span className="font-mono text-emerald-100 text-[11px] truncate block">
+              {state.settings.autoReminderLastRunAt
+                ? new Date(state.settings.autoReminderLastRunAt).toLocaleString('id-ID', {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                  })
+                : 'Belum dieksekusi'}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left 7 Cols: Unpaid Queue */}
@@ -213,13 +355,23 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                           · {item.resident.whatsapp}
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-600">
-                        <span>
+                      <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                        <span className="text-slate-600">
                           Bulan belum lunas:{' '}
                           <strong className="text-red-700">
                             {item.unpaidLabels.join(', ')}
                           </strong>
                         </span>
+                        {item.resident.lastRemindedAt ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <Clock className="w-2.5 h-2.5" />
+                            <span>Diingatkan: {new Date(item.resident.lastRemindedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 bg-stone-100 px-2 py-0.5 rounded-full">
+                            Belum pernah diingatkan
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -361,10 +513,28 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                     <span className="font-semibold text-slate-900">
                       Unit {log.unitId} — {log.residentName}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-800">
-                      <CheckCheck className="w-3.5 h-3.5" />
-                      {log.status}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                          log.triggerType === 'Otomatis Terjadwal'
+                            ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
+                            : log.triggerType === 'Siaran Massal Admin'
+                            ? 'bg-blue-100 text-blue-900 border border-blue-200'
+                            : 'bg-stone-100 text-slate-700 border border-stone-200'
+                        }`}
+                      >
+                        {log.triggerType === 'Otomatis Terjadwal' ? (
+                          <Bot className="w-2.5 h-2.5" />
+                        ) : (
+                          <Send className="w-2.5 h-2.5" />
+                        )}
+                        <span>{log.triggerType}</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-800">
+                        <CheckCheck className="w-3.5 h-3.5" />
+                        {log.status}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono tabular-nums">
                     <span>{log.whatsapp}</span>
