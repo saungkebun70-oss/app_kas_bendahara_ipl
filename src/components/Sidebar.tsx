@@ -42,6 +42,10 @@ interface SidebarProps {
   pendingVerificationCount?: number;
   onOpenVerification?: () => void;
   presenceSummary?: PresenceSummary | null;
+  wargaTab?: import('./WargaPortalView').WargaPortalTab;
+  onSelectWargaTab?: (tab: import('./WargaPortalView').WargaPortalTab) => void;
+  satpamTab?: 'keamanan' | 'anggota' | 'kegiatan';
+  onSelectSatpamTab?: (tab: 'keamanan' | 'anggota' | 'kegiatan') => void;
 }
 
 const MANAGE_NAV_ITEMS: Array<{
@@ -78,6 +82,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   pendingVerificationCount,
   onOpenVerification,
   presenceSummary,
+  wargaTab = 'iuran',
+  onSelectWargaTab,
+  satpamTab = 'keamanan',
+  onSelectSatpamTab,
 }) => {
   const handleSelect = (id: NavTab) => {
     onSelectTab(id);
@@ -164,45 +172,109 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="space-y-1">
                 <button
                   type="button"
-                  onClick={() => scrollToWargaSection('warga-section-iuran')}
-                  className="flex w-[calc(100%-16px)] items-center justify-between rounded-r-full bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] py-2.5 pl-6 pr-4 text-left text-xs font-bold text-[#082068] shadow-md cursor-pointer"
+                  onClick={() => {
+                    onSelectWargaTab?.('iuran');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'iuran'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
-                    <Home className="h-4 w-4 shrink-0 text-[#082068]" />
-                    <span>Riwayat Iuran Saya ({session.unitId})</span>
+                    <Home className="h-4 w-4 shrink-0" />
+                    <span>Status Iuran &amp; QRIS</span>
                   </span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => scrollToWargaSection('warga-section-kegiatan')}
-                  className="flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-semibold text-sky-100/85 hover:bg-white/10 hover:text-white cursor-pointer"
+                  onClick={() => {
+                    onSelectWargaTab?.('kwitansi');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'kwitansi'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
-                    <Megaphone className="h-4 w-4 shrink-0 text-sky-200/75" />
+                    <FileSpreadsheet className="h-4 w-4 shrink-0" />
+                    <span>Kwitansi Pembayaran</span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectWargaTab?.('kegiatan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'kegiatan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
+                    <Megaphone className="h-4 w-4 shrink-0" />
                     <span>Kegiatan &amp; Info Admin</span>
                   </span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => scrollToWargaSection('warga-section-keamanan')}
-                  className="flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-semibold text-sky-100/85 hover:bg-white/10 hover:text-white cursor-pointer"
+                  onClick={() => {
+                    onSelectWargaTab?.('keamanan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'keamanan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
-                    <ShieldCheck className="h-4 w-4 shrink-0 text-sky-200/75" />
+                    <ShieldCheck className="h-4 w-4 shrink-0" />
                     <span>Info Keamanan Satpam</span>
                   </span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => scrollToWargaSection('warga-section-tunggakan')}
-                  className="flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-semibold text-sky-100/85 hover:bg-white/10 hover:text-white cursor-pointer"
+                  onClick={() => {
+                    onSelectWargaTab?.('tunggakan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'tunggakan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
-                    <AlertTriangle className="h-4 w-4 shrink-0 text-sky-200/75" />
-                    <span>Warga Menunggak</span>
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    <span>Transparansi Tunggakan</span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectWargaTab?.('laporan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    wargaTab === 'laporan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
+                    <FileSpreadsheet className="h-4 w-4 shrink-0" />
+                    <span>Laporan Kas &amp; LPJ</span>
                   </span>
                 </button>
               </div>
@@ -215,12 +287,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="space-y-1">
                 <button
                   type="button"
-                  onClick={() => handleSelect('publications')}
-                  className="flex w-[calc(100%-16px)] items-center justify-between rounded-r-full bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] py-2.5 pl-6 pr-4 text-left text-xs font-bold text-[#082068] shadow-md cursor-pointer"
+                  onClick={() => {
+                    onSelectSatpamTab?.('keamanan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    satpamTab === 'keamanan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
                 >
                   <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
-                    <ShieldCheck className="h-4 w-4 shrink-0 text-[#082068]" />
-                    <span>Publish Info Keamanan</span>
+                    <ShieldCheck className="h-4 w-4 shrink-0" />
+                    <span>Laporan Situasi &amp; Patroli</span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectSatpamTab?.('anggota');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    satpamTab === 'anggota'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
+                    <ShieldCheck className="h-4 w-4 shrink-0" />
+                    <span>Rekan Satpam &amp; Kontak Pos</span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectSatpamTab?.('kegiatan');
+                    onCloseMobile();
+                  }}
+                  className={`flex w-[calc(100%-16px)] items-center justify-between rounded-r-full py-2.5 pl-6 pr-4 text-left text-xs font-bold transition-all cursor-pointer ${
+                    satpamTab === 'kegiatan'
+                      ? 'bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] text-[#082068] shadow-md'
+                      : 'text-sky-100/85 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span className="flex items-center gap-3 whitespace-nowrap shrink-0">
+                    <Megaphone className="h-4 w-4 shrink-0" />
+                    <span>Pengumuman Lingkungan</span>
                   </span>
                 </button>
               </div>

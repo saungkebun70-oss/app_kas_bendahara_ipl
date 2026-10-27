@@ -10,6 +10,7 @@ import {
   Megaphone,
   Phone,
   Plus,
+  Send,
   Shield,
   ShieldAlert,
   ShieldCheck,
@@ -64,6 +65,8 @@ interface PublicationsManagerViewProps {
   ) => Promise<void>;
   onDeleteSecurityOfficer?: (id: string) => Promise<void>;
   initialSubTab?: 'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota';
+  activeSubTab?: 'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota';
+  onChangeSubTab?: (tab: 'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota') => void;
 }
 
 const PERIOD_OPTIONS = ['2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
@@ -84,13 +87,20 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
   onUpdateSecurityOfficer,
   onDeleteSecurityOfficer,
   initialSubTab,
+  activeSubTab: externalSubTab,
+  onChangeSubTab: setExternalSubTab,
 }) => {
   const isSatpamOnly = session.role === 'satpam';
   const canManageAdminItems = session.isAdmin;
 
-  const [activeSubTab, setActiveSubTab] = useState<'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota'>(
+  const [internalSubTab, setInternalSubTab] = useState<'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota'>(
     isSatpamOnly ? 'keamanan' : initialSubTab || 'kegiatan'
   );
+  const activeSubTab = externalSubTab || internalSubTab;
+  const setActiveSubTab = (tab: 'kegiatan' | 'tunggakan' | 'keamanan' | 'anggota') => {
+    setInternalSubTab(tab);
+    setExternalSubTab?.(tab);
+  };
   const [feedback, setFeedback] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -259,7 +269,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
 
         {/* Sub-navigation pills */}
         <div className="mt-5 flex flex-wrap gap-2">
-          {canManageAdminItems && (
+          {canManageAdminItems ? (
             <>
               <button
                 type="button"
@@ -290,37 +300,79 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                   2. Publish / Unpublish Warga Menunggak ({unpaidItems.length} Rumah)
                 </span>
               </button>
+
+              <button
+                type="button"
+                data-testid="tab-pub-keamanan"
+                onClick={() => setActiveSubTab('keamanan')}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                  activeSubTab === 'keamanan'
+                    ? 'bg-[#5eead4] text-[#082068]'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>3. Laporan Situasi Satpam Jaga ({securityReports.length})</span>
+              </button>
+
+              <button
+                type="button"
+                data-testid="tab-pub-anggota"
+                onClick={() => setActiveSubTab('anggota')}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                  activeSubTab === 'anggota'
+                    ? 'bg-[#5eead4] text-[#082068]'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <Users className="h-4 w-4" />
+                <span>4. Anggota Pengamanan Terpisah dari Warga ({securityOfficers.length})</span>
+              </button>
             </>
-          )}
+          ) : (
+            <>
+              <button
+                type="button"
+                data-testid="tab-pub-keamanan"
+                onClick={() => setActiveSubTab('keamanan')}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                  activeSubTab === 'keamanan'
+                    ? 'bg-[#5eead4] text-[#082068]'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>Laporan Situasi &amp; Patroli ({securityReports.length})</span>
+              </button>
 
-          <button
-            type="button"
-            data-testid="tab-pub-keamanan"
-            onClick={() => setActiveSubTab('keamanan')}
-            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
-              activeSubTab === 'keamanan'
-                ? 'bg-[#5eead4] text-[#082068]'
-                : 'bg-white/15 text-white hover:bg-white/25'
-            }`}
-          >
-            <ShieldCheck className="h-4 w-4" />
-            <span>3. Laporan Situasi Satpam Jaga ({securityReports.length})</span>
-          </button>
+              <button
+                type="button"
+                data-testid="tab-pub-anggota"
+                onClick={() => setActiveSubTab('anggota')}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                  activeSubTab === 'anggota'
+                    ? 'bg-[#5eead4] text-[#082068]'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <Users className="h-4 w-4" />
+                <span>Rekan Satpam &amp; Kontak Pos ({securityOfficers.length})</span>
+              </button>
 
-          {canManageAdminItems && (
-            <button
-              type="button"
-              data-testid="tab-pub-anggota"
-              onClick={() => setActiveSubTab('anggota')}
-              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
-                activeSubTab === 'anggota'
-                  ? 'bg-[#5eead4] text-[#082068]'
-                  : 'bg-white/15 text-white hover:bg-white/25'
-              }`}
-            >
-              <Users className="h-4 w-4" />
-              <span>4. Anggota Pengamanan Terpisah dari Warga ({securityOfficers.length})</span>
-            </button>
+              <button
+                type="button"
+                data-testid="tab-pub-kegiatan"
+                onClick={() => setActiveSubTab('kegiatan')}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                  activeSubTab === 'kegiatan'
+                    ? 'bg-[#5eead4] text-[#082068]'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <Megaphone className="h-4 w-4" />
+                <span>Pengumuman Kegiatan ({announcements.length})</span>
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -335,14 +387,15 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
         </div>
       )}
 
-      {/* PANEL 1: INFORMASI KEGIATAN & PENGUMUMAN ADMIN */}
-      {activeSubTab === 'kegiatan' && canManageAdminItems && (
+      {/* PANEL 1: INFORMASI KEGIATAN & PENGUMUMAN */}
+      {activeSubTab === 'kegiatan' && (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-          {/* Left Form: Publish New Activity */}
-          <form
-            onSubmit={handleAddAnnouncement}
-            className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4"
-          >
+          {/* Left Form: Publish New Activity (Admin / RT) */}
+          {canManageAdminItems && (
+            <form
+              onSubmit={handleAddAnnouncement}
+              className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4"
+            >
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <Megaphone className="h-4 w-4 text-[#1547b8]" />
               <h2 className="font-display text-sm font-bold text-slate-900">
@@ -429,16 +482,21 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               <span>Publish Kegiatan ke Akun Warga</span>
             </button>
           </form>
+          )}
 
-          {/* Right List: Manage Publish / Unpublish Announcements */}
-          <div className="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="font-display text-sm font-bold text-slate-900">
-                Daftar Informasi Kegiatan &amp; Pengumuman ({announcements.length})
-              </h2>
-              <span className="text-xs text-slate-500">
-                Klik tombol Publish / Unpublish untuk mengatur tampilan di warga
-              </span>
+          {/* Right/Full List: Manage Publish / Unpublish Announcements */}
+          <div className={`${canManageAdminItems ? 'lg:col-span-7' : 'lg:col-span-12'} rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-3 gap-1">
+              <div>
+                <h2 className="font-display text-sm font-bold text-slate-900">
+                  Daftar Informasi Kegiatan &amp; Pengumuman ({announcements.length})
+                </h2>
+                <span className="text-xs text-slate-500">
+                  {canManageAdminItems
+                    ? 'Klik tombol Publish / Unpublish untuk mengatur tampilan di warga'
+                    : 'Pengumuman dan jadwal kegiatan resmi paguyuban warga Saung Kebun'}
+                </span>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -461,46 +519,53 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        data-testid={`toggle-announcement-publish-${item.id}`}
-                        onClick={async () => {
-                          await onToggleAnnouncementPublish(item.id, !item.published);
-                          showToast(
+                    {canManageAdminItems ? (
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          data-testid={`toggle-announcement-publish-${item.id}`}
+                          onClick={async () => {
+                            await onToggleAnnouncementPublish(item.id, !item.published);
+                            showToast(
+                              item.published
+                                ? `Informasi "${item.title}" di-unpublish dari Akun Warga.`
+                                : `Informasi "${item.title}" berhasil di-publish ke Akun Warga.`
+                            );
+                          }}
+                          className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11px] font-bold cursor-pointer ${
                             item.published
-                              ? `Informasi "${item.title}" di-unpublish dari Akun Warga.`
-                              : `Informasi "${item.title}" berhasil di-publish ke Akun Warga.`
-                          );
-                        }}
-                        className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11px] font-bold cursor-pointer ${
-                          item.published
-                            ? 'bg-teal-100 text-teal-900 hover:bg-teal-200'
-                            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                        }`}
-                      >
-                        {item.published ? (
-                          <>
-                            <Eye className="h-3 w-3" />
-                            <span>Published (Klik untuk Unpublish)</span>
-                          </>
-                        ) : (
-                          <>
-                            <EyeOff className="h-3 w-3" />
-                            <span>Unpublished (Klik untuk Publish)</span>
-                          </>
-                        )}
-                      </button>
+                              ? 'bg-teal-100 text-teal-900 hover:bg-teal-200'
+                              : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                          }`}
+                        >
+                          {item.published ? (
+                            <>
+                              <Eye className="h-3 w-3" />
+                              <span>Published (Klik untuk Unpublish)</span>
+                            </>
+                          ) : (
+                            <>
+                              <EyeOff className="h-3 w-3" />
+                              <span>Draft (Klik untuk Publish)</span>
+                            </>
+                          )}
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => onDeleteAnnouncement(item.id)}
-                        aria-label={`Hapus pengumuman ${item.title}`}
-                        className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteAnnouncement(item.id)}
+                          aria-label={`Hapus pengumuman ${item.title}`}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                        <CheckCircle2 className="h-3 w-3 text-teal-600" />
+                        <span>Resmi Pengurus</span>
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="font-display text-sm font-bold text-slate-900">
@@ -909,9 +974,183 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
         </div>
       )}
 
-      {/* PANEL 4: KELOLA ANGGOTA SATUAN PENGAMANAN (TERPISAH DARI DATA 55 WARGA) */}
-      {activeSubTab === 'anggota' && canManageAdminItems && (
+      {/* PANEL 4: KELOLA ANGGOTA SATUAN PENGAMANAN & REKAN POS */}
+      {activeSubTab === 'anggota' && (
         <div data-testid="security-officers-manager-panel" className="space-y-6">
+          {!canManageAdminItems ? (
+            <div className="space-y-6">
+              {/* Satpam Directory Header */}
+              <div className="rounded-2xl border-2 border-teal-300 bg-teal-50/80 p-5 text-xs text-teal-950 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-800 text-white shadow-xs">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h2 className="font-display text-base font-bold text-teal-950">
+                      Rekan Satuan Pengamanan &amp; Kontak Pos Jaga
+                    </h2>
+                    <p className="mt-0.5 text-teal-800 leading-relaxed">
+                      Daftar seluruh rekan petugas pengamanan klaster Saung Kebun beserta nomor darurat instansi dan pimpinan lingkungan untuk koordinasi cepat saat patroli.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                  <span className="rounded-lg bg-white border border-teal-200 px-3 py-1.5 font-bold text-teal-900 text-xs shadow-xs">
+                    Total: {securityOfficers.length} Rekan
+                  </span>
+                  <span className="rounded-lg bg-teal-800 text-white px-3 py-1.5 font-bold text-xs shadow-xs">
+                    {securityOfficers.filter((o) => o.status === 'Aktif').length} Bertugas Aktif
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* Officers List */}
+                <div className="lg:col-span-7 space-y-3">
+                  <h3 className="font-display text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-[#0f766e]" />
+                    <span>Daftar Rekan Petugas Pengamanan ({securityOfficers.length})</span>
+                  </h3>
+
+                  {securityOfficers.length === 0 ? (
+                    <div className="text-center py-8 text-xs text-slate-500 bg-white rounded-xl border border-dashed border-slate-200">
+                      Belum ada rekan pengamanan yang terdaftar.
+                    </div>
+                  ) : (
+                    securityOfficers.map((officer) => {
+                      const isAktif = officer.status === 'Aktif';
+                      const isCuti = officer.status === 'Cuti';
+                      return (
+                        <div
+                          key={officer.id}
+                          data-testid={`officer-card-${officer.id}`}
+                          className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs space-y-3"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#0f766e] text-white font-bold font-display text-base shadow-xs">
+                                {officer.name.slice(0, 2).toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <h4 className="font-display text-sm font-bold text-slate-900">
+                                    {officer.name}
+                                  </h4>
+                                  <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-slate-700 border border-slate-200">
+                                    {officer.badgeNumber}
+                                  </span>
+                                </div>
+                                <span className="text-xs font-semibold text-[#0f766e]">
+                                  {officer.rankOrRole}
+                                </span>
+                              </div>
+                            </div>
+
+                            <span
+                              className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${
+                                isAktif
+                                  ? 'bg-teal-100 text-teal-900 border border-teal-200'
+                                  : isCuti
+                                  ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                                  : 'bg-rose-100 text-rose-900 border border-rose-200'
+                              }`}
+                            >
+                              {officer.status}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                              <span className="truncate">{officer.assignedShift}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Phone className="h-3.5 w-3.5 text-teal-600 shrink-0" />
+                              <a
+                                href={`tel:${officer.phone}`}
+                                className="font-mono tabular-nums text-teal-800 hover:underline font-semibold"
+                              >
+                                {officer.phone}
+                              </a>
+                            </div>
+                          </div>
+
+                          {officer.notes && (
+                            <p className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 italic">
+                              Catatan tugas: {officer.notes}
+                            </p>
+                          )}
+
+                          <div className="flex items-center gap-2 pt-1">
+                            <a
+                              href={`tel:${officer.phone}`}
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-50 border border-teal-200 px-3 py-2 text-xs font-bold text-teal-800 hover:bg-teal-100 transition-colors"
+                            >
+                              <Phone className="h-3.5 w-3.5 text-teal-700" />
+                              <span>Telepon Rekan</span>
+                            </a>
+                            <a
+                              href={`https://wa.me/${officer.phone.replace(/[^0-9]/g, '').replace(/^0/, '62')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition-colors"
+                            >
+                              <Send className="h-3.5 w-3.5" />
+                              <span>WhatsApp</span>
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Emergency & Official Directory */}
+                <div className="lg:col-span-5 rounded-2xl border border-rose-200 bg-rose-50/50 p-5 shadow-xs space-y-4">
+                  <div className="flex items-center gap-2 border-b border-rose-100 pb-3">
+                    <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0" />
+                    <div>
+                      <h3 className="font-display text-sm font-bold text-rose-950">
+                        Kontak Darurat &amp; Bantuan Cepat
+                      </h3>
+                      <p className="text-[11px] text-rose-800">
+                        Hubungi instansi berwenang saat terjadi insiden di lingkungan
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {[
+                      { name: 'Polsek / Binmas Pol', phone: '021-5978110', label: 'Keamanan Kriminal' },
+                      { name: 'Babinsa Koramil', phone: '0812-8877-6655', label: 'Bantuan TNI Teritorial' },
+                      { name: 'Pemadam Kebakaran (Damkar)', phone: '113', label: 'Darurat Kebakaran' },
+                      { name: 'Puskesmas / Ambulans Darurat', phone: '119', label: 'Medis Gawat Darurat' },
+                      { name: 'Ketua RT / Paguyuban Saung Kebun', phone: '0812-8901-2345', label: 'Pimpinan Lingkungan' },
+                    ].map((c) => (
+                      <div
+                        key={c.name}
+                        className="rounded-xl border border-white bg-white p-3 shadow-xs flex items-center justify-between gap-2"
+                      >
+                        <div>
+                          <h4 className="font-display text-xs font-bold text-slate-900">{c.name}</h4>
+                          <span className="text-[10px] text-slate-500 font-medium">{c.label}</span>
+                        </div>
+                        <a
+                          href={`tel:${c.phone.replace(/[^0-9]/g, '')}`}
+                          className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-mono font-bold text-white hover:bg-rose-700 transition-colors shadow-xs"
+                        >
+                          <Phone className="h-3 w-3" />
+                          <span>{c.phone}</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6">
           {/* Informational Separation Banner */}
           <div className="rounded-2xl border-2 border-teal-300 bg-teal-50/70 p-5 text-xs text-teal-950 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -1176,6 +1415,8 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               </div>
             </div>
           </div>
+        </div>
+          )}
         </div>
       )}
     </div>

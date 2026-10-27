@@ -15,7 +15,7 @@ import { WhatsAppBillingView } from './components/WhatsAppBillingView';
 import { AdminSettingsView } from './components/AdminSettingsView';
 import { AddTransactionModal } from './components/AddTransactionModal';
 import { UnitDetailModal } from './components/UnitDetailModal';
-import { WargaPortalView } from './components/WargaPortalView';
+import { WargaPortalView, type WargaPortalTab } from './components/WargaPortalView';
 import { PublicationsManagerView } from './components/PublicationsManagerView';
 import { ReceiptPreviewModal } from './components/ReceiptPreviewModal';
 import { AdminPaymentVerificationModal } from './components/AdminPaymentVerificationModal';
@@ -112,6 +112,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [selectedMonth, setSelectedMonth] = useState<string>('2026-10');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [wargaTab, setWargaTab] = useState<WargaPortalTab>('iuran');
+  const [satpamSubTab, setSatpamSubTab] = useState<'keamanan' | 'anggota' | 'kegiatan'>('keamanan');
 
   // Modals state
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
@@ -339,9 +341,13 @@ export default function App() {
         pendingVerificationCount={pendingConfirmationsCount}
         onOpenVerification={() => setVerificationModalOpen(true)}
         presenceSummary={presenceSummary}
+        wargaTab={wargaTab}
+        onSelectWargaTab={setWargaTab}
+        satpamTab={satpamSubTab}
+        onSelectSatpamTab={setSatpamSubTab}
       />
 
-      <main className="flex-1 min-w-0 w-full pb-20 lg:pb-0">
+      <main className="flex-1 min-w-0 w-full overflow-x-hidden pb-28 lg:pb-8">
         {isWarga ? (
           <WargaPortalView
             state={db}
@@ -352,6 +358,8 @@ export default function App() {
               setPreviewReceiptData({ resident: res, transaction: tx })
             }
             onStateUpdate={setDb}
+            activeTab={wargaTab}
+            onChangeTab={setWargaTab}
           />
         ) : isSatpam ? (
           <div className="p-4 sm:p-6 lg:p-8 max-w-[1440px] mx-auto w-full">
@@ -360,6 +368,13 @@ export default function App() {
               session={session}
               activePeriodMonth={selectedMonth}
               onChangePeriodMonth={setSelectedMonth}
+              activeSubTab={satpamSubTab}
+              onChangeSubTab={(tab) => {
+                if (tab === 'keamanan' || tab === 'anggota' || tab === 'kegiatan') {
+                  setSatpamSubTab(tab);
+                }
+              }}
+              initialSubTab={satpamSubTab}
               onCreateAnnouncement={async (payload) => {
                 const nextState = await api.createAnnouncement(payload);
                 setDb(nextState);
@@ -661,6 +676,10 @@ export default function App() {
           setAddModalOpen(true);
         }}
         onOpenUnitModal={(unitId, showQRIS) => handleOpenUnitModal(unitId, Boolean(showQRIS))}
+        wargaTab={wargaTab}
+        onSelectWargaTab={setWargaTab}
+        satpamTab={satpamSubTab}
+        onSelectSatpamTab={setSatpamSubTab}
       />
     </div>
   );
