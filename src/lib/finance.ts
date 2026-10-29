@@ -255,6 +255,112 @@ export function getYearlyMonthlyTrend(
   };
 }
 
+export interface SixMonthCashFlowPoint {
+  periodMonth: string; // e.g. "2026-05"
+  monthName: string; // "Mei"
+  shortName: string; // "Mei"
+  year: number; // 2026
+  income: number;
+  expense: number;
+  net: number;
+  incomeCount: number;
+  expenseCount: number;
+  totalCount: number;
+}
+
+export interface SixMonthCashFlowSummary {
+  referenceMonth: string;
+  points: SixMonthCashFlowPoint[];
+  totalIncome: number;
+  totalExpense: number;
+  netSurplus: number;
+  averageIncome: number;
+  averageExpense: number;
+  highestIncomePoint: SixMonthCashFlowPoint;
+  highestExpensePoint: SixMonthCashFlowPoint;
+}
+
+export function getLast6MonthsCashFlow(
+  transactions: LedgerTransaction[],
+  referencePeriodMonth: string = '2026-10'
+): SixMonthCashFlowSummary {
+  const [refYearStr, refMonthStr] = referencePeriodMonth.split('-');
+  const refYear = Number(refYearStr) || 2026;
+  const refMonth = Number(refMonthStr) || 10;
+
+  const points: SixMonthCashFlowPoint[] = [];
+
+  for (let i = 5; i >= 0; i--) {
+    let year = refYear;
+    let month = refMonth - i;
+    while (month <= 0) {
+      month += 12;
+      year -= 1;
+    }
+    const monthCode = String(month).padStart(2, '0');
+    const periodMonth = `${year}-${monthCode}`;
+    const monthName = INDONESIAN_MONTHS[month - 1] ?? monthCode;
+    const shortName = monthName.slice(0, 3);
+
+    const monthTxs = transactions.filter((t) => t.periodMonth === periodMonth);
+    let income = 0;
+    let expense = 0;
+    let incomeCount = 0;
+    let expenseCount = 0;
+
+    for (const t of monthTxs) {
+      if (t.type === 'income') {
+        income += t.amount;
+        incomeCount++;
+      } else {
+        expense += t.amount;
+        expenseCount++;
+      }
+    }
+
+    points.push({
+      periodMonth,
+      monthName,
+      shortName,
+      year,
+      income,
+      expense,
+      net: income - expense,
+      incomeCount,
+      expenseCount,
+      totalCount: incomeCount + expenseCount,
+    });
+  }
+
+  const totalIncome = points.reduce((acc, p) => acc + p.income, 0);
+  const totalExpense = points.reduce((acc, p) => acc + p.expense, 0);
+  const netSurplus = totalIncome - totalExpense;
+  const averageIncome = Math.round(totalIncome / 6);
+  const averageExpense = Math.round(totalExpense / 6);
+
+  const highestIncomePoint = points.reduce(
+    (max, p) => (p.income > max.income ? p : max),
+    points[0]
+  );
+  const highestExpensePoint = points.reduce(
+    (max, p) => (p.expense > max.expense ? p : max),
+    points[0]
+  );
+
+  return {
+    referenceMonth: referencePeriodMonth,
+    points,
+    totalIncome,
+    totalExpense,
+    netSurplus,
+    averageIncome,
+    averageExpense,
+    highestIncomePoint,
+    highestExpensePoint,
+  };
+}
+
+
 export interface RealtimeFinancialSummary {
   currentBalance: number;
   openingBalance2026: number;

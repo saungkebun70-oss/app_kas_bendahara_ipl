@@ -7,6 +7,7 @@ import {
   calculateQuarterlyLPJ,
   calculateRealtimeSummary,
   formatRupiah,
+  getLast6MonthsCashFlow,
   getPublishedAnnouncements,
   getPublishedArrearsForWargaPortal,
   getPublishedSecurityReports,
@@ -837,4 +838,47 @@ test('operational expenses can be recorded with manual custom categories separat
   assert.ok(summary.totalAllTimeExpense > 0);
   assert.equal(summary.monthExpense, 350000 + db.transactions.filter(t => t.type === 'expense' && t.periodMonth === '2026-10').reduce((s, t) => s + t.amount, 0));
 });
+
+test('getLast6MonthsCashFlow computes sliding 6 months window and aggregates income, expense, and net accurately', () => {
+  const db = createSeedDatabase();
+  const summary = getLast6MonthsCashFlow(db.transactions, '2026-10');
+
+  // Verify exactly 6 months
+  assert.equal(summary.points.length, 6);
+  assert.equal(summary.referenceMonth, '2026-10');
+
+  // Verify month sequence: 2026-05, 2026-06, 2026-07, 2026-08, 2026-09, 2026-10
+  const expectedMonths = ['2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10'];
+  assert.deepEqual(summary.points.map((p) => p.periodMonth), expectedMonths);
+
+  // Verify Indonesian month names
+  assert.equal(summary.points[0].monthName, 'Mei');
+  assert.equal(summary.points[5].monthName, 'Oktober');
+
+  // Verify totals match sum of points
+  const sumIncome = summary.points.reduce((acc, p) => acc + p.income, 0);
+  const sumExpense = summary.points.reduce((acc, p) => acc + p.expense, 0);
+  assert.equal(summary.totalIncome, sumIncome);
+  assert.equal(summary.totalExpense, sumExpense);
+  assert.equal(summary.netSurplus, sumIncome - sumExpense);
+  assert.equal(summary.averageIncome, Math.round(sumIncome / 6));
+  assert.equal(summary.averageExpense, Math.round(sumExpense / 6));
+
+  // Verify cross-year sliding window (e.g. 2026-02 should include 2025-09 .. 2026-02)
+  const febSummary = getLast6MonthsCashFlow(db.transactions, '2026-02');
+  assert.equal(febSummary.points.length, 6);
+  assert.deepEqual(febSummary.points.map((p) => p.periodMonth), [
+    '2025-09',
+    '2025-10',
+    '2025-11',
+    '2025-12',
+    '2026-01',
+    '2026-02',
+  ]);
+  assert.equal(febSummary.points[3].monthName, 'Desember');
+  assert.equal(febSummary.points[3].year, 2025);
+  assert.equal(febSummary.points[5].monthName, 'Februari');
+  assert.equal(febSummary.points[5].year, 2026);
+});
+
 

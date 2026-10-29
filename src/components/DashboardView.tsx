@@ -29,6 +29,7 @@ import {
   sortTransactionsChronologically,
 } from '../lib/finance';
 import type { NavTab } from './Sidebar';
+import { SixMonthCashflowBarChart } from './SixMonthCashflowBarChart';
 import { ExpenseCategoryBarChart } from './ExpenseCategoryBarChart';
 import { MultiUserPresenceCard } from './MultiUserPresenceCard';
 import type { PresenceSummary } from '../lib/api';
@@ -858,6 +859,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             </section>
           </div>
+
+          {/* SIX MONTH CASHFLOW BAR CHART (RECHARTS: 6-month income and expense trend) */}
+          <SixMonthCashflowBarChart
+            transactions={state.transactions}
+            activePeriodMonth={activePeriodMonth}
+            onChangePeriodMonth={onChangePeriodMonth}
+            onNavigateToTransactions={() => onNavigate('transactions')}
+          />
 
           {/* D3 EXPENSE CATEGORY BAR CHART (Visualizing monthly expense categories vs historical monthly averages) */}
           <ExpenseCategoryBarChart
