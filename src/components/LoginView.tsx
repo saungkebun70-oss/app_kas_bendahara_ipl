@@ -70,15 +70,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const switchPortal = (target: LoginPortalType) => {
-    setPortal(target);
-    setError(null);
-    try {
-      if (target === 'satpam') window.location.hash = '#satpam';
-      else window.location.hash = `#${target}`;
-    } catch {}
-  };
-
   // Separate Ketua form state
   const [ketuaUsername, setKetuaUsername] = useState('');
   const [ketuaPassword, setKetuaPassword] = useState('');
@@ -258,71 +249,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
           <DatabaseHealthIndicator />
         </div>
       </header>
-
-      {/* SEPARATED PORTAL SELECTOR BAR */}
-      <nav
-        aria-label="Pilih Akses Masuk Akun"
-        className="bg-white border-b border-slate-200/90 shadow-2xs sticky top-0 z-20"
-      >
-        <div className="mx-auto max-w-5xl px-4 sm:px-8 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2.5">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">
-            Akses Masuk Terpisah:
-          </span>
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={() => switchPortal('ketua')}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'ketua'
-                  ? 'bg-[#0b2273] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              <UserCheck className="w-3.5 h-3.5" />
-              <span>Akses Ketua</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => switchPortal('bendahara')}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'bendahara'
-                  ? 'bg-[#1547b8] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Akses Bendahara</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => switchPortal('warga')}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'warga'
-                  ? 'bg-[#0f766e] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>Portal Warga</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => switchPortal('satpam')}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'satpam'
-                  ? 'bg-[#064e3b] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              <Shield className="w-3.5 h-3.5" />
-              <span>Pos Keamanan</span>
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* Main Single-Portal Container */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-8 lg:py-12 flex items-center">

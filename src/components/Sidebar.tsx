@@ -518,7 +518,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-2 text-xs font-semibold text-white hover:bg-white/20 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5 text-sky-100" />
-            <span>Keluar / Ganti Akun</span>
+            <span>Keluar Sesi</span>
           </button>
         </div>
       </aside>
