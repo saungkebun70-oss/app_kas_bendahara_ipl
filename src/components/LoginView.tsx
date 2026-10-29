@@ -70,37 +70,34 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
   const [adminUsername, setAdminUsername] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
 
-  // Warga form state
-  const [selectedUnitId, setSelectedUnitId] = useState('A-05');
+  // Warga form state (manual text input, no dropdown list)
+  const [wargaUnitInput, setWargaUnitInput] = useState('');
   const [wargaPin, setWargaPin] = useState('');
 
-  // Satpam form state
+  // Satpam form state (manual text input, no dropdown list)
   const officers = state.securityOfficers ?? [];
-  const [selectedOfficerId, setSelectedOfficerId] = useState<string>(
-    officers[0]?.id || ''
-  );
-  const [guardName, setGuardName] = useState(
-    officers[0]?.name || 'Danru Suryadi & Petugas Jaga Herman'
-  );
+  const [guardName, setGuardName] = useState('');
   const [guardShift, setGuardShift] = useState<SecurityShiftLabel>(
-    officers[0]?.assignedShift || 'Shift Malam (19.00 - 07.00 WIB)'
+    'Shift Malam (19.00 - 07.00 WIB)'
   );
   const [satpamPin, setSatpamPin] = useState('');
 
   const [error, setError] = useState<string | null>(null);
 
   const summary = calculateRealtimeSummary(state, '2026-10');
-  const selectedResident = state.residents.find((r) => r.id === selectedUnitId);
-  const selectedOfficer = officers.find((o) => o.id === selectedOfficerId);
 
   const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (!adminUsername.trim() || !adminPassword.trim()) {
+      setError('ID Pengurus dan kata sandi wajib diisi manual.');
+      return;
+    }
     const res = authenticateAdmin(
       {
         adminRole,
-        username: adminUsername,
-        password: adminPassword,
+        username: adminUsername.trim(),
+        password: adminPassword.trim(),
       },
       state.settings
     );
@@ -114,10 +111,19 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
   const handleWargaSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const trimmedUnit = wargaUnitInput.trim().toUpperCase();
+    if (!trimmedUnit) {
+      setError('Ketik nomor unit rumah Anda (contoh: A-01, B-05, C-10).');
+      return;
+    }
+    if (!wargaPin.trim()) {
+      setError('Masukkan PIN Akses Warga yang telah diberikan oleh Pengurus.');
+      return;
+    }
     const res = authenticateWarga(
       {
-        unitId: selectedUnitId,
-        pin: wargaPin,
+        unitId: trimmedUnit,
+        pin: wargaPin.trim(),
       },
       state.residents
     );
@@ -131,12 +137,20 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
   const handleSatpamSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const trimmedName = guardName.trim();
+    if (!trimmedName) {
+      setError('Ketik nama lengkap atau nomor KTA petugas keamanan.');
+      return;
+    }
+    if (!satpamPin.trim()) {
+      setError('Masukkan PIN Akses Pos Satpam yang telah diberikan oleh Pengurus.');
+      return;
+    }
     const res = authenticateSatpam(
       {
-        guardName,
+        guardName: trimmedName,
         shift: guardShift,
-        pin: satpamPin,
-        officerId: selectedOfficerId || undefined,
+        pin: satpamPin.trim(),
       },
       state.securityOfficers
     );
@@ -268,8 +282,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                       Akses Masuk Akun Warga
                     </span>
                     <h2 className="font-display text-lg font-bold text-slate-900">
-                      Pilih Unit Rumah Anda
+                      Login Warga Perumahan
                     </h2>
+                    <p className="mt-1 text-xs text-slate-500">
+                      Masukkan Nomor Unit Rumah dan PIN Akun yang telah dibagikan oleh Admin Pengurus.
+                    </p>
                   </div>
 
                   {error && (
@@ -284,57 +301,50 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                   <form onSubmit={handleWargaSubmit} className="space-y-4">
                     <div>
                       <label
-                        htmlFor="warga-unit-select"
+                        htmlFor="warga-unit-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        Pilih Nomor Unit Rumah (55 Unit Saung Kebun)
+                        Nomor Unit Rumah (Ketik Manual)
                       </label>
-                      <select
-                        id="warga-unit-select"
-                        value={selectedUnitId}
-                        onChange={(e) => {
-                          setSelectedUnitId(e.target.value);
-                          setError(null);
-                        }}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:border-sky-600 focus:outline-none"
-                      >
-                        {state.residents.map((r) => (
-                          <option key={r.id} value={r.id}>
-                            Unit {r.id} — {r.headOfFamily} ({r.streetName})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {selectedResident && (
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-700">
-                        <div className="flex justify-between">
-                          <span>Kepala Keluarga: <strong className="text-slate-900">{selectedResident.headOfFamily}</strong></span>
-                          <span>WA: <span className="font-mono">{selectedResident.whatsapp}</span></span>
-                        </div>
+                      <div className="relative mt-1">
+                        <Home className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <input
+                          id="warga-unit-input"
+                          type="text"
+                          placeholder="Ketik nomor unit (contoh: A-01, B-05, C-10)"
+                          value={wargaUnitInput}
+                          onChange={(e) => {
+                            setWargaUnitInput(e.target.value);
+                            setError(null);
+                          }}
+                          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm uppercase text-slate-900 focus:border-sky-600 focus:outline-none"
+                        />
                       </div>
-                    )}
+                      <span className="mt-1 block text-[11px] text-slate-400">
+                        Format nomor blok &amp; nomor rumah (contoh: A-01 sampai D-15).
+                      </span>
+                    </div>
 
                     <div>
                       <label
                         htmlFor="warga-pin-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        PIN Akses Warga / 4 Digit Terakhir Nomor WhatsApp
+                        PIN Akses Warga
                       </label>
                       <div className="relative mt-1">
                         <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="warga-pin-input"
                           type="password"
-                          placeholder="Masukkan PIN Warga (default: 1234)"
+                          placeholder="Masukkan PIN Akun Warga Anda"
                           value={wargaPin}
                           onChange={(e) => setWargaPin(e.target.value)}
                           className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm text-slate-900 focus:border-sky-600 focus:outline-none"
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-slate-500">
-                        * Gunakan PIN <strong>1234</strong> atau 4 digit terakhir nomor WhatsApp terdaftar.
+                        * Masukkan PIN yang telah dikirimkan oleh Pengurus Paguyuban kepada nomor Anda.
                       </p>
                     </div>
 
@@ -342,24 +352,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                       type="submit"
                       className="w-full rounded-lg bg-[#0d5c75] px-4 py-3 text-xs font-bold text-white hover:bg-[#0b4b60] transition-colors cursor-pointer shadow-sm"
                     >
-                      Masuk sebagai Warga Unit {selectedUnitId}
+                      Masuk ke Portal Warga
                     </button>
                   </form>
                 </div>
 
-                {/* Quick Helper for Warga Only */}
-                <div className="mt-6 border-t border-slate-200 pt-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedUnitId('A-05');
-                      setWargaPin(DEFAULT_WARGA_PIN);
-                      setError(null);
-                    }}
-                    className="text-[11px] font-semibold text-sky-700 hover:text-sky-900 underline cursor-pointer"
-                  >
-                    Bantu Isi Contoh: Unit A-05 (PIN 1234)
-                  </button>
+                <div className="mt-6 border-t border-slate-100 pt-3 text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Keamanan Akun Terproteksi</span>
+                  <span>RT/RW Paguyuban Saung Kebun</span>
                 </div>
               </div>
             </>
@@ -435,6 +435,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                     <h2 className="font-display text-lg font-bold text-slate-900">
                       Login Petugas Jaga Pos Satpam
                     </h2>
+                    <p className="mt-1 text-xs text-slate-500">
+                      Ketikkan Nama/KTA dan PIN tugas yang telah diberikan oleh Pengurus Paguyuban.
+                    </p>
                   </div>
 
                   {error && (
@@ -449,45 +452,29 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                   <form onSubmit={handleSatpamSubmit} className="space-y-4">
                     <div>
                       <label
-                        htmlFor="satpam-officer-select"
+                        htmlFor="satpam-name-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        Pilih Petugas Satpam Terdaftar
+                        Nama Petugas / Nomor KTA Satpam (Ketik Manual)
                       </label>
-                      <select
-                        id="satpam-officer-select"
-                        value={selectedOfficerId}
-                        onChange={(e) => {
-                          const id = e.target.value;
-                          setSelectedOfficerId(id);
-                          const off = officers.find((o) => o.id === id);
-                          if (off) {
-                            setGuardName(off.name);
-                            setGuardShift(off.assignedShift);
-                          }
-                          setError(null);
-                        }}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:border-[#0f766e] focus:outline-none"
-                      >
-                        {officers.map((o) => (
-                          <option key={o.id} value={o.id}>
-                            {o.name} ({o.rankOrRole} · {o.badgeNumber}) — {o.status}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {selectedOfficer && (
-                      <div className="rounded-lg border border-teal-200 bg-teal-50/70 px-3.5 py-2 text-xs text-teal-950 flex items-center justify-between">
-                        <div>
-                          <span className="font-bold">{selectedOfficer.name}</span>
-                          <span className="text-teal-700 ml-1.5">({selectedOfficer.rankOrRole})</span>
-                        </div>
-                        <span className="rounded bg-teal-200 px-2 py-0.5 font-bold text-[10px] text-teal-900">
-                          {selectedOfficer.status}
-                        </span>
+                      <div className="relative mt-1">
+                        <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <input
+                          id="satpam-name-input"
+                          type="text"
+                          placeholder="Ketik nama lengkap atau nomor KTA petugas"
+                          value={guardName}
+                          onChange={(e) => {
+                            setGuardName(e.target.value);
+                            setError(null);
+                          }}
+                          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 text-sm text-slate-900 focus:border-[#0f766e] focus:outline-none"
+                        />
                       </div>
-                    )}
+                      <span className="mt-1 block text-[11px] text-slate-400">
+                        Pastikan sesuai dengan nama yang didaftarkan oleh Pengurus.
+                      </span>
+                    </div>
 
                     <div>
                       <label
@@ -516,19 +503,22 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         htmlFor="satpam-pin-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        PIN Akses Petugas / Sandi Pos Satpam
+                        PIN Akses Petugas Pos Satpam
                       </label>
                       <div className="relative mt-1">
                         <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="satpam-pin-input"
                           type="password"
-                          placeholder="Masukkan sandi petugas: satpam123"
+                          placeholder="Masukkan PIN Petugas Anda"
                           value={satpamPin}
                           onChange={(e) => setSatpamPin(e.target.value)}
                           className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm text-slate-900 focus:border-[#0f766e] focus:outline-none"
                         />
                       </div>
+                      <p className="mt-1 text-[11px] text-slate-500">
+                        * Masukkan PIN tugas rahasia Anda.
+                      </p>
                     </div>
 
                     <button
@@ -540,26 +530,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                   </form>
                 </div>
 
-                {/* Quick Helper for Satpam Only */}
-                <div className="mt-6 border-t border-slate-200 pt-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const firstOff = officers[0];
-                      if (firstOff) {
-                        setSelectedOfficerId(firstOff.id);
-                        setGuardName(firstOff.name);
-                        setGuardShift(firstOff.assignedShift);
-                        setSatpamPin(firstOff.pin);
-                      } else {
-                        setSatpamPin(DEFAULT_SATPAM_PIN);
-                      }
-                      setError(null);
-                    }}
-                    className="text-[11px] font-semibold text-teal-700 hover:text-teal-900 underline cursor-pointer"
-                  >
-                    Bantu Isi Contoh: Petugas {officers[0]?.name || 'Suryadi'} (Sandi: {officers[0]?.pin || 'satpam123'})
-                  </button>
+                <div className="mt-6 border-t border-slate-100 pt-3 text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Pos Jaga Gerbang Utama 24 Jam</span>
+                  <span>Sistem Satpam Saung Kebun</span>
                 </div>
               </div>
             </>
@@ -705,14 +678,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         htmlFor="admin-username-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        ID Pengguna (Username)
+                        ID Pengurus (Username)
                       </label>
                       <div className="relative mt-1">
                         <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="admin-username-input"
                           type="text"
-                          placeholder={adminRole === 'ketua' ? 'ketua' : 'bendahara'}
+                          placeholder="Masukkan ID Pengurus Anda"
                           value={adminUsername}
                           onChange={(e) => setAdminUsername(e.target.value)}
                           className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 text-sm text-slate-900 focus:border-indigo-600 focus:outline-none"
@@ -725,14 +698,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         htmlFor="admin-password-input"
                         className="block text-xs font-semibold text-slate-700"
                       >
-                        Kata Sandi (Password)
+                        Kata Sandi Otorisasi (Password)
                       </label>
                       <div className="relative mt-1">
                         <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="admin-password-input"
                           type="password"
-                          placeholder="Masukkan kata sandi"
+                          placeholder="Masukkan kata sandi akun pengurus"
                           value={adminPassword}
                           onChange={(e) => setAdminPassword(e.target.value)}
                           className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm text-slate-900 focus:border-indigo-600 focus:outline-none"
@@ -749,32 +722,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                   </form>
                 </div>
 
-                {/* Quick Helper for Admin Only */}
-                <div className="mt-6 border-t border-slate-200 pt-3 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAdminRole('ketua');
-                      setAdminUsername(ADMIN_CREDENTIALS.ketua.username);
-                      setAdminPassword(ADMIN_CREDENTIALS.ketua.password);
-                      setError(null);
-                    }}
-                    className="text-[11px] font-semibold text-indigo-700 hover:text-indigo-900 underline cursor-pointer"
-                  >
-                    Bantu Isi: Akun Ketua (ketua / ketua123)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAdminRole('bendahara');
-                      setAdminUsername(ADMIN_CREDENTIALS.bendahara.username);
-                      setAdminPassword(ADMIN_CREDENTIALS.bendahara.password);
-                      setError(null);
-                    }}
-                    className="text-[11px] font-semibold text-indigo-700 hover:text-indigo-900 underline cursor-pointer"
-                  >
-                    Bantu Isi: Akun Bendahara (bendahara / bendahara123)
-                  </button>
+                <div className="mt-6 border-t border-slate-100 pt-3 text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Otorisasi Resmi Pengurus Paguyuban</span>
+                  <span>Privasi Keuangan Terjamin</span>
                 </div>
               </div>
             </>

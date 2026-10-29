@@ -46,6 +46,8 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [incomeCategory, setIncomeCategory] = useState<IncomeCategory>('Sewa Saung Warga');
   const [expenseCategory, setExpenseCategory] = useState<ExpenseCategory>('Perawatan Taman & Saung');
   const [amountStr, setAmountStr] = useState('');
+  const [isManualExpense, setIsManualExpense] = useState(false);
+  const [manualExpenseCategory, setManualExpenseCategory] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer Bank');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +65,8 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       setPeriodMonth(defaultPeriodMonth);
       setDate(`${defaultPeriodMonth === '2026-10' ? '2026-10-24' : `${defaultPeriodMonth}-10`}`);
       setError(null);
+      setIsManualExpense(false);
+      setManualExpenseCategory('');
       setAiSuggestions([]);
       setAiSource(null);
       setAppliedFeedback(null);
@@ -196,13 +200,25 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       return;
     }
 
+    if (mode === 'expense' && isManualExpense && !manualExpenseCategory.trim()) {
+      setError('Ketik nama kategori pengeluaran manual terlebih dahulu.');
+      return;
+    }
+
+    const finalCategory =
+      mode === 'income'
+        ? incomeCategory
+        : isManualExpense
+        ? ((manualExpenseCategory.trim() || 'Pengeluaran Lainnya') as ExpenseCategory)
+        : expenseCategory;
+
     setSubmitting(true);
     try {
       await onSubmitTransaction({
         date,
         periodMonth,
         type: mode === 'income' ? 'income' : 'expense',
-        category: mode === 'income' ? incomeCategory : expenseCategory,
+        category: finalCategory,
         amount: numericAmount,
         unitId: null,
         paymentMethod,
@@ -385,18 +401,44 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                     ))}
                   </select>
                 ) : (
-                  <select
-                    id="trx-category"
-                    value={expenseCategory}
-                    onChange={(e) => setExpenseCategory(e.target.value as ExpenseCategory)}
-                    className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
-                  >
-                    {EXPENSE_CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="space-y-2">
+                    <select
+                      id="trx-category"
+                      value={isManualExpense ? '__manual__' : expenseCategory}
+                      onChange={(e) => {
+                        if (e.target.value === '__manual__') {
+                          setIsManualExpense(true);
+                        } else {
+                          setIsManualExpense(false);
+                          setExpenseCategory(e.target.value as ExpenseCategory);
+                        }
+                      }}
+                      className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
+                    >
+                      {EXPENSE_CATEGORIES.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                      <option value="__manual__">➕ Kategori Lainnya (Isi Manual)</option>
+                    </select>
+
+                    {isManualExpense && (
+                      <div className="rounded-lg border border-rose-200 bg-rose-50/60 p-2.5 space-y-1">
+                        <label htmlFor="trx-manual-cat" className="block text-[11px] font-bold text-rose-900">
+                          Nama Kategori Pengeluaran Manual:
+                        </label>
+                        <input
+                          id="trx-manual-cat"
+                          type="text"
+                          placeholder="Misal: Perbaikan Pompa Air Blok B / Cat Gapura"
+                          value={manualExpenseCategory}
+                          onChange={(e) => setManualExpenseCategory(e.target.value)}
+                          className="w-full rounded-lg border border-rose-300 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-rose-600 focus:outline-none"
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 

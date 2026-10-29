@@ -12,6 +12,7 @@ import {
   getUnpaidResidentsForBilling,
   getUnitTransactions,
   normalizePhoneToWa,
+  sortTransactionsChronologically,
 } from './finance';
 import { authenticateAdmin, authenticateSatpam, authenticateWarga } from './auth';
 import {
@@ -657,5 +658,46 @@ test('automated WhatsApp billing system formats payment links, instructions, and
   assert.ok(firstUnpaid.waWebUrl.startsWith('https://wa.me/62'));
   assert.ok(firstUnpaid.waWebUrl.includes('text='));
 });
+
+test('Recent Activity widget pulls from transactions state, orders chronologically descending, and limits to last 5 entries', () => {
+  const db = createSeedDatabase();
+  assert.ok(db.transactions.length > 5, 'Seed transactions must contain more than 5 entries');
+
+  // Derive recent activity entries as in DashboardView
+  const sortedDesc = sortTransactionsChronologically(db.transactions).reverse();
+  const recent5 = sortedDesc.slice(0, 5);
+
+  assert.equal(recent5.length, 5, 'Recent Activity widget must be strictly limited to 5 entries');
+
+  // Verify chronological ordering descending (latest date first)
+  for (let i = 0; i < recent5.length - 1; i++) {
+    const current = recent5[i];
+    const next = recent5[i + 1];
+    assert.ok(
+      current.date >= next.date,
+      `Item ${i} date (${current.date}) should be >= item ${i + 1} date (${next.date})`
+    );
+  }
+
+  // Verify transactions contain necessary display fields (receiptNumber, amount, category, type)
+  for (const entry of recent5) {
+    assert.ok(entry.id);
+    assert.ok(entry.receiptNumber);
+    assert.ok(entry.amount > 0);
+    assert.ok(entry.category);
+    assert.ok(entry.type === 'income' || entry.type === 'expense');
+    assert.ok(entry.paymentMethod);
+  }
+
+  // If transactions are fewer than 5, should return all available
+  const smallList = db.transactions.slice(0, 3);
+  const smallSorted = sortTransactionsChronologically(smallList).reverse().slice(0, 5);
+  assert.equal(smallSorted.length, 3);
+
+  // If empty, should return empty array without crashing
+  const emptySorted = sortTransactionsChronologically([]).reverse().slice(0, 5);
+  assert.deepEqual(emptySorted, []);
+});
+
 
 

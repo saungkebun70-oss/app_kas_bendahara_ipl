@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   Check,
+  Copy,
   Download,
   Edit3,
   FileDown,
+  KeyRound,
+  MessageCircle,
   QrCode,
   Save,
+  Shuffle,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -716,6 +720,91 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
               </dl>
             )}
           </section>
+
+          {/* Akun Akses Portal Warga & PIN Acak (Admin Manage & Share via WA) */}
+          {isAdmin && (
+            <section
+              aria-label="Akun Akses Portal Warga"
+              className="rounded-2xl border-2 border-sky-200 bg-sky-50/50 p-5 space-y-4 shadow-xs"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sky-100 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0d5c75] text-white">
+                    <KeyRound className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-sm font-bold text-slate-900">
+                      Akun Akses Masuk Portal Warga Unit {resident.id}
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Kelola PIN login warga dan kirimkan langsung via WhatsApp
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const randomPin = String(Math.floor(1000 + Math.random() * 9000));
+                      setBusy(true);
+                      try {
+                        await onUpdateResident(resident.id, { accessPin: randomPin });
+                        setFeedback(`PIN baru ${randomPin} berhasil diacak dan disimpan untuk Unit ${resident.id}!`);
+                        setTimeout(() => setFeedback(null), 4000);
+                      } catch {
+                        setError('Gagal mengacak PIN warga.');
+                      } finally {
+                        setBusy(false);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-sky-300 bg-white px-2.5 py-1.5 text-xs font-bold text-sky-800 hover:bg-sky-100/70 transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <Shuffle className="h-3.5 w-3.5" />
+                    <span>Acak PIN Baru</span>
+                  </button>
+
+                  <a
+                    href={`https://wa.me/${resident.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
+                      `Halo Bapak/Ibu ${resident.headOfFamily} (Warga Unit ${resident.id}),\n\nBerikut adalah akun resmi untuk login ke Portal Warga Perumahan Saung Kebun:\n\n🏡 Nomor Unit: ${resident.id}\n🔑 PIN Akses: ${resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}\n🌐 Tautan Portal Warga: ${window.location.origin}/#warga\n\nBapak/Ibu dapat menggunakan akun ini untuk melihat transparansi iuran, konfirmasi bukti pembayaran, serta laporan pos satpam.\n\nSalam hormat,\nPengurus Paguyuban Saung Kebun`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-colors cursor-pointer shadow-xs"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" />
+                    <span>Kirim Akun ke WA</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="rounded-xl border border-sky-200 bg-white p-3">
+                  <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+                    ID Login Unit
+                  </span>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="font-mono text-base font-bold text-slate-900">{resident.id}</span>
+                    <span className="text-[11px] text-slate-400">Unit Terdaftar</span>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-sky-200 bg-white p-3">
+                  <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+                    PIN Akses Aktif
+                  </span>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="font-mono text-base font-bold text-[#0d5c75]">
+                      {resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-medium">
+                      {resident.accessPin ? 'PIN Kustom Acak' : 'PIN Default WhatsApp'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* Transaction History for Unit */}
           <section

@@ -121,11 +121,11 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 w-full">
-          {/* Blok Filter with smooth horizontal touch scroll without overflow */}
-          <div className="overflow-x-auto scrollbar-none pb-0.5 max-w-full">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 w-full">
+          {/* Blok Filter with responsive wrapping (prevent button clipping) */}
+          <div className="w-full lg:w-auto">
             <div
-              className="inline-flex items-center gap-1 rounded-lg bg-stone-100 p-1"
+              className="flex flex-wrap items-center gap-1 sm:gap-1.5 rounded-xl bg-stone-100/90 p-1 w-full sm:w-auto"
               role="group"
               aria-label="Filter Blok Rumah"
             >
@@ -134,10 +134,10 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                   key={blk}
                   type="button"
                   onClick={() => setBlockFilter(blk)}
-                  className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                  className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
                     blockFilter === blk
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-slate-900 shadow-xs font-bold ring-1 ring-stone-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                   }`}
                 >
                   {blk === 'ALL' ? 'Semua (55)' : `Blok ${blk}`}
@@ -146,20 +146,20 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
             </div>
           </div>
 
-          {/* Status Filter with smooth horizontal touch scroll without overflow */}
-          <div className="overflow-x-auto scrollbar-none pb-0.5 max-w-full">
+          {/* Status Filter with responsive wrapping */}
+          <div className="w-full lg:w-auto">
             <div
-              className="inline-flex items-center gap-1 rounded-lg bg-stone-100 p-1"
+              className="flex flex-wrap items-center gap-1 sm:gap-1.5 rounded-xl bg-stone-100/90 p-1 w-full sm:w-auto"
               role="group"
               aria-label="Filter Status Pembayaran"
             >
               <button
                 type="button"
                 onClick={() => setStatusFilter('ALL')}
-                className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
                   statusFilter === 'ALL'
-                    ? 'bg-white text-slate-900 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-900 shadow-xs font-bold ring-1 ring-stone-200'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
                 Semua
@@ -167,10 +167,10 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               <button
                 type="button"
                 onClick={() => setStatusFilter('PAID')}
-                className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
                   statusFilter === 'PAID'
-                    ? 'bg-white text-emerald-900 shadow-xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-emerald-50 text-emerald-900 shadow-xs font-bold ring-1 ring-emerald-200'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
                 Lunas ({paidTotal})
@@ -178,10 +178,10 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               <button
                 type="button"
                 onClick={() => setStatusFilter('UNPAID')}
-                className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
                   statusFilter === 'UNPAID'
-                    ? 'bg-white text-rose-700 shadow-xs font-bold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-rose-50 text-rose-700 shadow-xs font-bold ring-1 ring-rose-200'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
                 Belum Bayar ({unpaidTotal})
@@ -214,8 +214,8 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           </div>
         ) : (
           <>
-            {/* Mobile Card View (< sm screens) */}
-            <div className="block sm:hidden divide-y divide-stone-100 max-h-[560px] overflow-y-auto p-2 space-y-2">
+            {/* Mobile & Tablet Card View (< lg screens) */}
+            <div className="block lg:hidden divide-y divide-stone-100 max-h-[580px] overflow-y-auto p-2 space-y-2">
               {filteredResidents.map((res) => {
                 const paidInfo = paidUnitMap.map.get(res.id);
                 const txCount = paidUnitMap.countByUnit.get(res.id) ?? 0;
@@ -304,8 +304,8 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               })}
             </div>
 
-            {/* Tablet & Desktop Table View (>= sm screens) */}
-            <div className="hidden sm:block overflow-x-auto max-h-[520px] xl:max-h-[600px] overflow-y-auto rounded-b-xl table-scroll-container border-t border-stone-100">
+            {/* Desktop Table View (>= lg screens) */}
+            <div className="hidden lg:block overflow-x-auto max-h-[520px] xl:max-h-[600px] overflow-y-auto rounded-b-xl table-scroll-container border-t border-stone-100">
               <table className="w-full min-w-[720px] border-collapse text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs shadow-2xs">
                   <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">

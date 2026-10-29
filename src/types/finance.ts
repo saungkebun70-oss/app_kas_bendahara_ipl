@@ -46,6 +46,7 @@ export interface ResidentUnit {
   joinedYear: number;
   notes: string;
   lastRemindedAt?: string;
+  accessPin?: string;
 }
 
 export interface LedgerTransaction {

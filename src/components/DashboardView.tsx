@@ -1,7 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import {
+  Activity,
+  ArrowDownRight,
+  ArrowUpRight,
   Check,
   CheckCircle2,
+  ChevronRight,
   Clock,
   FileDown,
   History,
@@ -155,6 +159,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     if (txScope === 'ALL') return allSorted.slice(0, 8);
     return allSorted.filter((t) => t.type === txScope).slice(0, 8);
   }, [state.transactions, txScope]);
+
+  // Recent Activity widget: strictly limited to the last 5 entries to maintain a clean layout
+  const recentActivityEntries: LedgerTransaction[] = useMemo(() => {
+    return sortTransactionsChronologically(state.transactions).reverse().slice(0, 5);
+  }, [state.transactions]);
 
   // Target unit for quick QRIS generation
   const targetQRISUnitId = session.unitId || 'A-05';
@@ -857,6 +866,146 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onChangePeriodMonth={onChangePeriodMonth}
             onNavigateToTransactions={() => onNavigate('transactions')}
           />
+
+          {/* RECENT ACTIVITY WIDGET (Pulls from transactions state, strictly limited to the last 5 entries to maintain a clean layout) */}
+          <section
+            aria-label="Recent Activity"
+            data-testid="recent-activity-widget"
+            className="rounded-2xl bg-white p-5 sm:p-6 shadow-xs border border-slate-200/80 space-y-4"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e0f7f4] text-[#0f766e]">
+                  <Activity className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="font-display text-sm sm:text-base font-bold text-slate-900">
+                      Recent Activity
+                    </h2>
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                      5 Entri Terakhir
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Aktivitas arus kas paguyuban terbaru yang tercatat di sistem
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('transactions')}
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#1547b8] hover:text-[#0b2273] transition-colors cursor-pointer"
+              >
+                <span>Lihat Semua Mutasi</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {recentActivityEntries.length === 0 ? (
+              <div className="py-8 text-center text-xs text-slate-400">
+                Belum ada aktivitas transaksi yang tercatat di buku kas.
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {recentActivityEntries.map((tx) => {
+                  const isIncome = tx.type === 'income';
+                  const isQRIS = tx.paymentMethod === 'QRIS Saung Kebun';
+                  const isBCA = tx.paymentMethod === 'Transfer BCA Kas';
+
+                  return (
+                    <div
+                      key={tx.id}
+                      data-testid="recent-activity-item"
+                      className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3 px-1 rounded-xl hover:bg-slate-50/70 transition-colors"
+                    >
+                      <div className="flex items-start sm:items-center gap-3 min-w-0">
+                        {/* Transaction Type Icon Badge */}
+                        <div
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                            isIncome
+                              ? 'bg-teal-50 text-[#0f766e] border border-teal-100'
+                              : 'bg-rose-50 text-rose-600 border border-rose-100'
+                          }`}
+                        >
+                          {isIncome ? (
+                            <ArrowDownRight className="h-4 w-4" />
+                          ) : (
+                            <ArrowUpRight className="h-4 w-4" />
+                          )}
+                        </div>
+
+                        {/* Details */}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="font-semibold text-slate-800 text-xs sm:text-sm">
+                              {tx.category}
+                            </span>
+                            {tx.unitId && (
+                              <button
+                                type="button"
+                                onClick={() => onSelectUnit(tx.unitId!, false)}
+                                className="font-mono text-[10px] font-bold rounded-md bg-blue-50 px-1.5 py-0.5 text-[#1547b8] hover:underline cursor-pointer"
+                              >
+                                Unit {tx.unitId}
+                              </button>
+                            )}
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                                isIncome
+                                  ? 'bg-[#e0f7f4] text-[#0f766e]'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              {isIncome ? 'Pemasukan' : 'Pengeluaran'}
+                            </span>
+                          </div>
+
+                          <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+                            <span className="font-mono">{formatShortDate(tx.date)}</span>
+                            <span aria-hidden="true">·</span>
+                            <span className="truncate max-w-[200px] sm:max-w-[280px]">
+                              {tx.description || tx.receiptNumber}
+                            </span>
+                            <span aria-hidden="true">·</span>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
+                              {isQRIS ? (
+                                <span className="inline-flex items-center">
+                                  <span className="h-2 w-2 rounded-full bg-[#ef4444] -mr-0.5" />
+                                  <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
+                                </span>
+                              ) : isBCA ? (
+                                <span className="flex h-3 w-3 items-center justify-center rounded-full bg-[#1547b8] text-[7px] font-bold text-white">
+                                  B
+                                </span>
+                              ) : null}
+                              <span>{tx.paymentMethod}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Amount & Ref */}
+                      <div className="flex items-center justify-between sm:flex-col sm:items-end gap-1 shrink-0 pl-12 sm:pl-0">
+                        <span
+                          className={`font-mono text-xs sm:text-sm font-extrabold tabular-nums ${
+                            isIncome ? 'text-[#0f766e]' : 'text-slate-900'
+                          }`}
+                        >
+                          {isIncome ? '+ ' : '- '}
+                          {formatRupiah(tx.amount)}
+                        </span>
+                        <span className="font-mono text-[10px] text-slate-400">
+                          {tx.receiptNumber}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
 
           {/* BOTTOM TRANSACTIONS CARD (matches reference image "Transactions" table) */}
           <section

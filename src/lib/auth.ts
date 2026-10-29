@@ -77,7 +77,7 @@ export function authenticateAdmin(
     if (!validUser || !validPass) {
       return {
         ok: false,
-        error: 'Kredensial Ketua Paguyuban tidak sesuai. Gunakan ID "ketua" dan sandi "ketua123".',
+        error: 'Kredensial Ketua Paguyuban tidak sesuai. Periksa kembali ID Pengurus dan kata sandi Anda.',
       };
     }
 
@@ -104,7 +104,7 @@ export function authenticateAdmin(
       return {
         ok: false,
         error:
-          'Kredensial Bendahara tidak sesuai. Gunakan ID "bendahara" dan sandi "bendahara123".',
+          'Kredensial Bendahara tidak sesuai. Periksa kembali ID Pengurus dan kata sandi Anda.',
       };
     }
 
@@ -178,7 +178,7 @@ export function authenticateSatpam(
       if (!validOfficerPin) {
         return {
           ok: false,
-          error: `PIN petugas keamanan tidak sesuai untuk ${matchedOfficer.name}. Gunakan PIN "${matchedOfficer.pin}" atau sandi default "${DEFAULT_SATPAM_PIN}".`,
+          error: `PIN otorisasi tidak sesuai untuk petugas ${matchedOfficer.name}. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus Paguyuban.`,
         };
       }
 
@@ -204,7 +204,7 @@ export function authenticateSatpam(
   if (pin !== DEFAULT_SATPAM_PIN && pin !== '5570') {
     return {
       ok: false,
-      error: 'Kode otorisasi Pos Satpam tidak sesuai. Gunakan sandi "satpam123" atau PIN "5570".',
+      error: 'Kode otorisasi Pos Satpam tidak sesuai. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus Paguyuban.',
     };
   }
 
@@ -233,14 +233,14 @@ export function authenticateWarga(
   if (!unitId) {
     return {
       ok: false,
-      error: 'Pilih nomor unit rumah Anda terlebih dahulu.',
+      error: 'Masukkan nomor unit rumah Anda terlebih dahulu (contoh: A-01, B-05).',
     };
   }
 
   if (!pin) {
     return {
       ok: false,
-      error: 'Masukkan PIN Warga atau 4 digit terakhir nomor WhatsApp terdaftar.',
+      error: 'Masukkan PIN Akses Warga yang telah dibagikan oleh Admin Pengurus.',
     };
   }
 
@@ -248,18 +248,25 @@ export function authenticateWarga(
   if (!resident) {
     return {
       ok: false,
-      error: `Unit rumah "${unitId}" tidak terdaftar dalam database 55 rumah Saung Kebun.`,
+      error: `Unit rumah "${unitId}" tidak terdaftar dalam database 55 rumah Saung Kebun. Periksa kembali penulisan nomor unit Anda.`,
     };
   }
 
   const waDigits = resident.whatsapp.replace(/\D/g, '');
   const last4Wa = waDigits.slice(-4);
   const nikLast4 = resident.nik.slice(-4);
+  const customPin = resident.accessPin?.trim();
 
-  if (pin !== DEFAULT_WARGA_PIN && pin !== last4Wa && pin !== nikLast4) {
+  const isPinValid =
+    (customPin && pin === customPin) ||
+    pin === DEFAULT_WARGA_PIN ||
+    pin === last4Wa ||
+    pin === nikLast4;
+
+  if (!isPinValid) {
     return {
       ok: false,
-      error: `PIN Warga tidak sesuai untuk Unit ${resident.id}. Gunakan PIN Warga "${DEFAULT_WARGA_PIN}" atau 4 digit terakhir WhatsApp (${last4Wa}).`,
+      error: `PIN Warga tidak sesuai untuk Unit ${resident.id}. Pastikan memasukkan PIN resmi yang telah dibagikan oleh Admin Pengurus.`,
     };
   }
 

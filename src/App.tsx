@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Receipt } from 'lucide-react';
 import type { DatabaseState, LedgerTransaction, ResidentUnit } from './types/finance';
 import type { AuthSession } from './lib/auth';
 import { api } from './lib/api';
@@ -660,6 +660,28 @@ export default function App() {
           session={session}
           onStateUpdate={setDb}
         />
+      )}
+
+      {/* Floating Action Button for Admin Quick Expense Recording */}
+      {isAdmin && (
+        <div className="fixed bottom-24 right-4 sm:bottom-8 sm:right-8 z-30">
+          <button
+            type="button"
+            data-testid="admin-fab-expense-btn"
+            onClick={() => {
+              setAddModalPresetMode('expense');
+              setAddModalOpen(true);
+            }}
+            className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-600 via-rose-700 to-red-700 px-4 py-3 sm:px-5 sm:py-3.5 text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ring-2 ring-white/60"
+            aria-label="Catat Pengeluaran Kas Baru"
+            title="Catat Pengeluaran Kas Baru"
+          >
+            <Receipt className="h-5 w-5 text-white group-hover:rotate-12 transition-transform" />
+            <span className="font-display text-xs sm:text-sm font-bold tracking-wide">
+              + Catat Pengeluaran
+            </span>
+          </button>
+        </div>
       )}
 
       {/* Aesthetic Mobile & Tablet Bottom Navigation Bar */}
