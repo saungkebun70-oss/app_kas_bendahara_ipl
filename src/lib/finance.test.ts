@@ -13,6 +13,8 @@ import {
   getPublishedSecurityReports,
   getUnpaidResidentsForBilling,
   getUnitTransactions,
+  isUnitExemptFromIuran,
+  getUnitExemptionInfo,
   normalizePhoneToWa,
   sortTransactionsChronologically,
 } from './finance';
@@ -50,12 +52,14 @@ test('real-time balance reconciles opening balance, all income, and all expenses
   const summaryBefore = calculateRealtimeSummary(db, '2026-10');
 
   assert.equal(summaryBefore.totalUnits, 55);
-  assert.equal(summaryBefore.targetIuranRevenue, 55 * 100000);
-  assert.equal(summaryBefore.monthIuranIncome, 43 * 100000);
-  assert.equal(summaryBefore.collectionRatePercent, 78);
+  assert.equal(summaryBefore.exemptUnitsCount, 2);
+  assert.equal(summaryBefore.billableUnitsCount, 53);
+  assert.equal(summaryBefore.targetIuranRevenue, 53 * 100000);
+  assert.equal(summaryBefore.monthIuranIncome, 41 * 100000);
+  assert.equal(summaryBefore.collectionRatePercent, 77);
   assert.equal(summaryBefore.totalRevenueAchievementPercent, 85);
-  assert.equal(summaryBefore.paidUnitsCount + summaryBefore.unpaidUnitsCount, 55);
-  assert.equal(summaryBefore.paidUnitsCount, 43);
+  assert.equal(summaryBefore.paidUnitsCount + summaryBefore.unpaidUnitsCount, 53);
+  assert.equal(summaryBefore.paidUnitsCount, 41);
   assert.equal(summaryBefore.unpaidUnitsCount, 12);
   assert.equal(summaryBefore.unpaidPotentialAmount, 12 * 100000);
 
@@ -76,7 +80,7 @@ test('real-time balance reconciles opening balance, all income, and all expenses
 
   const summaryAfter = calculateRealtimeSummary(db, '2026-10');
   assert.equal(summaryAfter.currentBalance, summaryBefore.currentBalance + 100000);
-  assert.equal(summaryAfter.paidUnitsCount, 44);
+  assert.equal(summaryAfter.paidUnitsCount, 42);
   assert.equal(summaryAfter.unpaidUnitsCount, 11);
 
   const unitHistory = getUnitTransactions(db.transactions, 'A-05');
@@ -133,7 +137,7 @@ test('WhatsApp billing detector identifies unpaid houses, multi-month arrears, a
   assert.equal(formatRupiah(100000), 'Rp 100.000');
 });
 
-test('separate Admin login validates Ketua Paguyuban and Bendahara credentials strictly', () => {
+test('separate Admin login validates Ketua and Bendahara credentials strictly', () => {
   const db = createSeedDatabase();
 
   const emptyRes = authenticateAdmin(
@@ -345,7 +349,7 @@ test('security officers are managed separately from 55 resident units and have i
 test('unit receipt preview generator creates valid PDF document and data URI before download', async () => {
   const { buildUnitReceiptPDFDoc, getUnitReceiptPDFDataUri } = await import('./pdfExport');
   const db = createSeedDatabase();
-  const unit = db.residents[0];
+  const unit = db.residents.find((r) => r.id === 'A-02')!;
   const tx = db.transactions.find((t) => t.unitId === unit.id)!;
 
   const doc = buildUnitReceiptPDFDoc(db, unit, tx);
@@ -416,10 +420,10 @@ test('TransactionsView search bar filters by transaction type, unit ID, and date
 
   // 4. Combined Multi-Criteria Filter (Type + Unit + Date Range)
   const combined = allTxs.filter(
-    (t) => t.type === 'income' && t.unitId === 'A-01' && t.date >= '2026-07-01' && t.date <= '2026-08-31'
+    (t) => t.type === 'income' && t.unitId === 'A-02' && t.date >= '2026-07-01' && t.date <= '2026-08-31'
   );
   assert.ok(combined.length >= 1);
-  assert.equal(combined.every((t) => t.type === 'income' && t.unitId === 'A-01'), true);
+  assert.equal(combined.every((t) => t.type === 'income' && t.unitId === 'A-02'), true);
 });
 
 test('TransactionsView summary section displays accurate total income, total expenses, and net balance for filtered transactions', () => {
@@ -432,9 +436,9 @@ test('TransactionsView summary section displays accurate total income, total exp
   const octExpense = octTxs.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
   const octNet = octIncome - octExpense;
 
-  assert.equal(octIncome, 4700000); // 47 paid units * 100.000
+  assert.equal(octIncome, 4500000); // 45 paid units * 100.000 (53 billable - 8 unpaid = 45 paid)
   assert.equal(octExpense, 4645000);
-  assert.equal(octNet, 55000); // 4.700.000 - 4.645.000 = +55.000 surplus
+  assert.equal(octNet, -145000); // 4.500.000 - 4.645.000 = -145.000
 
   // Filter 2: Only non-unit operational expenses/incomes
   const nonUnitTxs = allTxs.filter((t) => !t.unitId);
@@ -464,7 +468,7 @@ test('AI category suggestion matches Indonesian housing keywords and suggests co
     { text: 'Perbaikan lampu jalan PJU dan saklar', expectedCategory: 'Listrik PJU & Air', expectedType: 'EXPENSE' },
     { text: 'Pemangkasan rumput taman dan saung warga', expectedCategory: 'Perawatan Taman & Saung', expectedType: 'EXPENSE' },
     { text: 'Perbaikan CCTV gerbang utama dan portal', expectedCategory: 'Perbaikan Fasilitas Umum', expectedType: 'EXPENSE' },
-    { text: 'Pembelian kertas HVS dan stempel paguyuban RT', expectedCategory: 'Administrasi & Kas RT', expectedType: 'EXPENSE' },
+    { text: 'Pembelian kertas HVS dan stempel lingkungan RT', expectedCategory: 'Administrasi & Kas RT', expectedType: 'EXPENSE' },
     { text: 'Sewa saung serbaguna untuk acara ulang tahun', expectedCategory: 'Sewa Saung Warga', expectedType: 'INCOME' },
     { text: 'Donasi sedekah warga untuk santunan anak yatim', expectedCategory: 'Donasi & Sumbangan', expectedType: 'INCOME' },
     { text: 'Pembelian kartu akses RFID gerbang komplek', expectedCategory: 'Kartu Akses & Stiker', expectedType: 'INCOME' },
@@ -523,20 +527,20 @@ test('TransactionsView Recharts monthly trend aggregates income vs expenses corr
   // 3. Verify October 2026 numbers
   const oct = trend2026.months[9];
   assert.equal(oct.periodMonth, '2026-10');
-  assert.equal(oct.income, 4700000);
+  assert.equal(oct.income, 4500000);
   assert.equal(oct.expense, 4645000);
-  assert.equal(oct.net, 55000); // 4.700.000 - 4.645.000 = +55.000 surplus
+  assert.equal(oct.net, -145000);
   assert.equal(oct.hasData, true);
 
   // 4. Verify July, August, September numbers
   const jul = trend2026.months[6];
   const aug = trend2026.months[7];
   const sep = trend2026.months[8];
-  assert.equal(jul.income, 5850000); // 55 units paid (5.500.000) + other income (350.000)
+  assert.equal(jul.income, 5650000); // 53 billable units paid (5.300.000) + other income (350.000)
   assert.equal(jul.expense, 4825000);
-  assert.equal(aug.income, 6250000); // 55 units paid (5.500.000) + other income (750.000)
+  assert.equal(aug.income, 6050000); // 53 billable units paid (5.300.000) + other income (750.000)
   assert.equal(aug.expense, 4900000);
-  assert.equal(sep.income, 5500000); // 52 units paid + other income
+  assert.equal(sep.income, 5300000); // 50 billable units paid + other income
   assert.equal(sep.expense, 4900000);
 
   // 5. Total year income and expense must equal sum of all transactions
@@ -730,9 +734,12 @@ test('reporting module generates detailed monthly financial reports showing all 
   assert.ok(report.incomeByCategory.length > 0, 'Income categories should be populated');
   assert.ok(report.expenseByCategory.length > 0, 'Expense categories should be populated');
 
-  // Validate 55 units status tracking
+  // Validate 55 units status tracking with exemption
   assert.equal(report.unitStatuses.length, 55, 'Should track all 55 houses');
-  assert.equal(report.paidCount + report.unpaidCount, 55);
+  assert.equal(report.billableUnitsCount, 53, 'Should have 53 billable units');
+  assert.equal(report.exemptCount, 2, 'Should have 2 exempt officer units');
+  assert.equal(report.paidCount + report.unpaidCount, 53);
+  assert.equal(report.targetIuranRevenue, 53 * 100000);
 
   // Validate PDF export function generates filename
   const pdfFileName = downloadMonthlyReportPDF(db, periodMonth);
@@ -879,6 +886,61 @@ test('getLast6MonthsCashFlow computes sliding 6 months window and aggregates inc
   assert.equal(febSummary.points[3].year, 2025);
   assert.equal(febSummary.points[5].monthName, 'Februari');
   assert.equal(febSummary.points[5].year, 2026);
+});
+
+test('Ketua (A-01) and Bendahara (A-09) are strictly exempt from monthly iuran and excluded from billing reminders', () => {
+  const db = createSeedDatabase();
+
+  // 1. Exemption check functions
+  assert.equal(isUnitExemptFromIuran('A-01'), true);
+  assert.equal(isUnitExemptFromIuran('A-09'), true);
+  assert.equal(isUnitExemptFromIuran('A-02'), false);
+  assert.equal(isUnitExemptFromIuran('B-01'), false);
+
+  const ketuaInfo = getUnitExemptionInfo('A-01');
+  assert.ok(ketuaInfo);
+  assert.equal(ketuaInfo?.roleTitle, 'Ketua');
+
+  const bendaharaInfo = getUnitExemptionInfo('A-09');
+  assert.ok(bendaharaInfo);
+  assert.equal(bendaharaInfo?.roleTitle, 'Bendahara');
+
+  // 2. Unpaid billing calculation excludes exempt units
+  const billingList = getUnpaidResidentsForBilling(db, '2026-10');
+  const foundA01 = billingList.some((b) => b.resident.id === 'A-01');
+  const foundA09 = billingList.some((b) => b.resident.id === 'A-09');
+  assert.equal(foundA01, false, 'Ketua A-01 must not be billed');
+  assert.equal(foundA09, false, 'Bendahara A-09 must not be billed');
+
+  // 3. QRIS unpaid months returns empty array for exempt units
+  const unpaidMonthsA01 = getUnitUnpaidMonths(db, 'A-01', '2026-10');
+  const unpaidMonthsA09 = getUnitUnpaidMonths(db, 'A-09', '2026-10');
+  assert.deepEqual(unpaidMonthsA01, []);
+  assert.deepEqual(unpaidMonthsA09, []);
+
+  // 4. Realtime summary reflects 53 billable units (55 - 2 = 53)
+  const summary = calculateRealtimeSummary(db, '2026-10');
+  assert.equal(summary.totalUnits, 55);
+  assert.equal(summary.exemptUnitsCount, 2);
+  assert.equal(summary.billableUnitsCount, 53);
+  assert.equal(summary.targetIuranRevenue, 53 * 100000);
+
+  // 5. Separate Admin logins for Ketua and Bendahara
+  const ketuaAuth = authenticateAdmin({ adminRole: 'ketua', username: 'ketua', password: 'ketua123' }, db.settings);
+  assert.equal(ketuaAuth.ok, true);
+  if (ketuaAuth.ok) {
+    assert.equal(ketuaAuth.session.role, 'ketua');
+    assert.equal(ketuaAuth.session.isAdmin, true);
+    assert.equal(ketuaAuth.session.unitId, 'A-01');
+  }
+
+  const bendaharaAuth = authenticateAdmin({ adminRole: 'bendahara', username: 'bendahara', password: 'bendahara123' }, db.settings);
+  assert.equal(bendaharaAuth.ok, true);
+  if (bendaharaAuth.ok) {
+    assert.equal(bendaharaAuth.session.role, 'bendahara');
+    assert.equal(bendaharaAuth.session.isAdmin, true);
+    assert.equal(bendaharaAuth.session.unitId, 'A-09');
+  }
 });
 
 

@@ -193,7 +193,7 @@ export const MultiUserPresenceCard: React.FC<MultiUserPresenceCardProps> = ({
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 block">
-                  Pengurus Paguyuban
+                  Pengurus Lingkungan
                 </span>
                 <strong className="text-sm font-extrabold text-slate-900">
                   {adminCount} Admin Online
@@ -229,7 +229,7 @@ export const MultiUserPresenceCard: React.FC<MultiUserPresenceCardProps> = ({
             )}
           </div>
           <p className="text-[10px] text-slate-500">
-            Ketua Paguyuban &amp; Bendahara dapat login bersamaan untuk verifikasi kas.
+            Ketua &amp; Bendahara dapat login terpisah atau bersamaan untuk verifikasi kas.
           </p>
         </div>
       </div>

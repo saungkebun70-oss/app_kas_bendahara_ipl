@@ -31,6 +31,8 @@ import {
   getPublishedSecurityReports,
   getUnitMonthsMatrix,
   getUnitTransactions,
+  isUnitExemptFromIuran,
+  getUnitExemptionInfo,
 } from '../lib/finance';
 import { getResidentQRISPaymentInfo } from '../lib/qris';
 import { downloadMonthlyReportPDF, downloadQuarterlyLPJPDF, downloadUnitReceiptPDF } from '../lib/pdfExport';
@@ -82,6 +84,9 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
   const resident =
     state.residents.find((r) => r.id === unitId) || state.residents[0];
 
+  const isExempt = isUnitExemptFromIuran(resident.id);
+  const exemptionInfo = getUnitExemptionInfo(resident.id);
+
   const myMatrix = getUnitMonthsMatrix(state.transactions, resident.id, MATRIX_MONTHS);
   const myHistory = getUnitTransactions(state.transactions, resident.id);
   const myTotalPaid = myHistory.reduce((sum, t) => sum + t.amount, 0);
@@ -120,6 +125,14 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
               <span>{resident.streetName}</span>
               <span aria-hidden="true">·</span>
               <span>{resident.occupancyStatus}</span>
+              {isExempt && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span className="rounded-md bg-white/15 text-white border border-white/20 px-2 py-0.5 font-bold">
+                    Pengelola Lingkungan ({exemptionInfo?.roleTitle})
+                  </span>
+                </>
+              )}
             </div>
             <h1 className="mt-1.5 font-display text-xl sm:text-2xl font-bold text-white">
               Selamat Datang, {resident.headOfFamily}
@@ -130,24 +143,33 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              type="button"
-              data-testid="warga-open-confirmation-btn"
-              onClick={() => setConfirmationModalOpen(true)}
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-[#082068] shadow-sm hover:bg-teal-50 transition-colors cursor-pointer"
-            >
-              <CreditCard className="h-4 w-4 text-[#1547b8]" />
-              <span>Konfirmasi Bayar</span>
-            </button>
-            <button
-              type="button"
-              data-testid="warga-toggle-qris-btn"
-              onClick={() => setShowQRISBox((prev) => !prev)}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] px-3.5 py-2 text-xs font-bold text-[#082068] shadow-sm hover:opacity-95 transition-opacity cursor-pointer"
-            >
-              <QrCode className="h-4 w-4" />
-              <span>{showQRISBox ? 'Sembunyikan QRIS' : 'Lihat QRIS'}</span>
-            </button>
+            {isExempt ? (
+              <div className="inline-flex items-center gap-2 rounded-xl bg-white/15 border border-white/25 px-3.5 py-2 text-xs font-bold text-white shadow-xs">
+                <Check className="h-4 w-4 text-[#5eead4]" />
+                <span>Pengelola Lingkungan ({exemptionInfo?.roleTitle})</span>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  data-testid="warga-open-confirmation-btn"
+                  onClick={() => setConfirmationModalOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-[#082068] shadow-sm hover:bg-teal-50 transition-colors cursor-pointer"
+                >
+                  <CreditCard className="h-4 w-4 text-[#1547b8]" />
+                  <span>Konfirmasi Bayar</span>
+                </button>
+                <button
+                  type="button"
+                  data-testid="warga-toggle-qris-btn"
+                  onClick={() => setShowQRISBox((prev) => !prev)}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#2dd4bf] to-[#5eead4] px-3.5 py-2 text-xs font-bold text-[#082068] shadow-sm hover:opacity-95 transition-opacity cursor-pointer"
+                >
+                  <QrCode className="h-4 w-4" />
+                  <span>{showQRISBox ? 'Sembunyikan QRIS' : 'Lihat QRIS'}</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -285,75 +307,100 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
         <div className="space-y-5">
           {/* Collapsible Uploaded QRIS Payment Box */}
           {showQRISBox && (
-            <section
-              aria-label="Kode QRIS Pembayaran Iuran"
-              data-testid="warga-qris-box"
-              className="rounded-2xl border-2 border-[#38d3c3] bg-white p-5 shadow-sm"
-            >
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-12 items-center">
-                <div className="sm:col-span-5 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-4">
-                  <span className="text-[11px] font-bold text-[#0b2273] mb-2 uppercase tracking-wider">
-                    QRIS Resmi Paguyuban ({qrisInfo.qrisFileName})
-                  </span>
-                  <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs max-w-full">
-                    <img
-                      src={qrisInfo.qrisImageUrl}
-                      alt={`QRIS ${state.settings.housingName}`}
-                      className="h-44 sm:h-52 w-auto object-contain mx-auto"
-                    />
+            isExempt ? (
+              <section
+                aria-label="Informasi Pengelola Lingkungan"
+                data-testid="warga-qris-box"
+                className="rounded-2xl border-2 border-slate-200 bg-slate-50/90 p-5 shadow-sm"
+              >
+                <div className="flex items-start gap-3.5">
+                  <div className="rounded-xl bg-slate-700 p-2.5 text-white shrink-0 mt-0.5">
+                    <Check className="h-5 w-5" />
                   </div>
-                  <a
-                    href={qrisInfo.qrisImageUrl}
-                    download={qrisInfo.qrisFileName}
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#1547b8] hover:underline"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    <span>Unduh Gambar QRIS</span>
-                  </a>
-                </div>
-
-                <div className="sm:col-span-7 space-y-3">
-                  <div className="rounded-xl bg-[#0b2273] p-4 text-white">
-                    <span className="text-xs text-sky-200">
-                      Total Tagihan Unit {resident.id} — {resident.headOfFamily}
+                  <div className="space-y-1">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                      Akun Pengelola Lingkungan
                     </span>
-                    <p className="mt-1 font-mono text-2xl font-extrabold text-[#5eead4] tabular-nums">
-                      {qrisInfo.formattedAmount}
+                    <h3 className="font-display text-base font-bold text-slate-900">
+                      Unit {resident.id} ({resident.headOfFamily}) — {exemptionInfo?.roleTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                      Unit ini merupakan bagian dari tim pengelolaan lingkungan ({exemptionInfo?.roleTitle}), sehingga tidak dikenakan status atau tagihan iuran warga.
                     </p>
-                    <p className="mt-1 text-xs text-sky-100">
-                      Periode: {qrisInfo.unpaidLabels.join(', ') || 'Tidak ada tunggakan'}
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <span className="text-slate-400 block text-[11px]">Merchant QRIS</span>
-                      <strong className="text-slate-900 font-semibold text-xs">
-                        {qrisInfo.merchantName}
-                      </strong>
-                      <span className="text-[10px] font-mono text-slate-500 block mt-0.5">
-                        NMID: {qrisInfo.nmid}
-                      </span>
-                    </div>
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <span className="text-slate-400 block text-[11px]">Rekening Kas Paguyuban</span>
-                      <strong className="text-slate-900 font-mono text-xs block">
-                        {state.settings.bankAccountInfo}
-                      </strong>
-                    </div>
-                  </div>
-                  <div className="pt-1 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setConfirmationModalOpen(true)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold hover:bg-emerald-700 transition-colors cursor-pointer shadow-xs"
-                    >
-                      <CreditCard className="h-4 w-4" />
-                      <span>Konfirmasi Transfer &amp; Upload Struk</span>
-                    </button>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            ) : (
+              <section
+                aria-label="Kode QRIS Pembayaran Iuran"
+                data-testid="warga-qris-box"
+                className="rounded-2xl border-2 border-[#38d3c3] bg-white p-5 shadow-sm"
+              >
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-12 items-center">
+                  <div className="sm:col-span-5 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <span className="text-[11px] font-bold text-[#0b2273] mb-2 uppercase tracking-wider">
+                      QRIS Resmi Lingkungan ({qrisInfo.qrisFileName})
+                    </span>
+                    <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs max-w-full">
+                      <img
+                        src={qrisInfo.qrisImageUrl}
+                        alt={`QRIS ${state.settings.housingName}`}
+                        className="h-44 sm:h-52 w-auto object-contain mx-auto"
+                      />
+                    </div>
+                    <a
+                      href={qrisInfo.qrisImageUrl}
+                      download={qrisInfo.qrisFileName}
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#1547b8] hover:underline"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Unduh Gambar QRIS</span>
+                    </a>
+                  </div>
+
+                  <div className="sm:col-span-7 space-y-3">
+                    <div className="rounded-xl bg-[#0b2273] p-4 text-white">
+                      <span className="text-xs text-sky-200">
+                        Total Tagihan Unit {resident.id} — {resident.headOfFamily}
+                      </span>
+                      <p className="mt-1 font-mono text-2xl font-extrabold text-[#5eead4] tabular-nums">
+                        {qrisInfo.formattedAmount}
+                      </p>
+                      <p className="mt-1 text-xs text-sky-100">
+                        Periode: {qrisInfo.unpaidLabels.join(', ') || 'Tidak ada tunggakan'}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                        <span className="text-slate-400 block text-[11px]">Merchant QRIS</span>
+                        <strong className="text-slate-900 font-semibold text-xs">
+                          {qrisInfo.merchantName}
+                        </strong>
+                        <span className="text-[10px] font-mono text-slate-500 block mt-0.5">
+                          NMID: {qrisInfo.nmid}
+                        </span>
+                      </div>
+                      <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                        <span className="text-slate-400 block text-[11px]">Rekening Kas Lingkungan</span>
+                        <strong className="text-slate-900 font-mono text-xs block">
+                          {state.settings.bankAccountInfo}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="pt-1 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setConfirmationModalOpen(true)}
+                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold hover:bg-emerald-700 transition-colors cursor-pointer shadow-xs"
+                      >
+                        <CreditCard className="h-4 w-4" />
+                        <span>Konfirmasi Transfer &amp; Upload Struk</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )
           )}
 
           {/* Section: Status Iuran Rumah Sendiri */}
@@ -372,52 +419,75 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                   Matriks Iuran Unit {resident.id} ({resident.headOfFamily})
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Tarif iuran wajib lingkungan: {formatRupiah(state.settings.monthlyFee)} / bulan (jatuh tempo tanggal {state.settings.dueDayOfMonth})
+                  {isExempt
+                    ? `Unit tim pengelola lingkungan (${exemptionInfo?.roleTitle}) — bagian dari pengelolaan, tidak ditarik iuran.`
+                    : `Tarif iuran wajib lingkungan: ${formatRupiah(state.settings.monthlyFee)} / bulan (jatuh tempo tanggal ${state.settings.dueDayOfMonth})`}
                 </p>
               </div>
 
               <div className="rounded-xl bg-[#f0fdfa] border border-teal-200 px-4 py-2 text-left sm:text-right">
                 <span className="block text-[11px] text-[#0f766e] font-semibold">
-                  Total Terbayar Unit {resident.id}
+                  Status Iuran Unit {resident.id}
                 </span>
                 <span
                   data-testid="warga-own-total-paid"
                   className="font-mono text-base font-extrabold text-[#0b2273] tabular-nums"
                 >
-                  {formatRupiah(myTotalPaid)} ({myHistory.length} Kwitansi)
+                  {isExempt ? 'Pengelola' : `${formatRupiah(myTotalPaid)} (${myHistory.length} Kwitansi)`}
                 </span>
               </div>
             </div>
 
             {/* 6-Month Status Grid for This Resident's Unit */}
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-              {myMatrix.map((cell) => (
-                <div
-                  key={cell.periodMonth}
-                  className={`rounded-xl border p-3 text-center transition-colors ${
-                    cell.paid
-                      ? 'border-teal-200 bg-[#f0fdfa]/70'
-                      : 'border-rose-200 bg-rose-50/50'
-                  }`}
-                >
-                  <div className="text-xs font-bold text-slate-900">
-                    {formatMonthLabel(cell.periodMonth)}
-                  </div>
-                  {cell.paid ? (
-                    <div className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-[#0f9f90]">
-                      <Check className="h-3.5 w-3.5" />
-                      <span>Lunas</span>
+              {myMatrix.map((cell) => {
+                if (isExempt) {
+                  return (
+                    <div
+                      key={cell.periodMonth}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center transition-colors"
+                    >
+                      <div className="text-xs font-bold text-slate-700">
+                        {formatMonthLabel(cell.periodMonth)}
+                      </div>
+                      <div className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-slate-600">
+                        <span>Pengelola</span>
+                      </div>
+                      <div className="mt-1 text-[10px] text-slate-400 truncate">
+                        Bagian Pengelolaan
+                      </div>
                     </div>
-                  ) : (
-                    <div className="mt-1.5 text-xs font-bold text-rose-600">
-                      Belum Bayar
+                  );
+                }
+
+                return (
+                  <div
+                    key={cell.periodMonth}
+                    className={`rounded-xl border p-3 text-center transition-colors ${
+                      cell.paid
+                        ? 'border-teal-200 bg-[#f0fdfa]/70'
+                        : 'border-rose-200 bg-rose-50/50'
+                    }`}
+                  >
+                    <div className="text-xs font-bold text-slate-900">
+                      {formatMonthLabel(cell.periodMonth)}
                     </div>
-                  )}
-                  <div className="mt-1 font-mono text-[10px] text-slate-500 truncate">
-                    {cell.transaction ? cell.transaction.receiptNumber : formatRupiah(state.settings.monthlyFee)}
+                    {cell.paid ? (
+                      <div className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-[#0f9f90]">
+                        <Check className="h-3.5 w-3.5" />
+                        <span>Lunas</span>
+                      </div>
+                    ) : (
+                      <div className="mt-1.5 text-xs font-bold text-rose-600">
+                        Belum Bayar
+                      </div>
+                    )}
+                    <div className="mt-1 font-mono text-[10px] text-slate-500 truncate">
+                      {cell.transaction ? cell.transaction.receiptNumber : formatRupiah(state.settings.monthlyFee)}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -455,7 +525,7 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                 Kwitansi Pembayaran Iuran Unit {resident.id}
               </h2>
               <p className="text-xs text-slate-500">
-                Daftar transaksi yang telah diverifikasi dan masuk kas resmi paguyuban. Anda dapat mengunduh dokumen PDF kwitansi kapan saja.
+                Daftar transaksi yang telah diverifikasi dan masuk kas resmi lingkungan. Anda dapat mengunduh dokumen PDF kwitansi kapan saja.
               </p>
             </div>
             <span className="rounded-lg bg-teal-50 border border-teal-200 px-3 py-1 font-mono text-xs font-bold text-[#0f766e]">
@@ -714,7 +784,7 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Daftar ini diatur hak tayangnya oleh Admin Pengurus demi transparansi kas paguyuban.
+                  Daftar ini diatur hak tayangnya oleh Admin Pengurus demi transparansi kas lingkungan.
                 </p>
               </div>
             </div>
@@ -813,13 +883,13 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-3">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#1547b8]">
-                Transparansi Kas Paguyuban
+                Transparansi Kas Lingkungan
               </span>
               <h2 className="font-display text-base sm:text-lg font-bold text-slate-900">
                 Laporan Keuangan Bulanan &amp; LPJ Triwulan Resmi
               </h2>
               <p className="text-xs text-slate-500">
-                Laporan akuntabilitas kas paguyuban yang telah diverifikasi dan dipublikasikan resmi oleh Admin Pengurus.
+                Laporan akuntabilitas kas lingkungan yang telah diverifikasi dan dipublikasikan resmi oleh Admin Pengurus.
               </p>
             </div>
 

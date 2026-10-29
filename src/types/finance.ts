@@ -119,7 +119,7 @@ export type AnnouncementCategory =
   | 'Kegiatan Warga'
   | 'Pengumuman Pengurus'
   | 'Kerja Bakti & Lingkungan'
-  | 'Rapat Paguyuban';
+  | 'Rapat Warga';
 
 export interface CommunityActivityAnnouncement {
   id: string;

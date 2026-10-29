@@ -140,7 +140,7 @@ export const ReportsLPJView: React.FC<ReportsLPJViewProps> = ({
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-[#0f766e]">
             <Layers className="w-4 h-4 text-[#0f766e]" />
-            <span>Modul Pelaporan Keuangan &amp; LPJ Otomatis Paguyuban</span>
+            <span>Modul Pelaporan Keuangan &amp; LPJ Otomatis Lingkungan</span>
           </div>
           <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Laporan Keuangan Bulanan &amp; LPJ Triwulan

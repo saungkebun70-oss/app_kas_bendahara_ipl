@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Check, Search, History, PlusCircle } from 'lucide-react';
+import { Check, Search, History, PlusCircle, ShieldCheck } from 'lucide-react';
 import type { BlockCode, DatabaseState } from '../types/finance';
 import {
   formatMonthLabel,
   formatRupiah,
+  isUnitExemptFromIuran,
   maskNik,
 } from '../lib/finance';
 
@@ -28,7 +29,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [blockFilter, setBlockFilter] = useState<'ALL' | BlockCode>('ALL');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'UNPAID'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'UNPAID' | 'EXEMPT'>('ALL');
   const [payingUnitId, setPayingUnitId] = useState<string | null>(null);
 
   const paidUnitMap = useMemo(() => {
@@ -46,13 +47,36 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
     return { map, countByUnit };
   }, [state.transactions, activePeriodMonth]);
 
+  const exemptTotal = useMemo(() => {
+    return state.residents.filter((r) => isUnitExemptFromIuran(r.id)).length;
+  }, [state.residents]);
+
+  const paidTotal = useMemo(() => {
+    return state.residents.filter(
+      (r) => !isUnitExemptFromIuran(r.id) && paidUnitMap.map.has(r.id)
+    ).length;
+  }, [state.residents, paidUnitMap.map]);
+
+  const unpaidTotal = useMemo(() => {
+    return state.residents.filter(
+      (r) => !isUnitExemptFromIuran(r.id) && !paidUnitMap.map.has(r.id)
+    ).length;
+  }, [state.residents, paidUnitMap.map]);
+
   const filteredResidents = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return state.residents.filter((r) => {
       if (blockFilter !== 'ALL' && r.block !== blockFilter) return false;
+      const isExempt = isUnitExemptFromIuran(r.id);
       const isPaid = paidUnitMap.map.has(r.id);
-      if (statusFilter === 'PAID' && !isPaid) return false;
-      if (statusFilter === 'UNPAID' && isPaid) return false;
+
+      if (statusFilter === 'PAID') {
+        if (isExempt || !isPaid) return false;
+      } else if (statusFilter === 'UNPAID') {
+        if (isExempt || isPaid) return false;
+      } else if (statusFilter === 'EXEMPT') {
+        if (!isExempt) return false;
+      }
 
       if (!q) return true;
       return (
@@ -65,8 +89,6 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
     });
   }, [state.residents, blockFilter, statusFilter, searchQuery, paidUnitMap.map]);
 
-  const paidTotal = state.residents.filter((r) => paidUnitMap.map.has(r.id)).length;
-  const unpaidTotal = state.residents.length - paidTotal;
 
   const handleQuickPay = async (unitId: string) => {
     setPayingUnitId(unitId);
@@ -162,7 +184,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
-                Semua
+                Semua (55)
               </button>
               <button
                 type="button"
@@ -186,6 +208,18 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               >
                 Belum Bayar ({unpaidTotal})
               </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter('EXEMPT')}
+                className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                  statusFilter === 'EXEMPT'
+                    ? 'bg-slate-200 text-slate-900 shadow-xs font-bold ring-1 ring-slate-300'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                }`}
+              >
+                Pengelola ({exemptTotal})
+              </button>
+
             </div>
           </div>
         </div>
@@ -241,19 +275,36 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                       </div>
 
                       <div className="text-right shrink-0">
-                        {paidInfo ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">
-                            <Check className="h-3 w-3" />
-                            <span>Lunas</span>
-                          </span>
+                        {isUnitExemptFromIuran(res.id) ? (
+                          <div className="text-right">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                              <ShieldCheck className="h-3 w-3 text-slate-500" />
+                              <span>Pengelola ({res.id === 'A-01' ? 'Ketua' : 'Bendahara'})</span>
+                            </span>
+                            <span className="block text-[10px] text-slate-400 mt-0.5">
+                              Bagian Pengelolaan
+                            </span>
+                          </div>
+                        ) : paidInfo ? (
+                          <>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">
+                              <Check className="h-3 w-3" />
+                              <span>Lunas</span>
+                            </span>
+                            <span className="block font-mono text-[10px] text-slate-500 mt-0.5">
+                              {formatRupiah(state.settings.monthlyFee)}
+                            </span>
+                          </>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
-                            Belum Bayar
-                          </span>
+                          <>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                              Belum Bayar
+                            </span>
+                            <span className="block font-mono text-[10px] text-slate-500 mt-0.5">
+                              {formatRupiah(state.settings.monthlyFee)}
+                            </span>
+                          </>
                         )}
-                        <span className="block font-mono text-[10px] text-slate-500 mt-0.5">
-                          {formatRupiah(state.settings.monthlyFee)}
-                        </span>
                       </div>
                     </div>
 
@@ -278,7 +329,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                       </span>
 
                       <div className="flex items-center gap-1.5">
-                        {isAdmin && !paidInfo && (
+                        {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
                           <button
                             type="button"
                             disabled={payingUnitId === res.id}
@@ -343,7 +394,17 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           <div className="text-slate-500">{res.vehiclePlate}</div>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap">
-                          {paidInfo ? (
+                          {isUnitExemptFromIuran(res.id) ? (
+                            <div className="text-xs">
+                              <span className="inline-flex items-center gap-1 font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                                <ShieldCheck className="h-3.5 w-3.5 text-slate-500" />
+                                <span>Pengelola ({res.id === 'A-01' ? 'Ketua' : 'Bendahara'})</span>
+                              </span>
+                              <div className="text-[11px] text-slate-400 mt-0.5">
+                                Bagian Pengelolaan
+                              </div>
+                            </div>
+                          ) : paidInfo ? (
                             <div className="text-xs">
                               <span className="inline-flex items-center gap-1 font-semibold text-emerald-800">
                                 <Check className="h-3.5 w-3.5" />
@@ -367,7 +428,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         </td>
                         <td className="py-3 pl-3 pr-5 text-right whitespace-nowrap">
                           <div className="inline-flex items-center justify-end gap-2">
-                            {isAdmin && !paidInfo && (
+                            {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
                               <button
                                 type="button"
                                 disabled={payingUnitId === res.id}
@@ -379,6 +440,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                                 <span>{payingUnitId === res.id ? '...' : 'Bayar'}</span>
                               </button>
                             )}
+
                             <button
                               type="button"
                               onClick={() => onSelectUnit(res.id)}

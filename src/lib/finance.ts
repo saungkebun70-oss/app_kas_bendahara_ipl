@@ -361,6 +361,18 @@ export function getLast6MonthsCashFlow(
 }
 
 
+export const EXEMPT_OFFICER_UNIT_IDS = ['A-01', 'A-09'] as const;
+
+export function isUnitExemptFromIuran(unitId: string): boolean {
+  return unitId === 'A-01' || unitId === 'A-09';
+}
+
+export function getUnitExemptionInfo(unitId: string): { isExempt: boolean; roleLabel?: string; roleTitle?: string } {
+  if (unitId === 'A-01') return { isExempt: true, roleLabel: 'Ketua (Bebas Iuran)', roleTitle: 'Ketua' };
+  if (unitId === 'A-09') return { isExempt: true, roleLabel: 'Bendahara (Bebas Iuran)', roleTitle: 'Bendahara' };
+  return { isExempt: false };
+}
+
 export interface RealtimeFinancialSummary {
   currentBalance: number;
   openingBalance2026: number;
@@ -375,6 +387,8 @@ export interface RealtimeFinancialSummary {
   monthNetSurplus: number;
   monthClosingBalance: number;
   totalUnits: number;
+  exemptUnitsCount: number;
+  billableUnitsCount: number;
   paidUnitsCount: number;
   unpaidUnitsCount: number;
   targetIuranRevenue: number;
@@ -430,10 +444,16 @@ export function calculateRealtimeSummary(
   const monthClosingBalance = monthOpeningBalance + monthNetSurplus;
 
   const totalUnits = residents.length;
-  const paidUnitsCount = residents.filter((r) => paidUnitSet.has(r.id)).length;
-  const unpaidUnitsCount = totalUnits - paidUnitsCount;
-  const targetIuranRevenue = totalUnits * settings.monthlyFee;
-  const collectionRatePercent = totalUnits > 0 ? Math.round((paidUnitsCount / totalUnits) * 100) : 0;
+  const exemptResidents = residents.filter((r) => isUnitExemptFromIuran(r.id));
+  const exemptUnitsCount = exemptResidents.length;
+  const billableResidents = residents.filter((r) => !isUnitExemptFromIuran(r.id));
+  const billableUnitsCount = billableResidents.length;
+
+  const paidUnitsCount = billableResidents.filter((r) => paidUnitSet.has(r.id)).length;
+  const unpaidUnitsCount = billableUnitsCount - paidUnitsCount;
+  const targetIuranRevenue = billableUnitsCount * settings.monthlyFee;
+  const collectionRatePercent =
+    billableUnitsCount > 0 ? Math.round((paidUnitsCount / billableUnitsCount) * 100) : 0;
   const totalRevenueAchievementPercent =
     targetIuranRevenue > 0 ? Math.round((monthIncome / targetIuranRevenue) * 100) : 0;
   const unpaidPotentialAmount = unpaidUnitsCount * settings.monthlyFee;
@@ -441,8 +461,9 @@ export function calculateRealtimeSummary(
   const blocks: BlockCode[] = ['A', 'B', 'C', 'D'];
   const blockBreakdown: BlockSummary[] = blocks.map((block) => {
     const unitsInBlock = residents.filter((r) => r.block === block);
-    const paidInBlock = unitsInBlock.filter((r) => paidUnitSet.has(r.id)).length;
-    const unpaidInBlock = unitsInBlock.length - paidInBlock;
+    const billableInBlock = unitsInBlock.filter((r) => !isUnitExemptFromIuran(r.id));
+    const paidInBlock = billableInBlock.filter((r) => paidUnitSet.has(r.id)).length;
+    const unpaidInBlock = billableInBlock.length - paidInBlock;
     return {
       block,
       streetName: unitsInBlock[0]?.streetName ?? `Blok ${block}`,
@@ -450,9 +471,10 @@ export function calculateRealtimeSummary(
       paidUnits: paidInBlock,
       unpaidUnits: unpaidInBlock,
       collectedAmount: paidInBlock * settings.monthlyFee,
-      targetAmount: unitsInBlock.length * settings.monthlyFee,
+      targetAmount: billableInBlock.length * settings.monthlyFee,
     };
   });
+
 
   return {
     currentBalance,
@@ -468,6 +490,8 @@ export function calculateRealtimeSummary(
     monthNetSurplus,
     monthClosingBalance,
     totalUnits,
+    exemptUnitsCount,
+    billableUnitsCount,
     paidUnitsCount,
     unpaidUnitsCount,
     targetIuranRevenue,
@@ -542,11 +566,17 @@ export interface MonthlyDetailedReport {
   ledgerEntries: LedgerEntryWithBalance[];
   unitStatuses: Array<{
     resident: ResidentUnit;
+    isExempt: boolean;
     paid: boolean;
     transaction: LedgerTransaction | null;
   }>;
   paidCount: number;
   unpaidCount: number;
+  exemptCount: number;
+  totalUnits: number;
+  billableUnitsCount: number;
+  exemptUnitsCount: number;
+  targetIuranRevenue: number;
 }
 
 export function calculateMonthlyReport(
@@ -621,16 +651,22 @@ export function calculateMonthlyReport(
   }).filter((c) => c.amount > 0);
 
   const unitStatuses = residents.map((resident) => {
+    const isExempt = isUnitExemptFromIuran(resident.id);
     const trx = unitPaidTrx.get(resident.id) ?? null;
     return {
       resident,
-      paid: Boolean(trx),
+      isExempt,
+      paid: isExempt || Boolean(trx),
       transaction: trx,
     };
   });
 
-  const paidCount = unitStatuses.filter((u) => u.paid).length;
-  const unpaidCount = unitStatuses.length - paidCount;
+  const paidCount = unitStatuses.filter((u) => !u.isExempt && u.paid).length;
+  const unpaidCount = unitStatuses.filter((u) => !u.isExempt && !u.paid).length;
+  const exemptCount = unitStatuses.filter((u) => u.isExempt).length;
+  const totalUnits = residents.length;
+  const billableUnitsCount = totalUnits - exemptCount;
+  const targetIuranRevenue = billableUnitsCount * (settings?.monthlyFee ?? 100000);
 
   return {
     periodMonth,
@@ -648,8 +684,14 @@ export function calculateMonthlyReport(
     unitStatuses,
     paidCount,
     unpaidCount,
+    exemptCount,
+    totalUnits,
+    billableUnitsCount,
+    exemptUnitsCount: exemptCount,
+    targetIuranRevenue,
   };
 }
+
 
 export interface QuarterlyMonthRow {
   periodMonth: string;
@@ -784,8 +826,9 @@ export function calculateQuarterlyLPJ(
   const blocks: BlockCode[] = ['A', 'B', 'C', 'D'];
   const blockRealization = blocks.map((block) => {
     const units = state.residents.filter((r) => r.block === block);
-    const expectedPaymentsCount = units.length * 3;
-    const actualPaymentsCount = units.reduce(
+    const billableUnits = units.filter((r) => !isUnitExemptFromIuran(r.id));
+    const expectedPaymentsCount = billableUnits.length * 3;
+    const actualPaymentsCount = billableUnits.reduce(
       (sum, u) => sum + (paidCountByUnit.get(u.id) ?? 0),
       0
     );
@@ -807,6 +850,7 @@ export function calculateQuarterlyLPJ(
       realizationPercent,
     };
   });
+
 
   const netSurplus = totalIncome - totalExpense;
   const closingBalance = openingBalance + netSurplus;
@@ -911,6 +955,10 @@ export function getUnpaidResidentsForBilling(
   const results: UnpaidResidentBillingItem[] = [];
 
   for (const resident of residents) {
+    if (isUnitExemptFromIuran(resident.id)) {
+      continue;
+    }
+
     if (paidLookup.has(`${resident.id}::${targetPeriodMonth}`)) {
       continue;
     }

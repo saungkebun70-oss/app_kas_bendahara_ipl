@@ -89,7 +89,7 @@ const PAYMENT_METHODS: PaymentMethod[] = [
 export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   housingName: 'Perumahan Saung Kebun',
   housingAddress: 'Bengle, Majalaya, Karawang, Jawa Barat',
-  rtRwLabel: 'Paguyuban Warga RT 004 / RW 009',
+  rtRwLabel: 'Pengurus Lingkungan RT 004 / RW 009',
   monthlyFee: 100000,
   dueDayOfMonth: 10,
   openingBalance2026: 14250000,
@@ -134,19 +134,19 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     location: 'Pendopo Saung Kebun & Seluruh Jalur Blok A–D',
     content:
       'Mengundang seluruh Bapak/Ibu warga 55 rumah Perumahan Saung Kebun untuk hadir dalam kegiatan kerja bakti pembersihan saluran drainase menjelang puncak musim hujan serta penataan tanaman hias di sekitar Pendopo Saung Kebun mulai pukul 07.00 WIB.',
-    authorName: 'Erlangga (Ketua Paguyuban)',
+    authorName: 'Erlangga (Ketua)',
     published: true,
     createdAt: '2026-10-20T09:00:00.000Z',
   },
   {
     id: 'ANN-2026-002',
     title: 'Rapat Evaluasi Kas & Sosialisasi LPJ Triwulan III 2026',
-    category: 'Rapat Paguyuban',
+    category: 'Rapat Warga',
     eventDate: '2026-11-01',
     location: 'Pendopo Utama Perumahan Saung Kebun',
     content:
       'Penyampaian laporan pertanggungjawaban (LPJ) kas lingkungan periode Juli–September 2026 serta pembahasan rencana peremajaan lampu penerangan jalan umum (PJU) LED dan kamera CCTV gerbang.',
-    authorName: 'Andriansyah (Bendahara Pengurus)',
+    authorName: 'Andriansyah (Bendahara)',
     published: true,
     createdAt: '2026-10-22T14:30:00.000Z',
   },
@@ -158,11 +158,12 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     location: 'Area Taman & Seluruh Rumah Blok A, B, C, D',
     content:
       'Pengurus bekerja sama dengan Puskesmas Majalaya akan melaksanakan fogging pencegahan DBD pada hari Minggu pagi pukul 08.00 WIB. Mohon warga menutup makanan dan membuka akses taman depan rumah.',
-    authorName: 'Erlangga (Ketua Paguyuban)',
+    authorName: 'Erlangga (Ketua)',
     published: true,
     createdAt: '2026-10-23T10:15:00.000Z',
   },
 ];
+
 
 export const DEFAULT_SECURITY_REPORTS: SecurityGuardReport[] = [
   {
@@ -293,24 +294,24 @@ export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
   },
   {
     id: 'CONF-2026-002',
-    unitId: 'A-01',
-    residentName: 'Erlangga',
-    whatsapp: '081298765431',
+    unitId: 'A-02',
+    residentName: 'Budi Santoso',
+    whatsapp: '081298765432',
     periodMonths: ['2026-10'],
     amount: 100000,
     paymentMethod: 'Transfer BCA Kas',
     transferDate: '2026-10-05',
     senderBank: 'Bank BCA',
-    senderAccountName: 'Erlangga',
-    notes: 'Iuran bulan Oktober 2026 unit A-01',
+    senderAccountName: 'Budi Santoso',
+    notes: 'Iuran bulan Oktober 2026 unit A-02',
     proofImageUrl: DEFAULT_QRIS_IMAGE_DATA_URL,
-    proofFileName: 'struk-transfer-A01.png',
+    proofFileName: 'struk-transfer-A02.png',
     status: 'DISETUJUI',
     submittedAt: '2026-10-05T08:30:00.000Z',
     verifiedAt: '2026-10-05T09:00:00.000Z',
     verifiedBy: 'Andriansyah (Bendahara)',
     resultingTransactionId: 'TRX-20261005-001',
-    resultingReceiptNumber: 'SK/KW/2026/10/A01',
+    resultingReceiptNumber: 'SK/KW/2026/10/A02',
   },
 ];
 
@@ -350,10 +351,10 @@ export function createSeedDatabase(): DatabaseState {
       const plateLetters = ['SK', 'KBN', 'BGR', 'TKP', 'SGB'][idx % 5];
       const vehiclePlate = `F ${1120 + idx * 17} ${plateLetters}`;
 
-      let notes = 'Warga tetap aktif paguyuban';
-      if (unitId === 'A-01') notes = 'Ketua Paguyuban Warga Saung Kebun';
-      else if (unitId === 'A-09') notes = 'Bendahara Paguyuban Saung Kebun';
-      else if (unitId === 'B-01') notes = 'Sekretaris Paguyuban Saung Kebun';
+      let notes = 'Warga tetap aktif';
+      if (unitId === 'A-01') notes = 'Ketua Lingkungan (Bebas Iuran)';
+      else if (unitId === 'A-09') notes = 'Bendahara Kas (Bebas Iuran)';
+      else if (unitId === 'B-01') notes = 'Sekretaris Lingkungan';
       else if (occupancyStatus === 'Dikontrakkan') notes = 'Iuran dibayar oleh penyewa bulanan';
       else if (occupancyStatus === 'Kosong Terawat') notes = 'Rumah singgah akhir pekan, iuran tetap berjalan';
 
@@ -395,6 +396,8 @@ export function createSeedDatabase(): DatabaseState {
   const seedMonthlyIuran = (periodMonth: string, skipSet: Set<string>) => {
     const [year, month] = periodMonth.split('-');
     residents.forEach((res, i) => {
+      // Ketua (A-01) dan Bendahara (A-09) tidak ditarik iuran
+      if (res.id === 'A-01' || res.id === 'A-09') return;
       if (skipSet.has(res.id)) return;
       const payDay = String(1 + (i % 10)).padStart(2, '0');
       const method = PAYMENT_METHODS[i % PAYMENT_METHODS.length];
@@ -412,6 +415,7 @@ export function createSeedDatabase(): DatabaseState {
       });
     });
   };
+
 
   // --- JULI 2026 ---
   seedMonthlyIuran('2026-07', new Set());

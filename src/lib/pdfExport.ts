@@ -243,7 +243,7 @@ export function downloadMonthlyReportPDF(state: DatabaseState, periodMonth: stri
   doc.text(`Karawang, ${formatShortDate(new Date().toISOString().slice(0, 10))}`, pageWidth - 65, sigY);
 
   doc.setFont('helvetica', 'bold');
-  doc.text('Ketua Paguyuban Warga', 14, sigY + 5);
+  doc.text('Ketua Lingkungan', 14, sigY + 5);
   doc.text('Bendahara Pengurus', pageWidth - 65, sigY + 5);
 
   doc.line(14, sigY + 24, 68, sigY + 24);
@@ -448,11 +448,11 @@ export function downloadQuarterlyLPJPDF(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
   doc.setTextColor(15, 23, 42);
-  doc.text('LEMBAR PENGESAHAN PENGURUS PAGUYUBAN PERUMAHAN SAUNG KEBUN', 14, sigY);
+  doc.text('LEMBAR PENGESAHAN PENGURUS LINGKUNGAN PERUMAHAN SAUNG KEBUN', 14, sigY);
 
   const colW = (pageWidth - 28) / 4;
   const roles = [
-    { role: 'Ketua Paguyuban', name: state.settings.chairpersonName },
+    { role: 'Ketua Lingkungan', name: state.settings.chairpersonName },
     { role: 'Bendahara', name: state.settings.treasurerName },
     { role: 'Sekretaris', name: state.settings.secretaryName },
     { role: 'Pengawas Warga', name: state.settings.supervisorName },

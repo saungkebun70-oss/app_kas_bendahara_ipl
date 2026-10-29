@@ -434,7 +434,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                   <option value="Kegiatan Warga">Kegiatan Warga</option>
                   <option value="Pengumuman Pengurus">Pengumuman Pengurus</option>
                   <option value="Kerja Bakti & Lingkungan">Kerja Bakti &amp; Lingkungan</option>
-                  <option value="Rapat Paguyuban">Rapat Paguyuban</option>
+                  <option value="Rapat Warga">Rapat Warga</option>
                 </select>
               </div>
 
@@ -498,7 +498,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                 <span className="text-xs text-slate-500">
                   {canManageAdminItems
                     ? 'Klik tombol Publish / Unpublish untuk mengatur tampilan di warga'
-                    : 'Pengumuman dan jadwal kegiatan resmi paguyuban warga Saung Kebun'}
+                    : 'Pengumuman dan jadwal kegiatan resmi warga Saung Kebun'}
                 </span>
               </div>
             </div>
@@ -1130,7 +1130,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                       { name: 'Babinsa Koramil', phone: '0812-8877-6655', label: 'Bantuan TNI Teritorial' },
                       { name: 'Pemadam Kebakaran (Damkar)', phone: '113', label: 'Darurat Kebakaran' },
                       { name: 'Puskesmas / Ambulans Darurat', phone: '119', label: 'Medis Gawat Darurat' },
-                      { name: 'Ketua RT / Paguyuban Saung Kebun', phone: '0812-8901-2345', label: 'Pimpinan Lingkungan' },
+                      { name: 'Ketua RT / Lingkungan Saung Kebun', phone: '0812-8901-2345', label: 'Pimpinan Lingkungan' },
                     ].map((c) => (
                       <div
                         key={c.name}
@@ -1426,7 +1426,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                         </p>
                         <a
                           href={`https://wa.me/${officer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
-                            `Halo Petugas ${officer.name} (${officer.badgeNumber}),\n\nBerikut akun resmi Pos Jaga Satpam Perumahan Saung Kebun:\n\n👮 Nama Petugas: ${officer.name}\n🔖 Nomor KTA/Badge: ${officer.badgeNumber}\n🕒 Shift Tugas: ${officer.assignedShift}\n🔑 PIN Akses: ${officer.pin}\n🌐 Tautan Pos Jaga: ${window.location.origin}/#satpam\n\nHarap simpan akun ini untuk keperluan dinas jaga.\n\nSalam hormat,\nPengurus Paguyuban Saung Kebun`
+                            `Halo Petugas ${officer.name} (${officer.badgeNumber}),\n\nBerikut akun resmi Pos Jaga Satpam Perumahan Saung Kebun:\n\n👮 Nama Petugas: ${officer.name}\n🔖 Nomor KTA/Badge: ${officer.badgeNumber}\n🕒 Shift Tugas: ${officer.assignedShift}\n🔑 PIN Akses: ${officer.pin}\n🌐 Tautan Pos Jaga: ${window.location.origin}/#satpam\n\nHarap simpan akun ini untuk keperluan dinas jaga.\n\nSalam hormat,\nPengurus Lingkungan Saung Kebun`
                           )}`}
                           target="_blank"
                           rel="noopener noreferrer"

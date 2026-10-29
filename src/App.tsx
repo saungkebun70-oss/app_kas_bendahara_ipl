@@ -24,27 +24,37 @@ import { DatabaseHealthIndicator } from './components/DatabaseHealthIndicator';
 import { BottomNav } from './components/BottomNav';
 import type { PresenceSummary } from './lib/api';
 
-const STORAGE_KEYS = {
+export type PortalRole = 'ketua' | 'bendahara' | 'warga' | 'satpam' | 'admin';
+
+const STORAGE_KEYS: Record<string, string> = {
+  ketua: 'saung_kebun_session_ketua_v2',
+  bendahara: 'saung_kebun_session_bendahara_v2',
   admin: 'saung_kebun_session_admin_v2',
   warga: 'saung_kebun_session_warga_v2',
   satpam: 'saung_kebun_session_satpam_v2',
-} as const;
+};
 
-function getCurrentPortalRole(): 'warga' | 'satpam' | 'admin' {
+function getCurrentPortalRole(): PortalRole {
   try {
     const hash = window.location.hash.toLowerCase();
+    if (hash === '#ketua') return 'ketua';
+    if (hash === '#bendahara') return 'bendahara';
     if (hash === '#warga') return 'warga';
     if (hash === '#keamanan' || hash === '#satpam') return 'satpam';
     const search = new URLSearchParams(window.location.search);
     const p = search.get('portal');
+    if (p === 'ketua') return 'ketua';
+    if (p === 'bendahara') return 'bendahara';
     if (p === 'warga') return 'warga';
     if (p === 'keamanan' || p === 'satpam') return 'satpam';
     if (p === 'admin') return 'admin';
     const path = window.location.pathname.toLowerCase();
+    if (path.includes('ketua')) return 'ketua';
+    if (path.includes('bendahara')) return 'bendahara';
     if (path.includes('warga')) return 'warga';
     if (path.includes('keamanan') || path.includes('satpam')) return 'satpam';
   } catch {}
-  return 'admin';
+  return 'ketua';
 }
 
 function getClientSessionId(): string {
@@ -56,7 +66,9 @@ function getClientSessionId(): string {
   return id;
 }
 
-function isSessionMatchingPortal(s: AuthSession, portal: 'warga' | 'satpam' | 'admin'): boolean {
+function isSessionMatchingPortal(s: AuthSession, portal: PortalRole): boolean {
+  if (portal === 'ketua') return s.role === 'ketua';
+  if (portal === 'bendahara') return s.role === 'bendahara';
   if (portal === 'warga') return s.role === 'warga';
   if (portal === 'satpam') return s.role === 'satpam';
   return s.isAdmin || s.role === 'ketua' || s.role === 'bendahara';
@@ -70,7 +82,7 @@ function loadSessionForCurrentPortal(): AuthSession | null {
         role: 'bendahara',
         isAdmin: true,
         displayName: 'Andriansyah',
-        roleLabel: 'Admin — Bendahara Pengurus',
+        roleLabel: 'Admin — Bendahara',
         unitId: 'A-09',
         loginAt: new Date().toISOString(),
       };
@@ -98,9 +110,19 @@ function loadSessionForCurrentPortal(): AuthSession | null {
       const parsed = JSON.parse(localRaw) as AuthSession;
       if (isSessionMatchingPortal(parsed, portal)) return parsed;
     }
+
+    // Also check generic admin fallback if portal is ketua or bendahara
+    if (portal === 'ketua' || portal === 'bendahara' || portal === 'admin') {
+      const adminRaw = localStorage.getItem(STORAGE_KEYS.admin);
+      if (adminRaw) {
+        const parsed = JSON.parse(adminRaw) as AuthSession;
+        if (parsed.isAdmin) return parsed;
+      }
+    }
   } catch {}
   return null;
 }
+
 
 export default function App() {
   const [db, setDb] = useState<DatabaseState | null>(null);
@@ -200,11 +222,23 @@ export default function App() {
     } else {
       setActiveTab('dashboard');
     }
-    const portal = newSession.role === 'warga' ? 'warga' : newSession.role === 'satpam' ? 'satpam' : 'admin';
+    const roleKey =
+      newSession.role === 'warga'
+        ? 'warga'
+        : newSession.role === 'satpam'
+        ? 'satpam'
+        : newSession.role === 'ketua'
+        ? 'ketua'
+        : 'bendahara';
     try {
-      localStorage.setItem(STORAGE_KEYS[portal], JSON.stringify(newSession));
-      sessionStorage.setItem(`saung_kebun_session_${portal}`, JSON.stringify(newSession));
+      localStorage.setItem(STORAGE_KEYS[roleKey], JSON.stringify(newSession));
+      sessionStorage.setItem(`saung_kebun_session_${roleKey}`, JSON.stringify(newSession));
+      if (newSession.isAdmin) {
+        localStorage.setItem(STORAGE_KEYS.admin, JSON.stringify(newSession));
+        sessionStorage.setItem('saung_kebun_session_admin', JSON.stringify(newSession));
+      }
     } catch {}
+
 
     // Trigger immediate presence heartbeat on login
     api.sendPresenceHeartbeat({

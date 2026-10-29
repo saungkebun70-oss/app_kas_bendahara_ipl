@@ -180,7 +180,7 @@ export const SixMonthCashflowBarChart: React.FC<SixMonthCashflowBarChartProps> =
             Tren Pemasukan &amp; Pengeluaran (6 Bulan Terakhir)
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Komparasi pemasukan iuran &amp; operasional terhadap pengeluaran kas paguyuban selama 6 bulan terakhir. Klik batang bulan untuk beralih periode.
+            Komparasi pemasukan iuran &amp; operasional terhadap pengeluaran kas lingkungan selama 6 bulan terakhir. Klik batang bulan untuk beralih periode.
           </p>
         </div>
 

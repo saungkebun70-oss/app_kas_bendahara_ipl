@@ -897,7 +897,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    Aktivitas arus kas paguyuban terbaru yang tercatat di sistem
+                    Aktivitas arus kas lingkungan terbaru yang tercatat di sistem
                   </p>
                 </div>
               </div>

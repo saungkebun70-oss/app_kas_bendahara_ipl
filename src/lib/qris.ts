@@ -1,5 +1,5 @@
 import type { DatabaseState, ResidentUnit } from '../types/finance.ts';
-import { formatMonthLabel, formatRupiah } from './finance.ts';
+import { formatMonthLabel, formatRupiah, isUnitExemptFromIuran } from './finance.ts';
 
 export interface ResidentQRISPaymentInfo {
   unitId: string;
@@ -111,6 +111,10 @@ export function getUnitUnpaidMonths(
   unitId: string,
   upToPeriodMonth = '2026-10'
 ): string[] {
+  if (isUnitExemptFromIuran(unitId)) {
+    return [];
+  }
+
   const paidMonths = new Set<string>();
   for (const t of state.transactions) {
     if (t.unitId === unitId && t.type === 'income' && t.category === 'Iuran Bulanan Warga') {

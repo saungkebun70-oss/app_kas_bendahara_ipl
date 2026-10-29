@@ -69,7 +69,7 @@ export function authenticateAdmin(
   }
 
   if (input.adminRole === 'ketua') {
-    const validUser = username === 'ketua' || username === 'hendra';
+    const validUser = username === 'ketua' || username === 'hendra' || username === 'erlangga';
     const validPass =
       password === ADMIN_CREDENTIALS.ketua.password ||
       password === ADMIN_CREDENTIALS.ketua.defaultPin;
@@ -77,7 +77,7 @@ export function authenticateAdmin(
     if (!validUser || !validPass) {
       return {
         ok: false,
-        error: 'Kredensial Ketua Paguyuban tidak sesuai. Periksa kembali ID Pengurus dan kata sandi Anda.',
+        error: 'Kredensial Ketua tidak sesuai. Periksa kembali ID Pengurus dan kata sandi Anda.',
       };
     }
 
@@ -87,7 +87,7 @@ export function authenticateAdmin(
         role: 'ketua',
         isAdmin: true,
         displayName: settings.chairpersonName,
-        roleLabel: 'Admin — Ketua Paguyuban',
+        roleLabel: 'Admin — Ketua',
         unitId: 'A-01',
         loginAt: new Date().toISOString(),
       },
@@ -114,12 +114,13 @@ export function authenticateAdmin(
         role: 'bendahara',
         isAdmin: true,
         displayName: settings.treasurerName,
-        roleLabel: 'Admin — Bendahara Pengurus',
+        roleLabel: 'Admin — Bendahara',
         unitId: 'A-09',
         loginAt: new Date().toISOString(),
       },
     };
   }
+
 
   return {
     ok: false,
@@ -178,7 +179,7 @@ export function authenticateSatpam(
       if (!validOfficerPin) {
         return {
           ok: false,
-          error: `PIN otorisasi tidak sesuai untuk petugas ${matchedOfficer.name}. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus Paguyuban.`,
+          error: `PIN otorisasi tidak sesuai untuk petugas ${matchedOfficer.name}. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus.`,
         };
       }
 
@@ -204,7 +205,7 @@ export function authenticateSatpam(
   if (pin !== DEFAULT_SATPAM_PIN && pin !== '5570') {
     return {
       ok: false,
-      error: 'Kode otorisasi Pos Satpam tidak sesuai. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus Paguyuban.',
+      error: 'Kode otorisasi Pos Satpam tidak sesuai. Pastikan memasukkan PIN resmi yang diberikan oleh Pengurus.',
     };
   }
 

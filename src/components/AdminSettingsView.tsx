@@ -258,7 +258,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
           Pengaturan Admin — {settings.housingName}
         </h1>
         <p className="text-xs text-sky-100 mt-1 max-w-2xl">
-          Kelola upload file kode pembayaran QRIS resmi paguyuban, tarif iuran bulanan rumah, pejabat penandatangan laporan PDF &amp; LPJ, serta template penagihan WhatsApp.
+          Kelola upload file kode pembayaran QRIS resmi perumahan, tarif iuran bulanan rumah, pejabat penandatangan laporan PDF &amp; LPJ, serta template penagihan WhatsApp.
         </p>
       </div>
 
@@ -278,7 +278,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
           <ShieldAlert className="w-4 h-4 text-amber-800 shrink-0" />
           <span>
             Anda sedang masuk melalui <strong>Portal Warga</strong>. Anda dapat melihat dan mengunduh kode QRIS resmi perumahan di bawah ini, namun hanya pengurus{' '}
-            <strong>Admin (Ketua Paguyuban / Bendahara)</strong> yang dapat mengunggah atau mengganti file QRIS.
+            <strong>Admin (Ketua / Bendahara)</strong> yang dapat mengunggah atau mengganti file QRIS.
           </span>
         </div>
       )}
@@ -764,7 +764,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Nama Ketua Paguyuban / RT (Penandatangan LPJ)
+                Nama Ketua Lingkungan / RT (Penandatangan LPJ)
               </label>
               <input
                 type="text"

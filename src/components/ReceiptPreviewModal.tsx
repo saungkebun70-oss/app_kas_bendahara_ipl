@@ -45,7 +45,7 @@ export const ReceiptPreviewModal: React.FC<ReceiptPreviewModalProps> = ({
 
   if (!open || !resident || !transaction) return null;
 
-  const recordedByDisplay = (transaction.recordedBy || state.settings.treasurerName || 'Admin — Ketua Paguyuban (Erlangga)')
+  const recordedByDisplay = (transaction.recordedBy || state.settings.treasurerName || 'Admin — Ketua (Erlangga)')
     .replace(/Ratna\s*Sari\s*Dewi,?\s*S\.E\./gi, state.settings.treasurerName || 'Andriansyah')
     .replace(/H\.\s*Hendra\s*Wijaya,?\s*S\.T\./gi, state.settings.chairpersonName || 'Erlangga');
 

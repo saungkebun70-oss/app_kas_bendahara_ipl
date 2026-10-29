@@ -26,6 +26,7 @@ import {
   formatShortDate,
   getUnitMonthsMatrix,
   getUnitTransactions,
+  isUnitExemptFromIuran,
   maskNik,
 } from '../lib/finance';
 import {
@@ -262,7 +263,22 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
             </div>
           )}
 
+          {isUnitExemptFromIuran(resident.id) && (
+            <div className="rounded-xl border border-slate-200 bg-slate-50/90 p-4 flex items-start gap-3 shadow-xs">
+              <Check className="h-5 w-5 text-slate-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-bold text-slate-900">
+                  Akun Pengelola Lingkungan — {resident.id === 'A-01' ? 'Ketua' : 'Bendahara'}
+                </p>
+                <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                  Unit ini merupakan bagian dari pengelolaan lingkungan ({resident.id === 'A-01' ? 'Ketua Lingkungan' : 'Bendahara Kas'}), sehingga tidak dikenakan status tagihan iuran warga.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Uploaded QRIS Payment Card (From Settings) */}
+
           {showQRISPanel && (
             <section
               aria-label="Kode Pembayaran QRIS Saung Kebun"
@@ -413,10 +429,12 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   Kartu Iuran Bulanan 2026 ({formatRupiah(state.settings.monthlyFee)} / Bulan)
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Pilih bulan belum lunas untuk melihat total tagihan atau mencatat pelunasan
+                  {isUnitExemptFromIuran(resident.id)
+                    ? 'Unit tim pengelola lingkungan — bagian dari pengelolaan, tidak ditarik iuran'
+                    : 'Pilih bulan belum lunas untuk melihat total tagihan atau mencatat pelunasan'}
                 </p>
               </div>
-              {!showQRISPanel && (
+              {!showQRISPanel && !isUnitExemptFromIuran(resident.id) && (
                 <button
                   type="button"
                   onClick={handleOpenQRIS}
@@ -430,6 +448,22 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
 
             <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6">
               {matrix.map((cell) => {
+                if (isUnitExemptFromIuran(resident.id)) {
+                  return (
+                    <div
+                      key={cell.periodMonth}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-center"
+                    >
+                      <div className="text-xs font-semibold text-slate-700">
+                        {cell.monthShort} 26
+                      </div>
+                      <div className="mt-1 text-[11px] font-semibold text-slate-500">
+                        Pengelola
+                      </div>
+                    </div>
+                  );
+                }
+
                 const selected = selectedMonthsToPay.includes(cell.periodMonth);
                 if (cell.paid) {
                   return (
@@ -473,7 +507,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
               })}
             </div>
 
-            {isAdmin && selectedMonthsToPay.length > 0 && (
+            {isAdmin && !isUnitExemptFromIuran(resident.id) && selectedMonthsToPay.length > 0 && (
               <div className="rounded-xl border border-sky-200 bg-sky-50/70 p-4 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                   <span className="font-semibold text-slate-900">
@@ -766,7 +800,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
 
                   <a
                     href={`https://wa.me/${resident.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
-                      `Halo Bapak/Ibu ${resident.headOfFamily} (Warga Unit ${resident.id}),\n\nBerikut adalah akun resmi untuk login ke Portal Warga Perumahan Saung Kebun:\n\n🏡 Nomor Unit: ${resident.id}\n🔑 PIN Akses: ${resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}\n🌐 Tautan Portal Warga: ${window.location.origin}/#warga\n\nBapak/Ibu dapat menggunakan akun ini untuk melihat transparansi iuran, konfirmasi bukti pembayaran, serta laporan pos satpam.\n\nSalam hormat,\nPengurus Paguyuban Saung Kebun`
+                      `Halo Bapak/Ibu ${resident.headOfFamily} (Warga Unit ${resident.id}),\n\nBerikut adalah akun resmi untuk login ke Portal Warga Perumahan Saung Kebun:\n\n🏡 Nomor Unit: ${resident.id}\n🔑 PIN Akses: ${resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}\n🌐 Tautan Portal Warga: ${window.location.origin}/#warga\n\nBapak/Ibu dapat menggunakan akun ini untuk melihat transparansi iuran, konfirmasi bukti pembayaran, serta laporan pos satpam.\n\nSalam hormat,\nPengurus Lingkungan Saung Kebun`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
