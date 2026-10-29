@@ -1544,7 +1544,16 @@ Kembalikan kategori utama yang paling sesuai dengan uraian transaksi tersebut, b
     res.json(dbState);
   });
 
-  const PORT = Number(process.env.PORT) || 3000;
+  // In AI Studio preview environment, nginx listens on 8080 and proxies to port 3000.
+  // The Node dev server must always listen on port 3000.
+  let targetPort = 3000;
+  const portArgIdx = process.argv.indexOf('--port');
+  if (portArgIdx !== -1 && process.argv[portArgIdx + 1]) {
+    targetPort = Number(process.argv[portArgIdx + 1]) || 3000;
+  } else if (process.env.PORT && process.env.PORT !== '8080') {
+    targetPort = Number(process.env.PORT) || 3000;
+  }
+  const PORT = targetPort;
   const distPath = path.join(__dirname, 'dist');
   const isProd = process.env.NODE_ENV === 'production' && fs.existsSync(distPath);
 
@@ -1564,6 +1573,22 @@ Kembalikan kategori utama yang paling sesuai dengan uraian transaksi tersebut, b
       appType: 'spa',
     });
     app.use(vite.middlewares);
+    app.use('*', async (req, res, next) => {
+      if (req.originalUrl.startsWith('/api')) {
+        return next();
+      }
+      try {
+        const url = req.originalUrl;
+        let template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e) {
+        if (typeof (vite as any).ssrFixStacktrace === 'function') {
+          (vite as any).ssrFixStacktrace(e as Error);
+        }
+        next(e);
+      }
+    });
   }
 
   app.listen(PORT, '0.0.0.0', () => {
