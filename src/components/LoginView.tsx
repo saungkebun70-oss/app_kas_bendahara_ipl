@@ -174,8 +174,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
         }`}
       >
         <div className="flex items-center gap-3 whitespace-nowrap shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 text-[#5eead4] ring-1 ring-white/25">
-            {portal === 'warga' ? (
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-[#5eead4] ring-1 ring-white/25 overflow-hidden">
+            {state.settings.appLogoUrl ? (
+              <img
+                src={state.settings.appLogoUrl}
+                alt={state.settings.housingName}
+                className="h-full w-full object-cover"
+              />
+            ) : portal === 'warga' ? (
               <Home className="h-5 w-5" />
             ) : portal === 'satpam' ? (
               <Shield className="h-5 w-5" />
@@ -186,10 +192,10 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
           <div>
             <span className="block font-display text-base font-bold tracking-tight text-white">
               {portal === 'warga'
-                ? 'Portal Warga — Perumahan Saung Kebun'
+                ? `Portal Warga — ${state.settings.housingName}`
                 : portal === 'satpam'
-                ? 'Pos Keamanan & Satpam — Saung Kebun'
-                : 'Portal Pengurus Paguyuban — Saung Kebun'}
+                ? `Pos Keamanan & Satpam — ${state.settings.housingName}`
+                : `Portal Pengurus Paguyuban — ${state.settings.housingName}`}
             </span>
             <span className="block text-[11px] text-[#5eead4]">
               {state.settings.rtRwLabel} · {state.settings.housingAddress}

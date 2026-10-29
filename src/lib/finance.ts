@@ -585,6 +585,9 @@ export interface QuarterlyLPJReport {
     realizationPercent: number;
   }>;
   totalTransactionsCount: number;
+  transactions: LedgerTransaction[];
+  incomeTransactions: LedgerTransaction[];
+  expenseTransactions: LedgerTransaction[];
 }
 
 export function calculateQuarterlyLPJ(
@@ -620,7 +623,11 @@ export function calculateQuarterlyLPJ(
     };
   });
 
-  const quarterTrx = state.transactions.filter((t) => monthSet.has(t.periodMonth));
+  const quarterTrx = sortTransactionsChronologically(
+    state.transactions.filter((t) => monthSet.has(t.periodMonth))
+  );
+  const incomeTransactions = quarterTrx.filter((t) => t.type === 'income');
+  const expenseTransactions = quarterTrx.filter((t) => t.type === 'expense');
   let totalIncome = 0;
   let totalIuranIncome = 0;
   let totalOtherIncome = 0;
@@ -716,6 +723,9 @@ export function calculateQuarterlyLPJ(
     expenseByCategory,
     blockRealization,
     totalTransactionsCount: quarterTrx.length,
+    transactions: quarterTrx,
+    incomeTransactions,
+    expenseTransactions,
   };
 }
 

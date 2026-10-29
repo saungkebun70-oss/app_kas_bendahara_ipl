@@ -46,6 +46,7 @@ interface SidebarProps {
   onSelectWargaTab?: (tab: import('./WargaPortalView').WargaPortalTab) => void;
   satpamTab?: 'keamanan' | 'anggota' | 'kegiatan';
   onSelectSatpamTab?: (tab: 'keamanan' | 'anggota' | 'kegiatan') => void;
+  settings?: import('../types/finance').AdminSettings;
 }
 
 const MANAGE_NAV_ITEMS: Array<{
@@ -86,6 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectWargaTab,
   satpamTab = 'keamanan',
   onSelectSatpamTab,
+  settings,
 }) => {
   const handleSelect = (id: NavTab) => {
     onSelectTab(id);
@@ -122,32 +124,40 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand Header */}
         <div className="flex h-20 items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-[#5eead4] ring-1 ring-white/25">
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="7" cy="17" r="3" />
-                <circle cx="17" cy="7" r="3" />
-                <path d="M9.1 14.9L14.9 9.1" />
-              </svg>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-[#5eead4] ring-1 ring-white/25 overflow-hidden">
+              {settings?.appLogoUrl ? (
+                <img
+                  src={settings.appLogoUrl}
+                  alt={settings.housingName || 'Logo Aplikasi'}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="7" cy="17" r="3" />
+                  <circle cx="17" cy="7" r="3" />
+                  <path d="M9.1 14.9L14.9 9.1" />
+                </svg>
+              )}
             </div>
             <div className="min-w-0">
-              <span className="block truncate font-display text-lg font-bold tracking-tight text-white">
-                saungkebun
+              <span className="block truncate font-display text-base sm:text-lg font-bold tracking-tight text-white">
+                {settings?.housingName ? settings.housingName : 'Saung Kebun'}
               </span>
               <span className="block truncate text-[11px] text-sky-200/80">
                 {isWarga
                   ? `Portal Warga · Unit ${session.unitId}`
                   : isSatpam
                   ? 'Pos Keamanan Satpam'
-                  : '55 Rumah · Kas RT 004'}
+                  : settings?.rtRwLabel || '55 Rumah · Kas RT 004'}
               </span>
             </div>
           </div>

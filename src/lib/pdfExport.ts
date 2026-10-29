@@ -219,10 +219,10 @@ export function downloadMonthlyReportPDF(state: DatabaseState, periodMonth: stri
     styles: { fontSize: 7.5, cellPadding: 1.5 },
     headStyles: { fillColor: [20, 83, 45], textColor: [255, 255, 255] },
     columnStyles: {
-      0: { cellWidth: 9, halign: 'center' },
-      1: { cellWidth: 14, fontStyle: 'bold' },
-      2: { cellWidth: 44 },
-      3: { cellWidth: 34 },
+      0: { cellWidth: 8, halign: 'center' },
+      1: { cellWidth: 13, fontStyle: 'bold' },
+      2: { cellWidth: 43 },
+      3: { cellWidth: 33 },
       4: { cellWidth: 21 },
       5: { cellWidth: 25 },
       6: { cellWidth: 20, halign: 'right' },
@@ -388,7 +388,58 @@ export function downloadQuarterlyLPJPDF(
     },
   });
 
-  let sigY = getLastAutoTableY(doc, 225) + 10;
+  doc.addPage();
+  drawOfficialHeader(
+    doc,
+    state,
+    'LAMPIRAN MUTASI KAS LPJ 3 BULAN',
+    `${lpj.title} · Total: ${lpj.transactions.length} Transaksi`
+  );
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(15, 23, 42);
+  doc.text(
+    `5. RINCIAN SELURUH TRANSAKSI PEMASUKAN & PENGELUARAN (${lpj.transactions.length} TRANSAKSI)`,
+    14,
+    39.5
+  );
+
+  const trxBody = lpj.transactions.map((t, idx) => [
+    String(idx + 1),
+    formatShortDate(t.date),
+    t.receiptNumber,
+    t.category,
+    t.description,
+    t.type === 'income' ? formatRupiah(t.amount) : '-',
+    t.type === 'expense' ? formatRupiah(t.amount) : '-',
+    t.paymentMethod,
+  ]);
+
+  autoTable(doc, {
+    startY: 42.5,
+    margin: { left: 14, right: 14 },
+    head: [['No', 'Tanggal', 'No. Bukti', 'Kategori', 'Uraian Transaksi', 'Pemasukan', 'Pengeluaran', 'Metode']],
+    body:
+      trxBody.length > 0
+        ? trxBody
+        : [['-', '-', '-', '-', 'Tidak ada mutasi transaksi pada triwulan ini', '-', '-', '-']],
+    theme: 'grid',
+    styles: { fontSize: 7, cellPadding: 1.5, overflow: 'linebreak' },
+    headStyles: { fillColor: [20, 83, 45], textColor: [255, 255, 255] },
+    columnStyles: {
+      0: { cellWidth: 7, halign: 'center' },
+      1: { cellWidth: 18 },
+      2: { cellWidth: 26 },
+      3: { cellWidth: 26 },
+      4: { cellWidth: 41 },
+      5: { cellWidth: 20, halign: 'right' },
+      6: { cellWidth: 20, halign: 'right' },
+      7: { cellWidth: 24 },
+    },
+  });
+
+  let sigY = getLastAutoTableY(doc, 220) + 12;
   if (sigY > 248) {
     doc.addPage();
     sigY = 24;

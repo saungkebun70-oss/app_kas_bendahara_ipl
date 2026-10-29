@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Check, Lightbulb, Loader2, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Check, Receipt, Sparkles, X } from 'lucide-react';
 import type {
   DatabaseState,
-  ExpenseCategory,
   IncomeCategory,
   PaymentMethod,
 } from '../types/finance';
 import {
-  EXPENSE_CATEGORIES,
   formatMonthLabel,
   formatRupiah,
   INCOME_CATEGORIES,
@@ -21,6 +19,7 @@ interface AddTransactionModalProps {
   defaultPeriodMonth: string;
   presetMode: 'iuran' | 'income' | 'expense';
   onSubmitTransaction: (payload: CreateTransactionPayload) => Promise<void>;
+  onOpenExpenseModal?: () => void;
 }
 
 const PAYMENT_METHODS: PaymentMethod[] = [
@@ -38,16 +37,14 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   defaultPeriodMonth,
   presetMode,
   onSubmitTransaction,
+  onOpenExpenseModal,
 }) => {
-  const [mode, setMode] = useState<'iuran' | 'income' | 'expense'>(presetMode);
+  const [mode, setMode] = useState<'iuran' | 'income'>(presetMode === 'expense' ? 'iuran' : presetMode);
   const [periodMonth, setPeriodMonth] = useState(defaultPeriodMonth);
   const [date, setDate] = useState('2026-10-24');
   const [unitId, setUnitId] = useState('');
   const [incomeCategory, setIncomeCategory] = useState<IncomeCategory>('Sewa Saung Warga');
-  const [expenseCategory, setExpenseCategory] = useState<ExpenseCategory>('Perawatan Taman & Saung');
   const [amountStr, setAmountStr] = useState('');
-  const [isManualExpense, setIsManualExpense] = useState(false);
-  const [manualExpenseCategory, setManualExpenseCategory] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Transfer Bank');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -56,19 +53,21 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   // AI-Powered Category Helper State
   const [aiSuggestions, setAiSuggestions] = useState<CategorySuggestion[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiSource, setAiSource] = useState<'gemini' | 'heuristic' | null>(null);
   const [appliedFeedback, setAppliedFeedback] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
-      setMode(presetMode);
+      if (presetMode === 'expense') {
+        onClose();
+        onOpenExpenseModal?.();
+        return;
+      }
+
+      setMode(presetMode === 'income' ? 'income' : 'iuran');
       setPeriodMonth(defaultPeriodMonth);
       setDate(`${defaultPeriodMonth === '2026-10' ? '2026-10-24' : `${defaultPeriodMonth}-10`}`);
       setError(null);
-      setIsManualExpense(false);
-      setManualExpenseCategory('');
       setAiSuggestions([]);
-      setAiSource(null);
       setAppliedFeedback(null);
 
       const paidInPeriod = new Set(
@@ -84,27 +83,24 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       );
       const firstUnpaid = state.residents.find((r) => !paidInPeriod.has(r.id));
       setUnitId(firstUnpaid?.id ?? state.residents[0]?.id ?? 'A-01');
-      setAmountStr(presetMode === 'iuran' ? String(state.settings.monthlyFee) : '');
+      setAmountStr(presetMode === 'income' ? '' : String(state.settings.monthlyFee));
       setDescription('');
     }
-  }, [open, presetMode, defaultPeriodMonth, state.residents, state.transactions, state.settings.monthlyFee]);
+  }, [open, presetMode, defaultPeriodMonth, state.residents, state.transactions, state.settings.monthlyFee, onClose, onOpenExpenseModal]);
 
   // Debounced category suggestions based on entered description
   useEffect(() => {
-    if (!description.trim() || description.trim().length < 3) {
+    if (mode !== 'income' || !description.trim() || description.trim().length < 3) {
       setAiSuggestions([]);
-      setAiSource(null);
       return;
     }
 
     const timer = setTimeout(async () => {
       setAiLoading(true);
       try {
-        const targetMode = mode === 'iuran' ? 'income' : mode;
-        const res = await api.suggestCategory(description.trim(), targetMode);
+        const res = await api.suggestCategory(description.trim(), 'income');
         if (res.ok && Array.isArray(res.suggestions)) {
           setAiSuggestions(res.suggestions);
-          setAiSource(res.source);
         }
       } catch (err) {
         console.error('Failed to get AI category suggestions:', err);
@@ -116,19 +112,12 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     return () => clearTimeout(timer);
   }, [description, mode]);
 
-  const handleApplyCategory = (cat: string, suggestedType?: 'income' | 'expense') => {
-    if (suggestedType && suggestedType !== mode && mode !== 'iuran') {
-      setMode(suggestedType);
-    }
-    if (EXPENSE_CATEGORIES.includes(cat as ExpenseCategory)) {
-      setExpenseCategory(cat as ExpenseCategory);
-      if (mode === 'income') setMode('expense');
-    } else if (INCOME_CATEGORIES.includes(cat as IncomeCategory)) {
+  const handleApplyCategory = (cat: string) => {
+    if (INCOME_CATEGORIES.includes(cat as IncomeCategory)) {
       setIncomeCategory(cat as IncomeCategory);
-      if (mode === 'expense') setMode('income');
+      setAppliedFeedback(`Kategori "${cat}" berhasil diterapkan!`);
+      setTimeout(() => setAppliedFeedback(null), 3500);
     }
-    setAppliedFeedback(`Kategori "${cat}" berhasil diterapkan!`);
-    setTimeout(() => setAppliedFeedback(null), 3500);
   };
 
   if (!open) return null;
@@ -149,76 +138,70 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     e.preventDefault();
     setError(null);
 
-    if (!date || !periodMonth) {
-      setError('Tanggal dan periode bulan wajib diisi.');
-      return;
-    }
+    const numericAmount = Number(amountStr.replace(/\D/g, '')) || 0;
 
     if (mode === 'iuran') {
       if (!unitId) {
-        setError('Pilih salah satu unit rumah warga.');
+        setError('Pilih unit rumah terlebih dahulu.');
         return;
       }
       if (paidUnitsInSelectedMonth.has(unitId)) {
-        setError(`Unit ${unitId} sudah berstatus LUNAS pada periode ${formatMonthLabel(periodMonth)}.`);
+        setError(
+          `Unit ${unitId} sudah tercatat lunas untuk periode ${formatMonthLabel(
+            periodMonth
+          )}. Pilih unit lain atau ubah periode.`
+        );
         return;
       }
-      const resident = state.residents.find((r) => r.id === unitId);
-      const autoDesc =
-        description.trim() ||
-        `Iuran bulanan lingkungan ${unitId} (${resident?.headOfFamily ?? ''}) periode ${periodMonth}`;
+      if (numericAmount <= 0) {
+        setError('Nominal iuran harus lebih besar dari Rp 0.');
+        return;
+      }
 
       setSubmitting(true);
       try {
+        const resObj = state.residents.find((r) => r.id === unitId);
+        const autoDesc = description.trim()
+          ? description.trim()
+          : `Iuran bulanan lingkungan ${unitId} (${resObj?.headOfFamily ?? 'Warga'}) periode ${formatMonthLabel(periodMonth)}`;
+
         await onSubmitTransaction({
           date,
           periodMonth,
           type: 'income',
           category: 'Iuran Bulanan Warga',
-          amount: state.settings.monthlyFee,
+          amount: numericAmount,
           unitId,
           paymentMethod,
           description: autoDesc,
         });
         onClose();
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Gagal menyimpan pembayaran iuran.');
+        setError(err instanceof Error ? err.message : 'Gagal menyimpan iuran.');
       } finally {
         setSubmitting(false);
       }
       return;
     }
 
-    const numericAmount = Number(amountStr.replace(/[^\d]/g, ''));
-    if (!amountStr.trim() || !Number.isFinite(numericAmount) || numericAmount <= 0) {
-      setError('Masukkan nominal transaksi yang valid (lebih dari Rp 0).');
+    // Pemasukan Non-Iuran
+    if (numericAmount <= 0) {
+      setError('Nominal pemasukan harus lebih besar dari Rp 0.');
       return;
     }
 
     if (!description.trim()) {
-      setError('Uraian keterangan transaksi wajib diisi.');
+      setError('Uraian / keterangan pemasukan wajib diisi.');
       return;
     }
-
-    if (mode === 'expense' && isManualExpense && !manualExpenseCategory.trim()) {
-      setError('Ketik nama kategori pengeluaran manual terlebih dahulu.');
-      return;
-    }
-
-    const finalCategory =
-      mode === 'income'
-        ? incomeCategory
-        : isManualExpense
-        ? ((manualExpenseCategory.trim() || 'Pengeluaran Lainnya') as ExpenseCategory)
-        : expenseCategory;
 
     setSubmitting(true);
     try {
       await onSubmitTransaction({
         date,
         periodMonth,
-        type: mode === 'income' ? 'income' : 'expense',
-        category: finalCategory,
+        type: 'income',
+        category: incomeCategory,
         amount: numericAmount,
         unitId: null,
         paymentMethod,
@@ -226,7 +209,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       });
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal menyimpan transaksi.');
+      setError(err instanceof Error ? err.message : 'Gagal menyimpan transaksi pemasukan.');
     } finally {
       setSubmitting(false);
     }
@@ -239,26 +222,32 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       aria-modal="true"
       aria-labelledby="add-trx-modal-title"
     >
-      <div className="w-full max-w-lg rounded-xl border border-stone-200 bg-white shadow-xl max-h-[92vh] overflow-y-auto">
-        <div className="flex items-center justify-between border-b border-stone-200 px-6 py-4">
-          <h2 id="add-trx-modal-title" className="font-display text-lg font-bold text-slate-900">
-            Catat Transaksi Kas Saung Kebun
-          </h2>
+      <div className="w-full max-w-lg rounded-2xl border border-stone-200 bg-white shadow-2xl max-h-[92vh] overflow-y-auto">
+        <div className="flex items-center justify-between border-b border-stone-200 px-6 py-4 bg-slate-50 rounded-t-2xl">
+          <div>
+            <h2 id="add-trx-modal-title" className="font-display text-base sm:text-lg font-bold text-slate-900">
+              Catat Pemasukan Kas &amp; Iuran
+            </h2>
+            <p className="text-xs text-slate-500">
+              Formulir khusus penerimaan kas masuk (Iuran warga &amp; non-iuran)
+            </p>
+          </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Tutup formulir transaksi"
-            className="rounded-lg p-1.5 text-slate-500 hover:bg-stone-100 hover:text-slate-900"
+            className="rounded-lg p-1.5 text-slate-500 hover:bg-stone-200 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 p-6">
+          {/* Separated Tabs: Only Iuran and Income (Expense is in separate form) */}
           <div
-            className="grid grid-cols-3 gap-1 rounded-lg bg-stone-100 p-1"
+            className="grid grid-cols-2 gap-1 rounded-xl bg-stone-100 p-1"
             role="group"
-            aria-label="Jenis pencatatan transaksi"
+            aria-label="Jenis pencatatan pemasukan"
           >
             <button
               type="button"
@@ -267,13 +256,13 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 setAmountStr(String(state.settings.monthlyFee));
                 setError(null);
               }}
-              className={`rounded-md py-2 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
+              className={`rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
                 mode === 'iuran'
                   ? 'bg-white text-emerald-950 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Iuran Warga
+              Iuran Bulanan Warga (55 Rumah)
             </button>
             <button
               type="button"
@@ -282,30 +271,35 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 setAmountStr('');
                 setError(null);
               }}
-              className={`rounded-md py-2 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
+              className={`rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
                 mode === 'income'
                   ? 'bg-white text-emerald-950 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Pemasukan Lain
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMode('expense');
-                setAmountStr('');
-                setError(null);
-              }}
-              className={`rounded-md py-2 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
-                mode === 'expense'
-                  ? 'bg-white text-red-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Pengeluaran Kas
+              Pemasukan Lainnya (Donasi / Sewa)
             </button>
           </div>
+
+          {/* Quick Notice to open Separated Expense Form */}
+          {onOpenExpenseModal && (
+            <div className="flex items-center justify-between text-xs bg-rose-50 border border-rose-200 rounded-xl px-3.5 py-2 text-rose-900">
+              <span className="font-medium flex items-center gap-1.5">
+                <Receipt className="h-3.5 w-3.5 text-rose-700" />
+                Catat pengeluaran kas operasional?
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenExpenseModal();
+                }}
+                className="font-bold text-rose-700 hover:text-rose-950 hover:underline cursor-pointer"
+              >
+                Buka Form Pengeluaran →
+              </button>
+            </div>
+          )}
 
           {error && (
             <div
@@ -325,7 +319,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 id="trx-period"
                 value={periodMonth}
                 onChange={(e) => setPeriodMonth(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none cursor-pointer"
               >
                 {PERIOD_OPTIONS.map((pm) => (
                   <option key={pm} value={pm}>
@@ -344,7 +338,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
               />
             </div>
           </div>
@@ -359,7 +353,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                   id="trx-unit"
                   value={unitId}
                   onChange={(e) => setUnitId(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none cursor-pointer"
                 >
                   {state.residents.map((r) => {
                     const isPaid = paidUnitsInSelectedMonth.has(r.id);
@@ -372,11 +366,16 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 </select>
               </div>
 
-              <div className="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-600">
-                  Tarif Iuran Bulanan Tetap
-                </span>
-                <span className="font-mono text-base font-bold text-emerald-900 tabular-nums">
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-emerald-950 block">
+                    Tarif Iuran Bulanan Wajib
+                  </span>
+                  <span className="text-[11px] text-emerald-700">
+                    Otomatis dihitung masuk ke kas dan kwitansi resmi
+                  </span>
+                </div>
+                <span className="font-mono text-base font-extrabold text-emerald-900 tabular-nums">
                   {formatRupiah(state.settings.monthlyFee)}
                 </span>
               </div>
@@ -385,76 +384,35 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="trx-category" className="block text-xs font-semibold text-slate-700">
-                  Kategori Akun Kas
+                  Kategori Pemasukan
                 </label>
-                {mode === 'income' ? (
-                  <select
-                    id="trx-category"
-                    value={incomeCategory}
-                    onChange={(e) => setIncomeCategory(e.target.value as IncomeCategory)}
-                    className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
-                  >
-                    {INCOME_CATEGORIES.filter((c) => c !== 'Iuran Bulanan Warga').map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div className="space-y-2">
-                    <select
-                      id="trx-category"
-                      value={isManualExpense ? '__manual__' : expenseCategory}
-                      onChange={(e) => {
-                        if (e.target.value === '__manual__') {
-                          setIsManualExpense(true);
-                        } else {
-                          setIsManualExpense(false);
-                          setExpenseCategory(e.target.value as ExpenseCategory);
-                        }
-                      }}
-                      className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
-                    >
-                      {EXPENSE_CATEGORIES.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                      <option value="__manual__">➕ Kategori Lainnya (Isi Manual)</option>
-                    </select>
-
-                    {isManualExpense && (
-                      <div className="rounded-lg border border-rose-200 bg-rose-50/60 p-2.5 space-y-1">
-                        <label htmlFor="trx-manual-cat" className="block text-[11px] font-bold text-rose-900">
-                          Nama Kategori Pengeluaran Manual:
-                        </label>
-                        <input
-                          id="trx-manual-cat"
-                          type="text"
-                          placeholder="Misal: Perbaikan Pompa Air Blok B / Cat Gapura"
-                          value={manualExpenseCategory}
-                          onChange={(e) => setManualExpenseCategory(e.target.value)}
-                          className="w-full rounded-lg border border-rose-300 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-rose-600 focus:outline-none"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
+                <select
+                  id="trx-category"
+                  value={incomeCategory}
+                  onChange={(e) => setIncomeCategory(e.target.value as IncomeCategory)}
+                  className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none cursor-pointer"
+                >
+                  {INCOME_CATEGORIES.filter((c) => c !== 'Iuran Bulanan Warga').map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label htmlFor="trx-amount" className="block text-xs font-semibold text-slate-700">
-                  Nominal (Rp)
+                  Nominal Pemasukan (Rp)
                 </label>
                 <input
                   id="trx-amount"
                   type="number"
                   min="1000"
                   step="500"
-                  placeholder="Contoh: 350000"
+                  placeholder="Contoh: 500000"
                   value={amountStr}
                   onChange={(e) => setAmountStr(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-sm text-slate-900 tabular-nums focus:border-emerald-800 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-bold text-slate-900 tabular-nums focus:border-emerald-800 focus:outline-none"
                 />
               </div>
             </div>
@@ -468,7 +426,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               id="trx-method"
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-              className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
+              className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none cursor-pointer"
             >
               {PAYMENT_METHODS.map((m) => (
                 <option key={m} value={m}>
@@ -497,152 +455,59 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               placeholder={
                 mode === 'iuran'
                   ? 'Otomatis diisi apabila dikosongkan'
-                  : 'Contoh: Pembayaran retribusi pengangkutan sampah atau perbaikan lampu gerbang...'
+                  : 'Contoh: Sewa saung warga acara syukuran keluarga atau donasi penerangan jalan'
               }
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none"
+              className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
             />
           </div>
 
-          {/* AI-Powered Category Helper Panel */}
-          {mode !== 'iuran' && (
-            <div
-              data-testid="ai-category-helper"
-              className="rounded-xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50/60 via-white to-blue-50/50 p-3.5 space-y-2.5 transition-all shadow-xs"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
-                  <Sparkles className="h-4 w-4 text-indigo-600" />
-                  <span>Saran Kategori AI (AI Category Helper)</span>
-                  <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[9px] font-bold text-indigo-700">
-                    {aiSource === 'gemini' ? 'Gemini 3.8 Flash' : 'Smart Rule-AI'}
-                  </span>
-                </div>
-                {aiLoading && (
-                  <div className="flex items-center gap-1 text-[11px] font-medium text-indigo-600">
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                    <span>Menganalisis uraian...</span>
-                  </div>
-                )}
+          {/* AI Suggestion Box */}
+          {aiSuggestions.length > 0 && mode === 'income' && (
+            <div className="rounded-xl border border-indigo-200 bg-indigo-50/60 p-3 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-900">
+                <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
+                <span>Rekomendasi Kategori:</span>
               </div>
-
-              {appliedFeedback && (
-                <div
-                  data-testid="ai-applied-feedback"
-                  className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 border border-emerald-200 animate-in fade-in"
-                >
-                  <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                  <span>{appliedFeedback}</span>
-                </div>
-              )}
-
-              {aiSuggestions.length > 0 ? (
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {aiSuggestions.map((sug, idx) => {
-                      const isCurrent =
-                        (mode === 'expense' && expenseCategory === sug.category) ||
-                        (mode === 'income' && incomeCategory === sug.category);
-
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          data-testid="ai-suggested-category-btn"
-                          onClick={() => handleApplyCategory(sug.category, sug.suggestedType)}
-                          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-                            isCurrent
-                              ? 'bg-emerald-900 text-white shadow-xs ring-2 ring-emerald-500/50'
-                              : 'bg-white border border-indigo-200 text-indigo-950 hover:bg-indigo-50 hover:border-indigo-300 shadow-2xs'
-                          }`}
-                        >
-                          <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                          <span>{sug.category}</span>
-                          <span
-                            className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${
-                              sug.confidence === 'high'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-amber-100 text-amber-800'
-                            }`}
-                          >
-                            {sug.confidence === 'high' ? 'Sangat Cocok' : 'Cocok'}
-                          </span>
-                          {isCurrent && <Check className="h-3.5 w-3.5 text-emerald-300 ml-0.5" />}
-                        </button>
-                      );
-                    })}
-
-                    {/* Alternatives from first suggestion */}
-                    {aiSuggestions[0]?.alternatives?.map((alt) => {
-                      const isCurrent =
-                        (mode === 'expense' && expenseCategory === alt) ||
-                        (mode === 'income' && incomeCategory === alt);
-                      return (
-                        <button
-                          key={alt}
-                          type="button"
-                          data-testid="ai-alternative-category-btn"
-                          onClick={() => handleApplyCategory(alt)}
-                          className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
-                            isCurrent
-                              ? 'bg-slate-800 text-white font-bold'
-                              : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
-                          }`}
-                        >
-                          {alt}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {aiSuggestions[0]?.explanation && (
-                    <p className="text-[11px] text-indigo-900/80 italic">
-                      💡 {aiSuggestions[0].explanation}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-1.5">
-                  <p className="text-[11px] text-slate-500">
-                    Ketik uraian transaksi untuk mendapatkan rekomendasi kategori otomatis dari AI. Contoh cepat:
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-0.5">
-                    {[
-                      'Pengangkutan sampah 55 rumah',
-                      'Honor 2 personel satpam jaga malam',
-                      'Perbaikan engsel gerbang utama & CCTV',
-                      'Pembelian token listrik PJU jalan',
-                    ].map((example) => (
-                      <button
-                        key={example}
-                        type="button"
-                        onClick={() => setDescription(example)}
-                        className="rounded-md border border-indigo-100 bg-white px-2 py-0.5 text-[10px] font-medium text-indigo-800 hover:bg-indigo-50 transition-colors cursor-pointer"
-                      >
-                        + &ldquo;{example}&rdquo;
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <div className="flex flex-wrap gap-1.5">
+                {aiSuggestions.map((s) => (
+                  <button
+                    key={s.category}
+                    type="button"
+                    onClick={() => handleApplyCategory(s.category)}
+                    className="inline-flex items-center gap-1 rounded-lg bg-white border border-indigo-200 px-2 py-1 text-[11px] font-semibold text-indigo-800 hover:bg-indigo-100 transition-colors cursor-pointer"
+                  >
+                    <span>{s.category}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-2.5 border-t border-stone-200 pt-4">
+          {appliedFeedback && (
+            <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-2 text-xs text-emerald-900 flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-emerald-700" />
+              <span>{appliedFeedback}</span>
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-200">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-stone-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-stone-50 whitespace-nowrap shrink-0"
+              disabled={submitting}
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-stone-50 transition-colors cursor-pointer disabled:opacity-50"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-lg bg-emerald-900 px-5 py-2 text-xs font-semibold text-white hover:bg-emerald-800 disabled:opacity-50 whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0b2273] px-5 py-2 text-xs font-bold text-white hover:bg-[#1547b8] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              {submitting ? 'Menyimpan...' : 'Simpan ke Buku Kas & LPJ'}
+              <span>{submitting ? 'Menyimpan...' : 'Simpan Pemasukan Kas'}</span>
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </form>

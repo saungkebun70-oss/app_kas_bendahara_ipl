@@ -153,16 +153,23 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               )}
             </button>
 
-            {/* Tab 4: Drawer Menu Lainnya */}
+            {/* Tab 4: Drawer Menu Lainnya / Laporan */}
             <button
               type="button"
               onClick={onOpenMobileMenu}
-              className="flex-1 flex flex-col items-center justify-center py-1.5 px-1 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-all cursor-pointer active:scale-95"
+              className={`flex-1 flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
+                activeTab === 'reports'
+                  ? 'bg-indigo-50/80 text-[#1547b8] font-bold shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+              }`}
             >
               <Menu className="h-5 w-5" />
               <span className="text-[10px] tracking-tight mt-0.5 truncate max-w-[55px]">
-                Lainnya
+                {activeTab === 'reports' ? 'Laporan' : 'Lainnya'}
               </span>
+              {activeTab === 'reports' && (
+                <span className="h-1 w-3.5 rounded-full bg-[#1547b8] mt-0.5" />
+              )}
             </button>
           </>
         )}

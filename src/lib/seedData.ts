@@ -120,6 +120,8 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   hiddenArrearsUnitIds: [],
   publishedMonthlyReports: ['2026-07', '2026-08', '2026-09', '2026-10'],
   publishedQuarterlyLPJ: ['2026-Q3'],
+  appLogoUrl: '',
+  appLogoFileName: '',
 };
 
 

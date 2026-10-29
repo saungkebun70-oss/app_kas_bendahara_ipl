@@ -111,6 +111,8 @@ export interface AdminSettings {
   hiddenArrearsUnitIds?: string[];
   publishedMonthlyReports?: string[]; // e.g. ["2026-07", "2026-08", "2026-09", "2026-10"]
   publishedQuarterlyLPJ?: string[]; // e.g. ["2026-Q3", "2026-Q4"]
+  appLogoUrl?: string;
+  appLogoFileName?: string;
 }
 
 export type AnnouncementCategory =

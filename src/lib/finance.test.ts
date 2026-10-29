@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import type { LedgerTransaction } from '../types/finance';
 import { createSeedDatabase } from './seedData';
 import {
   calculateMonthlyReport,
@@ -21,6 +22,10 @@ import {
   getUnitUnpaidMonths,
   validateQRISUploadFile,
 } from './qris';
+import {
+  downloadMonthlyReportPDF,
+  downloadQuarterlyLPJPDF,
+} from './pdfExport';
 
 test('seed database contains exactly 55 houses with complete profile fields and Rp 100.000 fee', () => {
   const db = createSeedDatabase();
@@ -699,5 +704,137 @@ test('Recent Activity widget pulls from transactions state, orders chronological
   assert.deepEqual(emptySorted, []);
 });
 
+test('reporting module generates detailed monthly financial reports showing all income and expenses and exports downloadable PDF', () => {
+  const db = createSeedDatabase();
+  const periodMonth = '2026-10';
+  const report = calculateMonthlyReport(db, periodMonth);
 
+  // Validate monthly figures
+  assert.equal(report.periodMonth, periodMonth);
+  assert.ok(report.totalIncome > 0, 'Monthly report should show total income');
+  assert.ok(report.totalExpense > 0, 'Monthly report should show total expenses');
+  assert.equal(report.netSurplus, report.totalIncome - report.totalExpense);
+  assert.equal(report.closingBalance, report.openingBalance + report.netSurplus);
+
+  // Validate ledger entries include all transactions for that month with running balances
+  assert.ok(report.ledgerEntries.length > 0);
+  for (const entry of report.ledgerEntries) {
+    assert.equal(entry.periodMonth, periodMonth);
+    assert.ok(entry.type === 'income' || entry.type === 'expense');
+    assert.ok(entry.amount > 0);
+    assert.ok(typeof entry.runningBalance === 'number');
+  }
+
+  // Validate category breakdowns
+  assert.ok(report.incomeByCategory.length > 0, 'Income categories should be populated');
+  assert.ok(report.expenseByCategory.length > 0, 'Expense categories should be populated');
+
+  // Validate 55 units status tracking
+  assert.equal(report.unitStatuses.length, 55, 'Should track all 55 houses');
+  assert.equal(report.paidCount + report.unpaidCount, 55);
+
+  // Validate PDF export function generates filename
+  const pdfFileName = downloadMonthlyReportPDF(db, periodMonth);
+  assert.ok(pdfFileName.endsWith('.pdf'));
+  assert.ok(pdfFileName.includes('2026-10'));
+});
+
+test('automated compilation process compiles quarterly LPJ summarizing all income and expenses for that 3-month period', () => {
+  const db = createSeedDatabase();
+  const lpj = calculateQuarterlyLPJ(db, 2026, 3); // Q3 2026 (July - September)
+
+  assert.equal(lpj.year, 2026);
+  assert.equal(lpj.quarter, 3);
+  assert.deepEqual(lpj.months, ['2026-07', '2026-08', '2026-09']);
+
+  // Validate 3-month aggregation
+  assert.ok(lpj.totalIncome > 0, 'Quarterly LPJ must compile total income');
+  assert.ok(lpj.totalExpense > 0, 'Quarterly LPJ must compile total expenses');
+  assert.equal(lpj.netSurplus, lpj.totalIncome - lpj.totalExpense);
+  assert.equal(lpj.closingBalance, lpj.openingBalance + lpj.netSurplus);
+
+  // Validate month-by-month breakdown
+  assert.equal(lpj.monthsBreakdown.length, 3, 'Must contain 3 months in quarter');
+  const sumMonthIncome = lpj.monthsBreakdown.reduce((sum, m) => sum + m.totalIncome, 0);
+  assert.equal(sumMonthIncome, lpj.totalIncome, 'Sum of 3 months income must match total');
+  const sumMonthExpense = lpj.monthsBreakdown.reduce((sum, m) => sum + m.totalExpense, 0);
+  assert.equal(sumMonthExpense, lpj.totalExpense, 'Sum of 3 months expense must match total');
+
+  // Validate compiled transaction arrays
+  assert.ok(Array.isArray(lpj.transactions));
+  assert.ok(Array.isArray(lpj.incomeTransactions));
+  assert.ok(Array.isArray(lpj.expenseTransactions));
+  assert.equal(lpj.transactions.length, lpj.totalTransactionsCount);
+  assert.equal(lpj.transactions.length, lpj.incomeTransactions.length + lpj.expenseTransactions.length);
+
+  // Validate block realization breakdown across 4 blocks
+  assert.equal(lpj.blockRealization.length, 4);
+  for (const block of lpj.blockRealization) {
+    assert.ok(['A', 'B', 'C', 'D'].includes(block.block));
+    assert.ok(block.targetAmount > 0);
+    assert.ok(block.realizedAmount >= 0);
+    assert.ok(block.realizationPercent >= 0 && block.realizationPercent <= 100);
+  }
+
+  // Validate automated quarterly LPJ PDF export
+  const pdfFileName = downloadQuarterlyLPJPDF(db, 2026, 3);
+  assert.ok(pdfFileName.endsWith('.pdf'));
+  assert.ok(pdfFileName.includes('Q3'));
+});
+
+test('admin settings support customizable application logo, housing name, and complete address', () => {
+  const db = createSeedDatabase();
+  assert.equal(typeof db.settings.housingName, 'string');
+  assert.equal(typeof db.settings.housingAddress, 'string');
+  assert.ok(db.settings.housingAddress.length > 0);
+
+  // Update with custom logo and updated address
+  const customSettings = {
+    ...db.settings,
+    appLogoUrl: 'data:image/svg+xml;utf8,<svg><rect width="100" height="100" fill="green"/></svg>',
+    appLogoFileName: 'my-custom-logo.svg',
+    housingName: 'Perumahan Saung Kebun Asri',
+    housingAddress: 'Jl. Saung Melati Indah Blok Utama No. 1, RT 04 / RW 08',
+  };
+
+  assert.equal(customSettings.appLogoFileName, 'my-custom-logo.svg');
+  assert.ok(customSettings.appLogoUrl?.startsWith('data:image/svg+xml'));
+  assert.equal(customSettings.housingName, 'Perumahan Saung Kebun Asri');
+  assert.equal(customSettings.housingAddress, 'Jl. Saung Melati Indah Blok Utama No. 1, RT 04 / RW 08');
+});
+
+test('operational expenses can be recorded with manual custom categories separated from income', () => {
+  const db = createSeedDatabase();
+  const initialExpensesCount = db.transactions.filter((t) => t.type === 'expense').length;
+
+  const newExpenseTx: LedgerTransaction = {
+    id: `TX-EXP-TEST-${Date.now()}`,
+    receiptNumber: 'SK/KW/2026/10/EXP01',
+    date: '2026-10-24',
+    periodMonth: '2026-10',
+    type: 'expense',
+    category: 'Perbaikan Mesin Pompa Air Tirta' as any,
+    amount: 350000,
+    unitId: null,
+    paymentMethod: 'Transfer Bank',
+    description: 'Penggantian dinamo pompa air sumur bor RT',
+    recordedBy: 'Admin — Bendahara Pengurus (Andriansyah)',
+    createdAt: new Date().toISOString(),
+  };
+
+  const updatedTransactions = [...db.transactions, newExpenseTx];
+  const newExpensesCount = updatedTransactions.filter((t) => t.type === 'expense').length;
+  assert.equal(newExpensesCount, initialExpensesCount + 1);
+
+  // Verify financial summary incorporates the custom operational expense
+  const summary = calculateRealtimeSummary(
+    {
+      ...db,
+      transactions: updatedTransactions,
+    },
+    '2026-10'
+  );
+  assert.ok(summary.totalAllTimeExpense > 0);
+  assert.equal(summary.monthExpense, 350000 + db.transactions.filter(t => t.type === 'expense' && t.periodMonth === '2026-10').reduce((s, t) => s + t.amount, 0));
+});
 

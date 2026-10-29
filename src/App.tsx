@@ -14,6 +14,7 @@ import { ReportsLPJView } from './components/ReportsLPJView';
 import { WhatsAppBillingView } from './components/WhatsAppBillingView';
 import { AdminSettingsView } from './components/AdminSettingsView';
 import { AddTransactionModal } from './components/AddTransactionModal';
+import { AddExpenseModal } from './components/AddExpenseModal';
 import { UnitDetailModal } from './components/UnitDetailModal';
 import { WargaPortalView, type WargaPortalTab } from './components/WargaPortalView';
 import { PublicationsManagerView } from './components/PublicationsManagerView';
@@ -117,6 +118,7 @@ export default function App() {
 
   // Modals state
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
+  const [expenseModalOpen, setExpenseModalOpen] = useState<boolean>(false);
   const [addModalPresetMode, setAddModalPresetMode] = useState<'iuran' | 'income' | 'expense'>('iuran');
   const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
   const [openUnitWithQRIS, setOpenUnitWithQRIS] = useState<boolean>(false);
@@ -334,6 +336,7 @@ export default function App() {
         onSelectTab={setActiveTab}
         unpaidCount={unpaidBillingItems.length}
         session={session}
+        settings={db.settings}
         onLogout={handleLogout}
         onOpenMyUnit={(unitId) => handleOpenUnitModal(unitId, true)}
         mobileOpen={mobileMenuOpen}
@@ -425,8 +428,12 @@ export default function App() {
             onChangePeriodMonth={setSelectedMonth}
             onNavigate={setActiveTab}
             onOpenAddModal={(preset) => {
-              setAddModalPresetMode(preset || 'iuran');
-              setAddModalOpen(true);
+              if (preset === 'expense') {
+                setExpenseModalOpen(true);
+              } else {
+                setAddModalPresetMode(preset || 'iuran');
+                setAddModalOpen(true);
+              }
             }}
             onDownloadMonthlyPdf={handleQuickDownloadCurrentMonthPDF}
             onSelectUnit={(unitId, showQRIS) => handleOpenUnitModal(unitId, Boolean(showQRIS))}
@@ -457,8 +464,12 @@ export default function App() {
                 onChangePeriodMonth={setSelectedMonth}
                 isAdmin={isAdmin}
                 onOpenAddModal={(preset) => {
-                  setAddModalPresetMode(preset || 'iuran');
-                  setAddModalOpen(true);
+                  if (preset === 'expense') {
+                    setExpenseModalOpen(true);
+                  } else {
+                    setAddModalPresetMode(preset || 'iuran');
+                    setAddModalOpen(true);
+                  }
                 }}
                 onDeleteTransaction={async (txId) => {
                   const nextState = await api.deleteTransaction(txId);
@@ -609,6 +620,26 @@ export default function App() {
           state={db}
           defaultPeriodMonth={selectedMonth}
           presetMode={addModalPresetMode}
+          onOpenExpenseModal={() => {
+            setAddModalOpen(false);
+            setExpenseModalOpen(true);
+          }}
+          onSubmitTransaction={async (payload) => {
+            const nextState = await api.createTransaction({
+              ...payload,
+              recordedBy: `${session.roleLabel} (${session.displayName})`,
+            });
+            setDb(nextState);
+          }}
+        />
+      )}
+
+      {isAdmin && (
+        <AddExpenseModal
+          open={expenseModalOpen}
+          onClose={() => setExpenseModalOpen(false)}
+          state={db}
+          defaultPeriodMonth={selectedMonth}
           onSubmitTransaction={async (payload) => {
             const nextState = await api.createTransaction({
               ...payload,
@@ -662,24 +693,21 @@ export default function App() {
         />
       )}
 
-      {/* Floating Action Button for Admin Quick Expense Recording */}
+      {/* Floating Action Button for Admin Quick Expense Recording (Bulat) */}
       {isAdmin && (
         <div className="fixed bottom-24 right-4 sm:bottom-8 sm:right-8 z-30">
           <button
             type="button"
             data-testid="admin-fab-expense-btn"
             onClick={() => {
-              setAddModalPresetMode('expense');
-              setAddModalOpen(true);
+              setExpenseModalOpen(true);
             }}
-            className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-600 via-rose-700 to-red-700 px-4 py-3 sm:px-5 sm:py-3.5 text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ring-2 ring-white/60"
+            className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-tr from-rose-600 via-rose-700 to-red-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ring-4 ring-white/80"
             aria-label="Catat Pengeluaran Kas Baru"
             title="Catat Pengeluaran Kas Baru"
           >
-            <Receipt className="h-5 w-5 text-white group-hover:rotate-12 transition-transform" />
-            <span className="font-display text-xs sm:text-sm font-bold tracking-wide">
-              + Catat Pengeluaran
-            </span>
+            <Receipt className="h-6 w-6 text-white group-hover:rotate-12 transition-transform" />
+            <span className="sr-only">Catat Pengeluaran Kas Baru</span>
           </button>
         </div>
       )}
