@@ -68,6 +68,10 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
       setError(null);
       if (mode === 'edit' && resident) {
         setBlock(resident.block);
+        const initHouseNum =
+          resident.houseNumber ||
+          (resident.id.includes('-') ? resident.id.split('-').slice(1).join('-') : resident.id);
+        setHouseNumber(initHouseNum);
         let initialStreet = resident.streetName || 'Gang Duren';
         if (
           initialStreet.startsWith('Jl. Saung Melati') ||
@@ -133,10 +137,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
     }
   };
 
-  const computedUnitId =
-    mode === 'edit' && resident
-      ? resident.id
-      : `${block}-${houseNumber.trim() ? houseNumber.trim().padStart(2, '0') : '??'}`;
+  const computedUnitId = `${block}-${houseNumber.trim() ? houseNumber.trim().padStart(2, '0') : '??'}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,15 +156,27 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
       return;
     }
 
+    const cleanNum = houseNumber.trim();
+    if (!cleanNum) {
+      setError('Nomor rumah wajib diisi.');
+      return;
+    }
+    const unitId = `${block}-${cleanNum.padStart(2, '0')}`;
+
     if (mode === 'add') {
-      const cleanNum = houseNumber.trim();
-      if (!cleanNum) {
-        setError('Nomor rumah wajib diisi.');
-        return;
-      }
-      const unitId = `${block}-${cleanNum.padStart(2, '0')}`;
       if (existingIds.some((id) => id.toLowerCase() === unitId.toLowerCase())) {
         setError(`Unit ${unitId} sudah terdaftar dalam sistem.`);
+        return;
+      }
+    } else if (resident && unitId.toLowerCase() !== resident.id.toLowerCase()) {
+      if (
+        existingIds.some(
+          (id) =>
+            id.toLowerCase() === unitId.toLowerCase() &&
+            id.toLowerCase() !== resident.id.toLowerCase()
+        )
+      ) {
+        setError(`Unit ${unitId} sudah digunakan oleh warga lain. Silakan masukkan nomor lain.`);
         return;
       }
     }
@@ -173,8 +186,6 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
     setLoading(true);
     try {
       if (mode === 'add') {
-        const cleanNum = houseNumber.trim();
-        const unitId = `${block}-${cleanNum.padStart(2, '0')}`;
         await onSave({
           id: unitId,
           block,
@@ -194,8 +205,9 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
         });
       } else if (resident) {
         await onSave({
+          id: unitId,
           block,
-          houseNumber: houseNumber.trim() || resident.houseNumber,
+          houseNumber: cleanNum,
           streetName: streetName.trim() || resident.streetName,
           headOfFamily: cleanName,
           nik: nik.trim(),
@@ -314,12 +326,14 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: 16"
+                  placeholder="Contoh: 02"
                   value={houseNumber}
                   onChange={(e) => setHouseNumber(e.target.value)}
-                  disabled={mode === 'edit'}
-                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none disabled:bg-stone-100 disabled:text-slate-500"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none focus:ring-1 focus:ring-emerald-800"
                 />
+                <p className="text-[10px] text-slate-400 mt-1">
+                  Dapat diubah bebas
+                </p>
               </div>
 
               <div className="sm:col-span-5">

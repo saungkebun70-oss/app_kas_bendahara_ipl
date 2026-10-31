@@ -613,19 +613,61 @@ app.get('/api/state', (_req, res) => {
       return;
     }
 
+    const targetBlock = (updates.block || dbState.residents[idx].block).toUpperCase() as BlockCode;
+    const targetHouseNumber = updates.houseNumber !== undefined ? String(updates.houseNumber).trim() : dbState.residents[idx].houseNumber;
+    let targetId = dbState.residents[idx].id;
+
+    if (updates.id && updates.id.trim()) {
+      targetId = updates.id.trim().toUpperCase();
+    } else if (updates.houseNumber !== undefined || updates.block !== undefined) {
+      targetId = `${targetBlock}-${targetHouseNumber.padStart(2, '0')}`;
+    }
+
+    if (targetId.toLowerCase() !== id.toLowerCase()) {
+      if (id === 'A-01' || id === 'A-09') {
+        res.status(400).json({ error: 'ID unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat diubah.' });
+        return;
+      }
+      if (dbState.residents.some((r) => r.id.toLowerCase() === targetId.toLowerCase())) {
+        res.status(400).json({ error: `Unit ${targetId} sudah terdaftar untuk warga lain.` });
+        return;
+      }
+    }
+
     const updatedResident: ResidentUnit = {
       ...dbState.residents[idx],
       ...updates,
-      id: dbState.residents[idx].id,
-      block: updates.block || dbState.residents[idx].block,
-      houseNumber: updates.houseNumber || dbState.residents[idx].houseNumber,
+      id: targetId,
+      block: targetBlock,
+      houseNumber: targetHouseNumber,
     };
 
     const nextResidents = [...dbState.residents];
     nextResidents[idx] = updatedResident;
+
+    // Cascade update transactions & payment confirmations if unitId changed
+    let nextTransactions = dbState.transactions || [];
+    let nextConfirmations = dbState.paymentConfirmations || [];
+    if (targetId !== id) {
+      nextTransactions = nextTransactions.map((t) => (t.unitId === id ? { ...t, unitId: targetId } : t));
+      nextConfirmations = nextConfirmations.map((c) => (c.unitId === id ? { ...c, unitId: targetId } : c));
+    }
+
+    // Sort residents
+    nextResidents.sort((a, b) => {
+      if (a.block !== b.block) {
+        return a.block.localeCompare(b.block, undefined, { numeric: true, sensitivity: 'base' });
+      }
+      const nA = Number(a.houseNumber.replace(/\D/g, '')) || 0;
+      const nB = Number(b.houseNumber.replace(/\D/g, '')) || 0;
+      return nA - nB || a.id.localeCompare(b.id);
+    });
+
     dbState = {
       ...dbState,
       residents: nextResidents,
+      transactions: nextTransactions,
+      paymentConfirmations: nextConfirmations,
     };
     saveDatabase(dbState);
     res.json(dbState);
