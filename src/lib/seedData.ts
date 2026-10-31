@@ -155,6 +155,8 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 };
 
 
+import { ACTIVITY_PHOTOS, SECURITY_PHOTOS } from './documentationPhotos.ts';
+
 export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
   {
     id: 'ANN-2026-001',
@@ -167,6 +169,7 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     authorName: 'Erlangga (Ketua)',
     published: true,
     createdAt: '2026-10-20T09:00:00.000Z',
+    photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman],
   },
   {
     id: 'ANN-2026-002',
@@ -179,6 +182,7 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     authorName: 'Andriansyah (Bendahara)',
     published: true,
     createdAt: '2026-10-22T14:30:00.000Z',
+    photos: [ACTIVITY_PHOTOS.rapatLPJ, ACTIVITY_PHOTOS.rapatPJU],
   },
   {
     id: 'ANN-2026-003',
@@ -191,6 +195,7 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     authorName: 'Erlangga (Ketua)',
     published: true,
     createdAt: '2026-10-23T10:15:00.000Z',
+    photos: [ACTIVITY_PHOTOS.foggingPengasapan, ACTIVITY_PHOTOS.foggingJentik],
   },
 ];
 
@@ -205,9 +210,10 @@ export const DEFAULT_SECURITY_REPORTS: SecurityGuardReport[] = [
     situationStatus: 'Aman Terkendali',
     title: 'Laporan Patroli Malam & Sistem Satu Pintu (One Gate System)',
     summary:
-      'Patroli keliling pukul 23.00, 01.30, dan 04.00 WIB di Jl. Saung Melati (Blok A), Jl. Kebun Asri (Blok B), Jl. Saung Cendana (Blok C), dan Jl. Kebun Kenanga (Blok D) berjalan aman terkendali. Portal akses samping telah dikunci pukul 22.00 WIB dan seluruh 8 titik CCTV pos jaga berfungsi normal.',
+      'Patroli keliling pukul 23.00, 01.30, dan 04.00 WIB di Gang Duren (Blok A) dan Gang Anggur (Blok B1–B9, C, D) berjalan aman terkendali. Portal akses samping telah dikunci pukul 22.00 WIB dan seluruh 8 titik CCTV pos jaga berfungsi normal.',
     published: true,
     createdAt: '2026-10-24T06:45:00.000Z',
+    photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok],
   },
   {
     id: 'SEC-2026-002',
@@ -221,6 +227,7 @@ export const DEFAULT_SECURITY_REPORTS: SecurityGuardReport[] = [
       'Petugas pengamanan yang bertugas jaga memberlakukan wajib titip kartu identitas (KTP/SIM) di Pos Satpam bagi tamu dan ojek/kurir roda empat yang tidak memiliki stiker kendaraan resmi Perumahan Saung Kebun. Warga yang menerima tamu menginap mohon menginformasikan ke Pos Satpam.',
     published: true,
     createdAt: '2026-10-24T13:20:00.000Z',
+    photos: [SECURITY_PHOTOS.penertibanTamu, SECURITY_PHOTOS.pemeriksaanPJU],
   },
 ];
 

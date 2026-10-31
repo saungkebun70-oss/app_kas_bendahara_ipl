@@ -506,16 +506,17 @@ export default function App() {
                   handleQuickPaySingleMonth(unitId, selectedMonth)
                 }
                 isAdmin={isAdmin}
+                isBendahara={session?.role === 'bendahara'}
                 onAddResident={async (resident) => {
-                  const nextState = await api.addResident(resident);
+                  const nextState = await api.addResident(resident, session?.role);
                   setDb(nextState);
                 }}
                 onUpdateResident={async (unitId, payload) => {
-                  const nextState = await api.updateResident(unitId, payload);
+                  const nextState = await api.updateResident(unitId, payload, session?.role);
                   setDb(nextState);
                 }}
                 onDeleteResident={async (unitId) => {
-                  const nextState = await api.deleteResident(unitId);
+                  const nextState = await api.deleteResident(unitId, session?.role);
                   setDb(nextState);
                 }}
                 onAddBlock={async (block) => {
@@ -738,6 +739,7 @@ export default function App() {
         resident={selectedUnit}
         state={db}
         isAdmin={isAdmin}
+        isBendahara={session?.role === 'bendahara'}
         initialShowQRIS={openUnitWithQRIS}
         onClose={() => {
           setSelectedUnitId(null);
@@ -751,7 +753,7 @@ export default function App() {
           setDb(nextState);
         }}
         onUpdateResident={async (unitId, payload) => {
-          const nextState = await api.updateResident(unitId, payload);
+          const nextState = await api.updateResident(unitId, payload, session?.role);
           setDb(nextState);
         }}
         onPreviewReceipt={(res, tx) =>

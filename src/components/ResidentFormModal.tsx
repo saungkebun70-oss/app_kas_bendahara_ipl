@@ -68,9 +68,22 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
       setError(null);
       if (mode === 'edit' && resident) {
         setBlock(resident.block);
-        setHouseNumber(resident.houseNumber);
-        setStreetName(resident.streetName || 'Gang Duren');
-        setHeadOfFamily(resident.headOfFamily);
+        let initialStreet = resident.streetName || 'Gang Duren';
+        if (
+          initialStreet.startsWith('Jl. Saung Melati') ||
+          initialStreet.includes('Melati') ||
+          initialStreet.includes('Cendana')
+        ) {
+          initialStreet = 'Gang Duren';
+        } else if (
+          initialStreet.startsWith('Jl. Kebun') ||
+          initialStreet.includes('Mawar') ||
+          initialStreet.includes('Kenanga') ||
+          initialStreet.includes('Asri')
+        ) {
+          initialStreet = 'Gang Anggur';
+        }
+        setStreetName(initialStreet);
         setNik(resident.nik || '');
         setKkNumber(resident.kkNumber || '');
         setWhatsapp(resident.whatsapp);

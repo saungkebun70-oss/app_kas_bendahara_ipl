@@ -152,27 +152,40 @@ export const api = {
     return handleJson<DatabaseState>(res);
   },
 
-  async addResident(resident: Partial<ResidentUnit>): Promise<DatabaseState> {
+  async addResident(resident: Partial<ResidentUnit>, userRole?: string): Promise<DatabaseState> {
     const res = await fetch('/api/residents', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(userRole ? { 'x-user-role': userRole } : {}),
+      },
       body: JSON.stringify(resident),
     });
     return handleJson<DatabaseState>(res);
   },
 
-  async updateResident(id: string, updates: Partial<ResidentUnit>): Promise<DatabaseState> {
+  async updateResident(
+    id: string,
+    updates: Partial<ResidentUnit>,
+    userRole?: string
+  ): Promise<DatabaseState> {
     const res = await fetch(`/api/residents/${encodeURIComponent(id)}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(userRole ? { 'x-user-role': userRole } : {}),
+      },
       body: JSON.stringify(updates),
     });
     return handleJson<DatabaseState>(res);
   },
 
-  async deleteResident(id: string): Promise<DatabaseState> {
+  async deleteResident(id: string, userRole?: string): Promise<DatabaseState> {
     const res = await fetch(`/api/residents/${encodeURIComponent(id)}`, {
       method: 'DELETE',
+      headers: {
+        ...(userRole ? { 'x-user-role': userRole } : {}),
+      },
     });
     return handleJson<DatabaseState>(res);
   },

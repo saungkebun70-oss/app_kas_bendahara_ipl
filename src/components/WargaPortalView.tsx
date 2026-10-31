@@ -37,6 +37,8 @@ import {
 import { getResidentQRISPaymentInfo } from '../lib/qris';
 import { downloadMonthlyReportPDF, downloadQuarterlyLPJPDF, downloadUnitReceiptPDF } from '../lib/pdfExport';
 import { WargaPaymentConfirmationModal } from './WargaPaymentConfirmationModal';
+import { HeadlineInformasiShowcase } from './HeadlineInformasiShowcase';
+import { DocumentationPhotoGallery } from './DocumentationPhotoGallery';
 
 export type WargaPortalTab =
   | 'iuran'
@@ -200,6 +202,13 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
           </button>
         </div>
       )}
+
+      {/* Headline Utama: Dokumentasi Foto Kegiatan Warga & Laporan Keamanan Satpam */}
+      <HeadlineInformasiShowcase
+        announcements={publishedAnnouncements}
+        securityReports={publishedSecurityReports}
+        onNavigateTab={(tab) => handleTabChange(tab)}
+      />
 
       {/* Navigation Bar: Tampilan Per Item Sesuai Judul Item Warga */}
       <div className="overflow-x-auto scrollbar-none pb-1 -mx-1 px-1 max-w-full">
@@ -647,6 +656,16 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                     {item.content}
                   </p>
 
+                  {/* Multi-photo documentation gallery */}
+                  {item.photos && item.photos.length > 0 && (
+                    <DocumentationPhotoGallery
+                      photos={item.photos}
+                      title={item.title}
+                      category={item.category}
+                      className="pt-1"
+                    />
+                  )}
+
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/70 text-[11px] text-slate-500">
                     <span className="inline-flex items-center gap-1">
                       <MapPin className="h-3 w-3 text-slate-400" />
@@ -731,6 +750,16 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                     <p className="text-xs leading-relaxed text-slate-600">
                       {sec.summary}
                     </p>
+
+                    {/* Multi-photo documentation gallery for security reports */}
+                    {sec.photos && sec.photos.length > 0 && (
+                      <DocumentationPhotoGallery
+                        photos={sec.photos}
+                        title={sec.title}
+                        category="Laporan Situasi Satpam"
+                        className="pt-1"
+                      />
+                    )}
 
                     <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-teal-200/60 text-[11px]">
                       <span className="inline-flex items-center gap-1 text-slate-600">

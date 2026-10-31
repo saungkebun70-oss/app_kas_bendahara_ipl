@@ -29,6 +29,8 @@ interface ResidentsViewProps {
   onSelectUnit: (unitId: string) => void;
   onQuickPayCurrentMonth: (unitId: string) => Promise<void>;
   isAdmin: boolean;
+  isBendahara?: boolean;
+  canManageResidents?: boolean;
   onAddResident?: (resident: Partial<ResidentUnit>) => Promise<void>;
   onUpdateResident?: (unitId: string, updates: Partial<ResidentUnit>) => Promise<void>;
   onDeleteResident?: (unitId: string) => Promise<void>;
@@ -48,6 +50,8 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
   onSelectUnit,
   onQuickPayCurrentMonth,
   isAdmin,
+  isBendahara,
+  canManageResidents: canManageResidentsProp,
   onAddResident,
   onUpdateResident,
   onDeleteResident,
@@ -57,6 +61,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
   onAddStreet,
   onDeleteStreet,
 }) => {
+  const canManageResidents = Boolean(isBendahara ?? canManageResidentsProp ?? false);
   const [searchQuery, setSearchQuery] = useState('');
   const [blockFilter, setBlockFilter] = useState<'ALL' | BlockCode>('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'UNPAID' | 'EXEMPT'>('ALL');
@@ -192,15 +197,26 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
             </button>
           )}
 
-          {isAdmin && onAddResident && (
+          {canManageResidents && onAddResident && (
             <button
               type="button"
+              data-testid="add-resident-btn"
               onClick={() => setIsAddModalOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 transition-colors cursor-pointer"
             >
               <UserPlus className="h-4 w-4" />
               <span>Tambah Warga Baru</span>
             </button>
+          )}
+
+          {isAdmin && !canManageResidents && (
+            <div
+              title="Akses penambahan, pengubahan, dan penghapusan data warga hanya tersedia di akun Bendahara"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50/90 px-3 py-2 text-xs font-semibold text-amber-900 shadow-2xs"
+            >
+              <ShieldCheck className="h-4 w-4 text-amber-700" />
+              <span>Kelola Warga: Khusus Akun Bendahara</span>
+            </div>
           )}
 
           <div className="flex items-center gap-2">
@@ -452,7 +468,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           <History className="h-3.5 w-3.5 text-slate-500" />
                           <span>Profil</span>
                         </button>
-                        {isAdmin && onUpdateResident && (
+                        {canManageResidents && onUpdateResident && (
                           <button
                             type="button"
                             onClick={() => setEditResident(res)}
@@ -463,7 +479,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                             <span>Edit</span>
                           </button>
                         )}
-                        {isAdmin && onDeleteResident && (
+                        {canManageResidents && onDeleteResident && (
                           <button
                             type="button"
                             disabled={isUnitExemptFromIuran(res.id)}
@@ -585,7 +601,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                               <span>Profil &amp; Riwayat</span>
                             </button>
 
-                            {isAdmin && onUpdateResident && (
+                            {canManageResidents && onUpdateResident && (
                               <button
                                 type="button"
                                 onClick={() => setEditResident(res)}
@@ -598,7 +614,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                               </button>
                             )}
 
-                            {isAdmin && onDeleteResident && (
+                            {canManageResidents && onDeleteResident && (
                               <button
                                 type="button"
                                 disabled={isUnitExemptFromIuran(res.id)}

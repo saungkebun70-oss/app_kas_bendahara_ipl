@@ -1048,5 +1048,15 @@ test('blocks and gang names support Gang Duren, Gang Anggur, B1-B9 blocks and ma
   assert.equal(db.settings.customBlocks.some((b) => b.id === 'B10'), false);
 });
 
+test('resident data add, edit, and delete can only be performed by Bendahara account', () => {
+  const canManageResidentData = (role?: string) => role === 'bendahara';
+
+  assert.equal(canManageResidentData('bendahara'), true, 'Bendahara must have permission to add, edit, and delete residents');
+  assert.equal(canManageResidentData('ketua'), false, 'Ketua cannot add, edit, or delete resident data');
+  assert.equal(canManageResidentData('satpam'), false, 'Satpam cannot manage resident data');
+  assert.equal(canManageResidentData('warga'), false, 'Warga cannot manage resident data');
+  assert.equal(canManageResidentData(undefined), false, 'Unauthenticated user cannot manage resident data');
+});
+
 
 

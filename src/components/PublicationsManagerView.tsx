@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import {
   AlertTriangle,
   BadgeCheck,
+  Camera,
   CheckCircle2,
   Clock,
   Eye,
   EyeOff,
+  Image as ImageIcon,
   Key,
   Megaphone,
   MessageCircle,
@@ -17,9 +19,11 @@ import {
   ShieldAlert,
   ShieldCheck,
   Trash2,
+  Upload,
   UserCheck,
   UserPlus,
   Users,
+  X,
 } from 'lucide-react';
 import type {
   AnnouncementCategory,
@@ -38,6 +42,8 @@ import {
   formatShortDate,
   getUnpaidResidentsForBilling,
 } from '../lib/finance';
+import { DocumentationPhotoGallery } from './DocumentationPhotoGallery';
+import { PRESET_PHOTO_OPTIONS, readFilesAsDataUrls } from '../lib/documentationPhotos';
 
 interface PublicationsManagerViewProps {
   state: DatabaseState;
@@ -112,6 +118,8 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
   const [annDate, setAnnDate] = useState('2026-10-27');
   const [annLocation, setAnnLocation] = useState('Pendopo Perumahan Saung Kebun');
   const [annContent, setAnnContent] = useState('');
+  const [annPhotos, setAnnPhotos] = useState<string[]>([]);
+  const [isProcessingAnnPhotos, setIsProcessingAnnPhotos] = useState(false);
 
   // Security Guard Situation Report Form State
   const [guardName, setGuardName] = useState(
@@ -126,6 +134,8 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
     useState<SecuritySituationStatus>('Aman Terkendali');
   const [secTitle, setSecTitle] = useState('');
   const [secSummary, setSecSummary] = useState('');
+  const [secPhotos, setSecPhotos] = useState<string[]>([]);
+  const [isProcessingSecPhotos, setIsProcessingSecPhotos] = useState(false);
 
   // Security Officer Member Management Form State (Admin)
   const [officerName, setOfficerName] = useState('');
@@ -166,10 +176,12 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
         content: annContent.trim(),
         authorName: `${session.displayName} (${session.roleLabel})`,
         published: true,
+        photos: annPhotos,
       });
       setAnnTitle('');
       setAnnContent('');
-      showToast('Informasi kegiatan berhasil ditambahkan dan di-publish ke Akun Warga.');
+      setAnnPhotos([]);
+      showToast('Informasi kegiatan beserta foto dokumentasi berhasil ditambahkan dan di-publish ke Akun Warga.');
     } finally {
       setBusy(false);
     }
@@ -189,11 +201,13 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
         title: secTitle.trim(),
         summary: secSummary.trim(),
         published: true,
+        photos: secPhotos,
       });
       setSecTitle('');
       setSecSummary('');
+      setSecPhotos([]);
       showToast(
-        'Laporan situasi pemukiman dan jaga berhasil dipublikasikan ke Portal Warga.'
+        'Laporan situasi pemukiman dan foto dokumentasi patroli berhasil dipublikasikan ke Portal Warga.'
       );
     } finally {
       setBusy(false);
@@ -477,9 +491,96 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               />
             </div>
 
+            {/* Foto Dokumentasi Kegiatan (Mendukung > 1 Foto) */}
+            <div className="space-y-2 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold text-slate-800">
+                  Foto Dokumentasi Kegiatan (Bisa Lebih Dari 1 Foto)
+                </label>
+                <span className="text-[11px] font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-md">
+                  {annPhotos.length} Foto Terpilih
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Unggah banyak foto kegiatan warga atau pilih template foto dokumentasi resmi Saung Kebun. Foto akan tampil di Headline Informasi &amp; galeri warga.
+              </p>
+
+              {/* Upload Input & Presets */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <label className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:border-slate-400 cursor-pointer shadow-2xs">
+                  <Upload className="h-3.5 w-3.5 text-teal-600" />
+                  <span>{isProcessingAnnPhotos ? 'Memproses...' : '+ Unggah Foto Perangkat'}</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="sr-only"
+                    disabled={isProcessingAnnPhotos}
+                    onChange={async (e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setIsProcessingAnnPhotos(true);
+                        try {
+                          const newUrls = await readFilesAsDataUrls(e.target.files);
+                          setAnnPhotos((prev) => [...prev, ...newUrls]);
+                          showToast(`${newUrls.length} foto kegiatan berhasil ditambahkan.`);
+                        } catch {
+                          showToast('Gagal memproses file foto.');
+                        } finally {
+                          setIsProcessingAnnPhotos(false);
+                          e.target.value = '';
+                        }
+                      }
+                    }}
+                  />
+                </label>
+
+                {/* Quick Presets for Activities */}
+                {PRESET_PHOTO_OPTIONS.filter((p) => p.category === 'kegiatan').slice(0, 3).map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setAnnPhotos((prev) => [...prev, preset.dataUrl]);
+                      showToast(`Template foto "${preset.label}" ditambahkan.`);
+                    }}
+                    className="inline-flex items-center gap-1 rounded-lg bg-teal-50 border border-teal-200 px-2.5 py-1.5 text-[11px] font-medium text-teal-900 hover:bg-teal-100 cursor-pointer"
+                  >
+                    <Camera className="h-3 w-3 text-teal-600" />
+                    <span>+ {preset.label.split(':')[1]?.trim() || preset.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Photos Preview Thumbnails */}
+              {annPhotos.length > 0 && (
+                <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-200">
+                  {annPhotos.map((photo, pIdx) => (
+                    <div key={pIdx} className="group relative rounded-lg overflow-hidden border border-slate-300 bg-slate-900 aspect-video">
+                      <img
+                        src={photo}
+                        alt={`Dokumentasi ${pIdx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1 rounded">
+                        #{pIdx + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setAnnPhotos((prev) => prev.filter((_, i) => i !== pIdx))}
+                        className="absolute top-1 right-1 rounded-full bg-rose-600/90 text-white p-0.5 hover:bg-rose-700 cursor-pointer shadow-xs"
+                        title="Hapus foto ini"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || isProcessingAnnPhotos}
               className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#1547b8] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#103896] disabled:opacity-50 cursor-pointer"
             >
               <Plus className="h-4 w-4" />
@@ -507,7 +608,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               {announcements.map((item) => (
                 <div
                   key={item.id}
-                  className={`rounded-xl border p-4 space-y-2 ${
+                  className={`rounded-xl border p-4 space-y-2.5 ${
                     item.published
                       ? 'border-teal-200 bg-[#f0fdfa]/40'
                       : 'border-slate-200 bg-slate-50 opacity-75'
@@ -576,8 +677,20 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                     {item.title}
                   </h3>
                   <p className="text-xs text-slate-600">{item.content}</p>
-                  <div className="text-[11px] text-slate-500">
-                    Lokasi: <strong>{item.location}</strong> · Penulis: {item.authorName}
+
+                  {/* Multi-Photo Documentation Gallery */}
+                  {item.photos && item.photos.length > 0 && (
+                    <DocumentationPhotoGallery
+                      photos={item.photos}
+                      title={item.title}
+                      category={item.category}
+                      className="pt-1"
+                    />
+                  )}
+
+                  <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                    <span>Lokasi: <strong>{item.location}</strong></span>
+                    <span>Penulis: <strong>{item.authorName}</strong></span>
                   </div>
                 </div>
               ))}
@@ -876,9 +989,96 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               />
             </div>
 
+            {/* Foto Dokumentasi Patroli & Keamanan Satpam (Mendukung > 1 Foto) */}
+            <div className="space-y-2 rounded-xl border border-teal-200/90 bg-teal-50/50 p-3.5">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold text-teal-950">
+                  Foto Dokumentasi Patroli &amp; Pos Jaga (Bisa Lebih Dari 1 Foto)
+                </label>
+                <span className="text-[11px] font-bold text-teal-900 bg-teal-100 px-2 py-0.5 rounded-md">
+                  {secPhotos.length} Foto Terpilih
+                </span>
+              </div>
+              <p className="text-[11px] text-teal-800">
+                Unggah banyak foto hasil patroli atau gunakan preset dokumentasi resmi pengamanan Saung Kebun. Foto akan tampil di Headline Informasi &amp; portal warga.
+              </p>
+
+              {/* Upload Input & Presets */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <label className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-teal-300 px-3 py-1.5 text-xs font-bold text-teal-900 hover:bg-teal-100 hover:border-teal-400 cursor-pointer shadow-2xs">
+                  <Upload className="h-3.5 w-3.5 text-teal-700" />
+                  <span>{isProcessingSecPhotos ? 'Memproses...' : '+ Unggah Foto Perangkat'}</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    className="sr-only"
+                    disabled={isProcessingSecPhotos}
+                    onChange={async (e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setIsProcessingSecPhotos(true);
+                        try {
+                          const newUrls = await readFilesAsDataUrls(e.target.files);
+                          setSecPhotos((prev) => [...prev, ...newUrls]);
+                          showToast(`${newUrls.length} foto dokumentasi keamanan berhasil ditambahkan.`);
+                        } catch {
+                          showToast('Gagal memproses file foto keamanan.');
+                        } finally {
+                          setIsProcessingSecPhotos(false);
+                          e.target.value = '';
+                        }
+                      }
+                    }}
+                  />
+                </label>
+
+                {/* Quick Presets for Security */}
+                {PRESET_PHOTO_OPTIONS.filter((p) => p.category === 'keamanan').slice(0, 3).map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setSecPhotos((prev) => [...prev, preset.dataUrl]);
+                      showToast(`Template foto "${preset.label}" ditambahkan.`);
+                    }}
+                    className="inline-flex items-center gap-1 rounded-lg bg-white border border-teal-200 px-2.5 py-1.5 text-[11px] font-medium text-teal-900 hover:bg-teal-100 cursor-pointer"
+                  >
+                    <Camera className="h-3 w-3 text-teal-700" />
+                    <span>+ {preset.label.split(':')[1]?.trim() || preset.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Photos Preview Thumbnails */}
+              {secPhotos.length > 0 && (
+                <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2 border-t border-teal-200">
+                  {secPhotos.map((photo, pIdx) => (
+                    <div key={pIdx} className="group relative rounded-lg overflow-hidden border border-teal-300 bg-slate-900 aspect-video">
+                      <img
+                        src={photo}
+                        alt={`Dokumentasi Satpam ${pIdx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1 rounded">
+                        #{pIdx + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSecPhotos((prev) => prev.filter((_, i) => i !== pIdx))}
+                        className="absolute top-1 right-1 rounded-full bg-rose-600/90 text-white p-0.5 hover:bg-rose-700 cursor-pointer shadow-xs"
+                        title="Hapus foto ini"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || isProcessingSecPhotos}
               data-testid="submit-security-report-btn"
               className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#0f766e] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#115e59] disabled:opacity-50 cursor-pointer"
             >
@@ -902,7 +1102,7 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
               {securityReports.map((sec) => (
                 <div
                   key={sec.id}
-                  className={`rounded-xl border p-4 space-y-2 ${
+                  className={`rounded-xl border p-4 space-y-2.5 ${
                     sec.published
                       ? 'border-teal-200 bg-[#f0fdfa]/50'
                       : 'border-slate-200 bg-slate-50 opacity-75'
@@ -964,7 +1164,18 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                     {sec.title}
                   </h3>
                   <p className="text-xs text-slate-600">{sec.summary}</p>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+
+                  {/* Multi-Photo Documentation Gallery for Security */}
+                  {sec.photos && sec.photos.length > 0 && (
+                    <DocumentationPhotoGallery
+                      photos={sec.photos}
+                      title={sec.title}
+                      category="Laporan Situasi Satpam"
+                      className="pt-1"
+                    />
+                  )}
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-teal-100">
                     <span>Area: {sec.patrolArea}</span>
                     <span className="inline-flex items-center gap-1 font-bold text-[#0b2273]">
                       <UserCheck className="h-3.5 w-3.5 text-[#0f9f90]" />

@@ -39,6 +39,7 @@ interface UnitDetailModalProps {
   resident: ResidentUnit | null;
   state: DatabaseState;
   isAdmin: boolean;
+  isBendahara?: boolean;
   initialShowQRIS?: boolean;
   onClose: () => void;
   onPayMonths: (payload: {
@@ -57,6 +58,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
   resident,
   state,
   isAdmin,
+  isBendahara = false,
   initialShowQRIS = false,
   onClose,
   onPayMonths,
@@ -559,7 +561,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
               <h3 className="font-display text-sm font-bold text-slate-900">
                 Profil Lengkap Warga Database
               </h3>
-              {isAdmin && !editingProfile && (
+              {isBendahara && !editingProfile && (
                 <button
                   type="button"
                   onClick={() => setEditingProfile(true)}
@@ -568,6 +570,11 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   <Edit3 className="h-3.5 w-3.5" />
                   <span>Ubah Profil</span>
                 </button>
+              )}
+              {isAdmin && !isBendahara && (
+                <span className="text-[11px] font-medium text-slate-400 italic">
+                  (Ubah data warga khusus akun Bendahara)
+                </span>
               )}
             </div>
 

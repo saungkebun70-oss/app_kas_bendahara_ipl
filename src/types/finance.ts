@@ -139,6 +139,7 @@ export interface CommunityActivityAnnouncement {
   authorName: string;
   published: boolean;
   createdAt: string;
+  photos?: string[];
 }
 
 export type SecurityShiftLabel =
@@ -161,6 +162,7 @@ export interface SecurityGuardReport {
   summary: string;
   published: boolean;
   createdAt: string;
+  photos?: string[];
 }
 
 export type SecurityOfficerStatus = 'Aktif' | 'Cuti' | 'Nonaktif';

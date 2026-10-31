@@ -13,6 +13,7 @@ import {
   DEFAULT_SECURITY_REPORTS,
   DEFAULT_STREETS,
 } from './src/lib/seedData.ts';
+import { ACTIVITY_PHOTOS, SECURITY_PHOTOS } from './src/lib/documentationPhotos.ts';
 import type {
   AdminSettings,
   BlockCode,
@@ -109,9 +110,31 @@ function loadDatabase(): DatabaseState {
         }
         if (!Array.isArray(parsed.announcements)) {
           parsed.announcements = DEFAULT_ANNOUNCEMENTS.map((a) => ({ ...a }));
+        } else {
+          parsed.announcements = parsed.announcements.map((a) => {
+            if (!a.photos || !Array.isArray(a.photos) || a.photos.length === 0) {
+              const match = DEFAULT_ANNOUNCEMENTS.find((def) => def.id === a.id);
+              if (match && match.photos && match.photos.length > 0) {
+                return { ...a, photos: [...match.photos] };
+              }
+              return { ...a, photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman] };
+            }
+            return a;
+          });
         }
         if (!Array.isArray(parsed.securityReports)) {
           parsed.securityReports = DEFAULT_SECURITY_REPORTS.map((s) => ({ ...s }));
+        } else {
+          parsed.securityReports = parsed.securityReports.map((s) => {
+            if (!s.photos || !Array.isArray(s.photos) || s.photos.length === 0) {
+              const match = DEFAULT_SECURITY_REPORTS.find((def) => def.id === s.id);
+              if (match && match.photos && match.photos.length > 0) {
+                return { ...s, photos: [...match.photos] };
+              }
+              return { ...s, photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok] };
+            }
+            return s;
+          });
         }
         if (!Array.isArray(parsed.securityOfficers)) {
           parsed.securityOfficers = DEFAULT_SECURITY_OFFICERS.map((o) => ({ ...o }));
@@ -444,6 +467,14 @@ app.get('/api/state', (_req, res) => {
   });
 
   app.post('/api/residents', (req, res) => {
+    const userRole = (req.headers['x-user-role'] as string)?.toLowerCase();
+    if (userRole && userRole !== 'bendahara') {
+      res.status(403).json({
+        error: 'Otorisasi ditolak. Penambahan data warga baru hanya dapat dilakukan oleh akun Bendahara.',
+      });
+      return;
+    }
+
     const raw = req.body as Partial<ResidentUnit>;
     const block = (raw.block || 'A').toUpperCase() as BlockCode;
     const houseNumber = String(raw.houseNumber || '').trim();
@@ -510,6 +541,14 @@ app.get('/api/state', (_req, res) => {
   });
 
   app.put('/api/residents/:id', (req, res) => {
+    const userRole = (req.headers['x-user-role'] as string)?.toLowerCase();
+    if (userRole && userRole !== 'bendahara') {
+      res.status(403).json({
+        error: 'Otorisasi ditolak. Pengubahan profil data warga hanya dapat dilakukan oleh akun Bendahara.',
+      });
+      return;
+    }
+
     const { id } = req.params;
     const updates = req.body as Partial<ResidentUnit>;
     const idx = dbState.residents.findIndex((r) => r.id === id);
@@ -546,6 +585,14 @@ app.get('/api/state', (_req, res) => {
   });
 
   app.delete('/api/residents/:id', (req, res) => {
+    const userRole = (req.headers['x-user-role'] as string)?.toLowerCase();
+    if (userRole && userRole !== 'bendahara') {
+      res.status(403).json({
+        error: 'Otorisasi ditolak. Penghapusan data warga hanya dapat dilakukan oleh akun Bendahara.',
+      });
+      return;
+    }
+
     const { id } = req.params;
     if (id === 'A-01' || id === 'A-09') {
       res.status(400).json({ error: 'Unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat dihapus.' });
@@ -1062,7 +1109,7 @@ app.get('/api/state', (_req, res) => {
   });
 
   app.post('/api/announcements', (req, res) => {
-    const { title, category, eventDate, location, content, authorName, published } =
+    const { title, category, eventDate, location, content, authorName, published, photos } =
       req.body as Partial<CommunityActivityAnnouncement>;
 
     if (!title?.trim() || !content?.trim() || !eventDate) {
@@ -1071,6 +1118,10 @@ app.get('/api/state', (_req, res) => {
       });
       return;
     }
+
+    const cleanedPhotos = Array.isArray(photos)
+      ? photos.filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+      : [];
 
     const newItem: CommunityActivityAnnouncement = {
       id: `ANN-${Date.now()}`,
@@ -1082,6 +1133,7 @@ app.get('/api/state', (_req, res) => {
       authorName: authorName?.trim() || dbState.settings.chairpersonName,
       published: published !== false,
       createdAt: new Date().toISOString(),
+      photos: cleanedPhotos,
     };
 
     dbState = {
@@ -1134,6 +1186,7 @@ app.get('/api/state', (_req, res) => {
       title,
       summary,
       published,
+      photos,
     } = req.body as Partial<SecurityGuardReport>;
 
     if (!guardName?.trim() || !title?.trim() || !summary?.trim() || !reportDate) {
@@ -1142,6 +1195,10 @@ app.get('/api/state', (_req, res) => {
       });
       return;
     }
+
+    const cleanedPhotos = Array.isArray(photos)
+      ? photos.filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+      : [];
 
     const newReport: SecurityGuardReport = {
       id: `SEC-${Date.now()}`,
@@ -1154,6 +1211,7 @@ app.get('/api/state', (_req, res) => {
       summary: summary.trim(),
       published: published !== false,
       createdAt: new Date().toISOString(),
+      photos: cleanedPhotos,
     };
 
     dbState = {
