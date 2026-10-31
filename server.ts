@@ -40,6 +40,239 @@ const DATA_DIR = path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'saung-kebun-db.json');
 const TMP_DB_FILE = path.join('/tmp', 'saung-kebun-db.json');
 
+function normalizeAndMigrateState(parsed: DatabaseState): { state: DatabaseState; changed: boolean } {
+  let changed = false;
+  parsed.settings = {
+    ...DEFAULT_ADMIN_SETTINGS,
+    ...parsed.settings,
+    qrisImageUrl: parsed.settings?.qrisImageUrl || DEFAULT_ADMIN_SETTINGS.qrisImageUrl,
+    qrisFileName: parsed.settings?.qrisFileName || DEFAULT_ADMIN_SETTINGS.qrisFileName,
+    qrisMerchantName:
+      parsed.settings?.qrisMerchantName || DEFAULT_ADMIN_SETTINGS.qrisMerchantName,
+    qrisNmid: parsed.settings?.qrisNmid || DEFAULT_ADMIN_SETTINGS.qrisNmid,
+    publishArrearsToResidents:
+      parsed.settings?.publishArrearsToResidents ??
+      DEFAULT_ADMIN_SETTINGS.publishArrearsToResidents,
+    hiddenArrearsUnitIds: Array.isArray(parsed.settings?.hiddenArrearsUnitIds)
+      ? parsed.settings.hiddenArrearsUnitIds
+      : [],
+    publishedMonthlyReports: Array.isArray(parsed.settings?.publishedMonthlyReports)
+      ? parsed.settings.publishedMonthlyReports
+      : DEFAULT_ADMIN_SETTINGS.publishedMonthlyReports,
+    publishedQuarterlyLPJ: Array.isArray(parsed.settings?.publishedQuarterlyLPJ)
+      ? parsed.settings.publishedQuarterlyLPJ
+      : DEFAULT_ADMIN_SETTINGS.publishedQuarterlyLPJ,
+    customBlocks:
+      Array.isArray(parsed.settings?.customBlocks) && parsed.settings.customBlocks.length > 0
+        ? parsed.settings.customBlocks
+        : [...DEFAULT_BLOCKS],
+    customStreets:
+      Array.isArray(parsed.settings?.customStreets) && parsed.settings.customStreets.length > 0
+        ? parsed.settings.customStreets
+        : [...DEFAULT_STREETS],
+  };
+
+  // Replace legacy blocks A, B, C, D in customBlocks with B1-B10
+  const hadOldBlocks = (parsed.settings.customBlocks || []).some((b) =>
+    ['A', 'B', 'C', 'D'].includes(b.id.toUpperCase())
+  );
+  if (hadOldBlocks) {
+    changed = true;
+    parsed.settings.customBlocks = (parsed.settings.customBlocks || []).filter(
+      (b) => !['A', 'B', 'C', 'D'].includes(b.id.toUpperCase())
+    );
+  }
+  const existingBlockIds = new Set((parsed.settings.customBlocks || []).map((b) => b.id.toUpperCase()));
+  for (const defBlock of DEFAULT_BLOCKS) {
+    if (!existingBlockIds.has(defBlock.id.toUpperCase())) {
+      parsed.settings.customBlocks.push({ ...defBlock });
+      changed = true;
+    }
+  }
+  parsed.settings.customBlocks.sort((a, b) =>
+    a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' })
+  );
+
+  // Migrate residents with old blocks A, B, C, D to B1-B10
+  const unitIdMap = new Map<string, string>();
+  if (Array.isArray(parsed.residents)) {
+    parsed.residents = parsed.residents.map((r: ResidentUnit) => {
+      const oldId = r.id;
+      const bUpper = (r.block || '').toUpperCase();
+      const n = Number((r.houseNumber || '').replace(/\D/g, '')) || 1;
+
+      let nextBlock = r.block;
+      let nextHouseNum = r.houseNumber;
+      let nextStreet = r.streetName || '';
+
+      if (bUpper === 'A' || oldId.startsWith('A-')) {
+        if (n <= 9) {
+          nextBlock = 'B1';
+          nextHouseNum = String(n).padStart(2, '0');
+          nextStreet = 'Gang Duren';
+        } else {
+          nextBlock = 'B2';
+          nextHouseNum = String(n - 9).padStart(2, '0');
+          nextStreet = 'Gang Duren';
+        }
+      } else if (
+        bUpper === 'B' ||
+        (oldId.startsWith('B-') &&
+          !oldId.startsWith('B1-') &&
+          !oldId.startsWith('B2-') &&
+          !oldId.startsWith('B3-') &&
+          !oldId.startsWith('B4-') &&
+          !oldId.startsWith('B5-') &&
+          !oldId.startsWith('B6-') &&
+          !oldId.startsWith('B7-') &&
+          !oldId.startsWith('B8-') &&
+          !oldId.startsWith('B9-') &&
+          !oldId.startsWith('B10-'))
+      ) {
+        if (n <= 5) {
+          nextBlock = 'B3';
+          nextHouseNum = String(n).padStart(2, '0');
+          nextStreet = 'Gang Duren';
+        } else if (n <= 10) {
+          nextBlock = 'B4';
+          nextHouseNum = String(n - 5).padStart(2, '0');
+          nextStreet = 'Gang Duren';
+        } else {
+          nextBlock = 'B5';
+          nextHouseNum = String(n - 10).padStart(2, '0');
+          nextStreet = 'Gang Duren';
+        }
+      } else if (bUpper === 'C' || oldId.startsWith('C-')) {
+        if (n <= 5) {
+          nextBlock = 'B6';
+          nextHouseNum = String(n).padStart(2, '0');
+          nextStreet = 'Gang Anggur';
+        } else if (n <= 10) {
+          nextBlock = 'B7';
+          nextHouseNum = String(n - 5).padStart(2, '0');
+          nextStreet = 'Gang Anggur';
+        } else {
+          nextBlock = 'B8';
+          nextHouseNum = String(n - 10).padStart(2, '0');
+          nextStreet = 'Gang Anggur';
+        }
+      } else if (bUpper === 'D' || oldId.startsWith('D-')) {
+        if (n <= 5) {
+          nextBlock = 'B9';
+          nextHouseNum = String(n).padStart(2, '0');
+          nextStreet = 'Gang Anggur';
+        } else {
+          nextBlock = 'B10';
+          nextHouseNum = String(n - 5).padStart(2, '0');
+          nextStreet = 'Gang Anggur';
+        }
+      }
+
+      if (!nextStreet || nextStreet.includes('Melati') || nextStreet.includes('Cendana')) {
+        nextStreet = 'Gang Duren';
+      } else if (
+        nextStreet.includes('Kebun') ||
+        nextStreet.includes('Mawar') ||
+        nextStreet.includes('Kenanga') ||
+        nextStreet.includes('Asri')
+      ) {
+        nextStreet = 'Gang Anggur';
+      }
+
+      const nextId = `${nextBlock}-${nextHouseNum.padStart(2, '0')}`;
+      if (oldId !== nextId) {
+        unitIdMap.set(oldId, nextId);
+        changed = true;
+      }
+
+      let nextNotes = r.notes || '';
+      if (nextId === 'B1-01' || oldId === 'A-01') nextNotes = 'Ketua Lingkungan (Bebas Iuran)';
+      else if (nextId === 'B1-09' || oldId === 'A-09') nextNotes = 'Bendahara Kas (Bebas Iuran)';
+
+      return {
+        ...r,
+        id: nextId,
+        block: nextBlock,
+        houseNumber: nextHouseNum,
+        streetName: nextStreet,
+        notes: nextNotes,
+      };
+    });
+
+    // Sort residents by B1 to B10 then house number
+    parsed.residents.sort((a, b) => {
+      if (a.block !== b.block) {
+        return a.block.localeCompare(b.block, undefined, { numeric: true, sensitivity: 'base' });
+      }
+      const nA = Number(a.houseNumber.replace(/\D/g, '')) || 0;
+      const nB = Number(b.houseNumber.replace(/\D/g, '')) || 0;
+      return nA - nB || a.id.localeCompare(b.id);
+    });
+  }
+
+  // Cascade mapped unit IDs to transactions and payment confirmations
+  if (unitIdMap.size > 0) {
+    changed = true;
+    if (Array.isArray(parsed.transactions)) {
+      parsed.transactions = parsed.transactions.map((t) =>
+        t.unitId && unitIdMap.has(t.unitId)
+          ? { ...t, unitId: unitIdMap.get(t.unitId)! }
+          : t
+      );
+    }
+    if (Array.isArray(parsed.paymentConfirmations)) {
+      parsed.paymentConfirmations = parsed.paymentConfirmations.map((c) =>
+        c.unitId && unitIdMap.has(c.unitId)
+          ? { ...c, unitId: unitIdMap.get(c.unitId)! }
+          : c
+      );
+    }
+  }
+
+  if (parsed.settings.chairpersonName) {
+    parsed.settings.chairpersonName = parsed.settings.chairpersonName.trim();
+    if (parsed.settings.chairpersonName.includes('Hendra Wijaya')) {
+      parsed.settings.chairpersonName = 'Erlangga';
+    }
+  }
+  if (!Array.isArray(parsed.announcements)) {
+    parsed.announcements = DEFAULT_ANNOUNCEMENTS.map((a) => ({ ...a }));
+  } else {
+    parsed.announcements = parsed.announcements.map((a) => {
+      if (!a.photos || !Array.isArray(a.photos) || a.photos.length === 0) {
+        const match = DEFAULT_ANNOUNCEMENTS.find((def) => def.id === a.id);
+        if (match && match.photos && match.photos.length > 0) {
+          return { ...a, photos: [...match.photos] };
+        }
+        return { ...a, photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman] };
+      }
+      return a;
+    });
+  }
+  if (!Array.isArray(parsed.securityReports)) {
+    parsed.securityReports = DEFAULT_SECURITY_REPORTS.map((s) => ({ ...s }));
+  } else {
+    parsed.securityReports = parsed.securityReports.map((s) => {
+      if (!s.photos || !Array.isArray(s.photos) || s.photos.length === 0) {
+        const match = DEFAULT_SECURITY_REPORTS.find((def) => def.id === s.id);
+        if (match && match.photos && match.photos.length > 0) {
+          return { ...s, photos: [...match.photos] };
+        }
+        return { ...s, photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok] };
+      }
+      return s;
+    });
+  }
+  if (!Array.isArray(parsed.securityOfficers)) {
+    parsed.securityOfficers = DEFAULT_SECURITY_OFFICERS.map((o) => ({ ...o }));
+  }
+  if (!Array.isArray(parsed.paymentConfirmations) || parsed.paymentConfirmations.length === 0) {
+    parsed.paymentConfirmations = DEFAULT_PAYMENT_CONFIRMATIONS.map((c: PaymentConfirmation) => ({ ...c }));
+  }
+
+  return { state: parsed, changed };
+}
+
 function loadDatabase(): DatabaseState {
   try {
     const candidateFile = fs.existsSync(TMP_DB_FILE) ? TMP_DB_FILE : DB_FILE;
@@ -47,107 +280,11 @@ function loadDatabase(): DatabaseState {
       const raw = fs.readFileSync(candidateFile, 'utf-8');
       const parsed = JSON.parse(raw) as DatabaseState;
       if (Array.isArray(parsed.residents) && parsed.residents.length > 0) {
-        parsed.settings = {
-          ...DEFAULT_ADMIN_SETTINGS,
-          ...parsed.settings,
-          qrisImageUrl: parsed.settings?.qrisImageUrl || DEFAULT_ADMIN_SETTINGS.qrisImageUrl,
-          qrisFileName: parsed.settings?.qrisFileName || DEFAULT_ADMIN_SETTINGS.qrisFileName,
-          qrisMerchantName:
-            parsed.settings?.qrisMerchantName || DEFAULT_ADMIN_SETTINGS.qrisMerchantName,
-          qrisNmid: parsed.settings?.qrisNmid || DEFAULT_ADMIN_SETTINGS.qrisNmid,
-          publishArrearsToResidents:
-            parsed.settings?.publishArrearsToResidents ??
-            DEFAULT_ADMIN_SETTINGS.publishArrearsToResidents,
-          hiddenArrearsUnitIds: Array.isArray(parsed.settings?.hiddenArrearsUnitIds)
-            ? parsed.settings.hiddenArrearsUnitIds
-            : [],
-          publishedMonthlyReports: Array.isArray(parsed.settings?.publishedMonthlyReports)
-            ? parsed.settings.publishedMonthlyReports
-            : DEFAULT_ADMIN_SETTINGS.publishedMonthlyReports,
-          publishedQuarterlyLPJ: Array.isArray(parsed.settings?.publishedQuarterlyLPJ)
-            ? parsed.settings.publishedQuarterlyLPJ
-            : DEFAULT_ADMIN_SETTINGS.publishedQuarterlyLPJ,
-          customBlocks:
-            Array.isArray(parsed.settings?.customBlocks) && parsed.settings.customBlocks.length > 0
-              ? parsed.settings.customBlocks
-              : [...DEFAULT_BLOCKS],
-          customStreets:
-            Array.isArray(parsed.settings?.customStreets) && parsed.settings.customStreets.length > 0
-              ? parsed.settings.customStreets
-              : [...DEFAULT_STREETS],
-        };
-        // Ensure all B1-B9 blocks exist in customBlocks if not already
-        const existingBlockIds = new Set((parsed.settings.customBlocks || []).map((b) => b.id.toUpperCase()));
-        for (const defBlock of DEFAULT_BLOCKS) {
-          if (!existingBlockIds.has(defBlock.id.toUpperCase())) {
-            parsed.settings.customBlocks?.push({ ...defBlock });
-          }
+        const { state, changed } = normalizeAndMigrateState(parsed);
+        if (changed) {
+          saveDatabase(state);
         }
-        // Migrate old street names to Gang Duren / Gang Anggur
-        if (Array.isArray(parsed.residents)) {
-          parsed.residents = parsed.residents.map((r: ResidentUnit) => {
-            let nextStreet = r.streetName || '';
-            if (
-              nextStreet.startsWith('Jl. Saung Melati') ||
-              nextStreet.includes('Melati') ||
-              nextStreet.includes('Cendana')
-            ) {
-              nextStreet = 'Gang Duren';
-            } else if (
-              nextStreet.startsWith('Jl. Kebun') ||
-              nextStreet.includes('Mawar') ||
-              nextStreet.includes('Kenanga') ||
-              nextStreet.includes('Asri')
-            ) {
-              nextStreet = 'Gang Anggur';
-            }
-            return {
-              ...r,
-              streetName: nextStreet || (r.block.startsWith('B') ? 'Gang Anggur' : 'Gang Duren'),
-            };
-          });
-        }
-        if (parsed.settings.chairpersonName) {
-          parsed.settings.chairpersonName = parsed.settings.chairpersonName.trim();
-          if (parsed.settings.chairpersonName.includes('Hendra Wijaya')) {
-            parsed.settings.chairpersonName = 'Erlangga';
-          }
-        }
-        if (!Array.isArray(parsed.announcements)) {
-          parsed.announcements = DEFAULT_ANNOUNCEMENTS.map((a) => ({ ...a }));
-        } else {
-          parsed.announcements = parsed.announcements.map((a) => {
-            if (!a.photos || !Array.isArray(a.photos) || a.photos.length === 0) {
-              const match = DEFAULT_ANNOUNCEMENTS.find((def) => def.id === a.id);
-              if (match && match.photos && match.photos.length > 0) {
-                return { ...a, photos: [...match.photos] };
-              }
-              return { ...a, photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman] };
-            }
-            return a;
-          });
-        }
-        if (!Array.isArray(parsed.securityReports)) {
-          parsed.securityReports = DEFAULT_SECURITY_REPORTS.map((s) => ({ ...s }));
-        } else {
-          parsed.securityReports = parsed.securityReports.map((s) => {
-            if (!s.photos || !Array.isArray(s.photos) || s.photos.length === 0) {
-              const match = DEFAULT_SECURITY_REPORTS.find((def) => def.id === s.id);
-              if (match && match.photos && match.photos.length > 0) {
-                return { ...s, photos: [...match.photos] };
-              }
-              return { ...s, photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok] };
-            }
-            return s;
-          });
-        }
-        if (!Array.isArray(parsed.securityOfficers)) {
-          parsed.securityOfficers = DEFAULT_SECURITY_OFFICERS.map((o) => ({ ...o }));
-        }
-        if (!Array.isArray(parsed.paymentConfirmations) || parsed.paymentConfirmations.length === 0) {
-          parsed.paymentConfirmations = DEFAULT_PAYMENT_CONFIRMATIONS.map((c: PaymentConfirmation) => ({ ...c }));
-        }
-        return parsed;
+        return state;
       }
     }
   } catch (err) {
@@ -187,8 +324,12 @@ let dbState: DatabaseState = loadDatabase();
   try {
     const cloudState = await loadStateFromCloud();
     if (cloudState && Array.isArray(cloudState.residents) && cloudState.residents.length > 0) {
-      dbState = cloudState;
-      console.log('[CloudDB] State loaded from online Google Cloud Firestore.');
+      const { state, changed } = normalizeAndMigrateState(cloudState);
+      dbState = state;
+      if (changed) {
+        saveDatabase(dbState);
+      }
+      console.log('[CloudDB] State loaded from online Google Cloud Firestore (normalized B1-B10).');
     } else {
       console.log('[CloudDB] Seeding state to online Google Cloud Firestore...');
       await syncStateToCloud(dbState);
@@ -624,7 +765,7 @@ app.get('/api/state', (_req, res) => {
     }
 
     if (targetId.toLowerCase() !== id.toLowerCase()) {
-      if (id === 'A-01' || id === 'A-09') {
+      if (id === 'A-01' || id === 'A-09' || id === 'B1-01' || id === 'B1-09') {
         res.status(400).json({ error: 'ID unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat diubah.' });
         return;
       }
@@ -683,7 +824,7 @@ app.get('/api/state', (_req, res) => {
     }
 
     const { id } = req.params;
-    if (id === 'A-01' || id === 'A-09') {
+    if (id === 'A-01' || id === 'A-09' || id === 'B1-01' || id === 'B1-09') {
       res.status(400).json({ error: 'Unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat dihapus.' });
       return;
     }

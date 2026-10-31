@@ -15,19 +15,16 @@ interface ResidentFormModalProps {
 }
 
 const FALLBACK_BLOCKS: BlockConfig[] = [
-  { id: 'A', name: 'Blok A', defaultStreet: 'Gang Duren' },
-  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Anggur' },
-  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Anggur' },
-  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Anggur' },
+  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Duren' },
+  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Duren' },
+  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Duren' },
   { id: 'B4', name: 'Blok B4', defaultStreet: 'Gang Duren' },
   { id: 'B5', name: 'Blok B5', defaultStreet: 'Gang Duren' },
-  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Duren' },
+  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Anggur' },
   { id: 'B7', name: 'Blok B7', defaultStreet: 'Gang Anggur' },
   { id: 'B8', name: 'Blok B8', defaultStreet: 'Gang Anggur' },
   { id: 'B9', name: 'Blok B9', defaultStreet: 'Gang Anggur' },
-  { id: 'B', name: 'Blok B', defaultStreet: 'Gang Anggur' },
-  { id: 'C', name: 'Blok C', defaultStreet: 'Gang Duren' },
-  { id: 'D', name: 'Blok D', defaultStreet: 'Gang Anggur' },
+  { id: 'B10', name: 'Blok B10', defaultStreet: 'Gang Anggur' },
 ];
 
 const FALLBACK_STREETS: string[] = ['Gang Duren', 'Gang Anggur'];
@@ -46,7 +43,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
   const blocks = availableBlocks && availableBlocks.length > 0 ? availableBlocks : FALLBACK_BLOCKS;
   const streets = availableStreets && availableStreets.length > 0 ? availableStreets : FALLBACK_STREETS;
 
-  const [block, setBlock] = useState<BlockCode>('A');
+  const [block, setBlock] = useState<BlockCode>('B1');
   const [houseNumber, setHouseNumber] = useState('');
   const [streetName, setStreetName] = useState('Gang Duren');
   const [headOfFamily, setHeadOfFamily] = useState('');

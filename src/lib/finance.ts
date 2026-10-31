@@ -361,15 +361,15 @@ export function getLast6MonthsCashFlow(
 }
 
 
-export const EXEMPT_OFFICER_UNIT_IDS = ['A-01', 'A-09'] as const;
+export const EXEMPT_OFFICER_UNIT_IDS = ['B1-01', 'B1-09', 'A-01', 'A-09'] as const;
 
 export function isUnitExemptFromIuran(unitId: string): boolean {
-  return unitId === 'A-01' || unitId === 'A-09';
+  return unitId === 'B1-01' || unitId === 'B1-09' || unitId === 'A-01' || unitId === 'A-09';
 }
 
 export function getUnitExemptionInfo(unitId: string): { isExempt: boolean; roleLabel?: string; roleTitle?: string } {
-  if (unitId === 'A-01') return { isExempt: true, roleLabel: 'Ketua (Bebas Iuran)', roleTitle: 'Ketua' };
-  if (unitId === 'A-09') return { isExempt: true, roleLabel: 'Bendahara (Bebas Iuran)', roleTitle: 'Bendahara' };
+  if (unitId === 'B1-01' || unitId === 'A-01') return { isExempt: true, roleLabel: 'Ketua (Bebas Iuran)', roleTitle: 'Ketua' };
+  if (unitId === 'B1-09' || unitId === 'A-09') return { isExempt: true, roleLabel: 'Bendahara (Bebas Iuran)', roleTitle: 'Bendahara' };
   return { isExempt: false };
 }
 
@@ -458,7 +458,8 @@ export function calculateRealtimeSummary(
     targetIuranRevenue > 0 ? Math.round((monthIncome / targetIuranRevenue) * 100) : 0;
   const unpaidPotentialAmount = unpaidUnitsCount * settings.monthlyFee;
 
-  const blocks: BlockCode[] = ['A', 'B', 'C', 'D'];
+  const rawBlocks = settings?.customBlocks?.map((b) => b.id) || Array.from(new Set(residents.map((r) => r.block)));
+  const blocks: BlockCode[] = rawBlocks.length > 0 ? rawBlocks : ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'];
   const blockBreakdown: BlockSummary[] = blocks.map((block) => {
     const unitsInBlock = residents.filter((r) => r.block === block);
     const billableInBlock = unitsInBlock.filter((r) => !isUnitExemptFromIuran(r.id));
@@ -823,7 +824,8 @@ export function calculateQuarterlyLPJ(
     };
   }).filter((c) => c.amount > 0);
 
-  const blocks: BlockCode[] = ['A', 'B', 'C', 'D'];
+  const rawBlocks = state.settings?.customBlocks?.map((b) => b.id) || Array.from(new Set(state.residents.map((r) => r.block)));
+  const blocks: BlockCode[] = rawBlocks.length > 0 ? rawBlocks : ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'];
   const blockRealization = blocks.map((block) => {
     const units = state.residents.filter((r) => r.block === block);
     const billableUnits = units.filter((r) => !isUnitExemptFromIuran(r.id));

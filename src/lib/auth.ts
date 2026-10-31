@@ -88,7 +88,7 @@ export function authenticateAdmin(
         isAdmin: true,
         displayName: settings.chairpersonName,
         roleLabel: 'Admin — Ketua',
-        unitId: 'A-01',
+        unitId: 'B1-01',
         loginAt: new Date().toISOString(),
       },
     };
@@ -115,7 +115,7 @@ export function authenticateAdmin(
         isAdmin: true,
         displayName: settings.treasurerName,
         roleLabel: 'Admin — Bendahara',
-        unitId: 'A-09',
+        unitId: 'B1-09',
         loginAt: new Date().toISOString(),
       },
     };

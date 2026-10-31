@@ -68,15 +68,15 @@ test('real-time balance reconciles opening balance, all income, and all expenses
 
   db.transactions.push({
     id: 'TRX-TEST-01',
-    receiptNumber: 'SK/KW/2026/10/A05',
+    receiptNumber: 'SK/KW/2026/10/B105',
     date: '2026-10-24',
     periodMonth: '2026-10',
     type: 'income',
     category: 'Iuran Bulanan Warga',
     amount: 100000,
-    unitId: 'A-05',
+    unitId: 'B1-05',
     paymentMethod: 'QRIS Saung Kebun',
-    description: 'Iuran Oktober A-05',
+    description: 'Iuran Oktober B1-05',
     recordedBy: 'Admin',
     createdAt: '2026-10-24T10:00:00.000Z',
   });
@@ -86,7 +86,7 @@ test('real-time balance reconciles opening balance, all income, and all expenses
   assert.equal(summaryAfter.paidUnitsCount, 42);
   assert.equal(summaryAfter.unpaidUnitsCount, 11);
 
-  const unitHistory = getUnitTransactions(db.transactions, 'A-05');
+  const unitHistory = getUnitTransactions(db.transactions, 'B1-05');
   assert.equal(unitHistory.length, 4);
   assert.equal(unitHistory[0].periodMonth, '2026-10');
 });
@@ -129,12 +129,12 @@ test('WhatsApp billing detector identifies unpaid houses, multi-month arrears, a
 
   assert.equal(unpaidList.length, 12);
 
-  const unitA12 = unpaidList.find((item) => item.resident.id === 'A-12');
-  assert.ok(unitA12);
-  assert.deepEqual(unitA12.unpaidMonths, ['2026-09', '2026-10']);
-  assert.equal(unitA12.totalArrears, 200000);
-  assert.ok(unitA12.formattedMessage.includes('Rp 200.000'));
-  assert.ok(unitA12.waWebUrl.startsWith('https://wa.me/628'));
+  const unitB203 = unpaidList.find((item) => item.resident.id === 'B2-03' || item.resident.id === 'A-12');
+  assert.ok(unitB203);
+  assert.deepEqual(unitB203.unpaidMonths, ['2026-09', '2026-10']);
+  assert.equal(unitB203.totalArrears, 200000);
+  assert.ok(unitB203.formattedMessage.includes('Rp 200.000'));
+  assert.ok(unitB203.waWebUrl.startsWith('https://wa.me/628'));
 
   assert.equal(normalizePhoneToWa('0812-3456-7890'), '6281234567890');
   assert.equal(formatRupiah(100000), 'Rp 100.000');
@@ -181,27 +181,27 @@ test('separate Admin login validates Ketua and Bendahara credentials strictly', 
 test('separate Warga login validates 55 house unit IDs and PIN or WhatsApp last 4 digits', () => {
   const db = createSeedDatabase();
 
-  const emptyPin = authenticateWarga({ unitId: 'A-05', pin: '' }, db.residents);
+  const emptyPin = authenticateWarga({ unitId: 'B1-05', pin: '' }, db.residents);
   assert.equal(emptyPin.ok, false);
 
-  const validWarga = authenticateWarga({ unitId: 'A-05', pin: '1234' }, db.residents);
+  const validWarga = authenticateWarga({ unitId: 'B1-05', pin: '1234' }, db.residents);
   assert.equal(validWarga.ok, true);
   if (validWarga.ok) {
     assert.equal(validWarga.session.role, 'warga');
     assert.equal(validWarga.session.isAdmin, false);
-    assert.equal(validWarga.session.unitId, 'A-05');
+    assert.equal(validWarga.session.unitId, 'B1-05');
   }
 });
 
 test('resident QRIS payment info resolves uploaded QRIS image and exact outstanding amount', () => {
   const db = createSeedDatabase();
-  const unitA05 = db.residents.find((r) => r.id === 'A-05')!;
-  const unitA12 = db.residents.find((r) => r.id === 'A-12')!;
+  const unitB105 = db.residents.find((r) => r.id === 'B1-05') || db.residents.find((r) => r.id === 'A-05')!;
+  const unitB203 = db.residents.find((r) => r.id === 'B2-03') || db.residents.find((r) => r.id === 'A-12')!;
 
-  assert.deepEqual(getUnitUnpaidMonths(db, 'A-05', '2026-10'), ['2026-10']);
-  assert.deepEqual(getUnitUnpaidMonths(db, 'A-12', '2026-10'), ['2026-09', '2026-10']);
+  assert.deepEqual(getUnitUnpaidMonths(db, unitB105.id, '2026-10'), ['2026-10']);
+  assert.deepEqual(getUnitUnpaidMonths(db, unitB203.id, '2026-10'), ['2026-09', '2026-10']);
 
-  const qrisA05 = getResidentQRISPaymentInfo(db, unitA05);
+  const qrisA05 = getResidentQRISPaymentInfo(db, unitB105);
   assert.equal(qrisA05.outstandingAmount, 100000);
   assert.equal(qrisA05.formattedAmount, 'Rp 100.000');
   assert.equal(qrisA05.qrisImageUrl, DEFAULT_QRIS_IMAGE_DATA_URL);
@@ -210,7 +210,7 @@ test('resident QRIS payment info resolves uploaded QRIS image and exact outstand
   db.settings.qrisImageUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB';
   db.settings.qrisFileName = 'qris-resmi-bendahara.png';
 
-  const qrisA12 = getResidentQRISPaymentInfo(db, unitA12);
+  const qrisA12 = getResidentQRISPaymentInfo(db, unitB203);
   assert.equal(qrisA12.outstandingAmount, 200000);
   assert.equal(qrisA12.formattedAmount, 'Rp 200.000');
   assert.equal(qrisA12.qrisImageUrl, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB');
@@ -264,12 +264,12 @@ test('Warga portal filters published announcements, security guard reports, and 
   assert.equal(initialArrears.isPublishedByAdmin, true);
   assert.equal(initialArrears.publishedItems.length, 12);
 
-  // Hide specific unit A-05 from Warga portal arrears list
-  db.settings.hiddenArrearsUnitIds = ['A-05'];
+  // Hide specific unit B1-05 from Warga portal arrears list
+  db.settings.hiddenArrearsUnitIds = ['B1-05'];
   const partialArrears = getPublishedArrearsForWargaPortal(db, '2026-10');
   assert.equal(partialArrears.publishedItems.length, 11);
   assert.equal(
-    partialArrears.publishedItems.some((i) => i.resident.id === 'A-05'),
+    partialArrears.publishedItems.some((i) => i.resident.id === 'B1-05'),
     false
   );
 
@@ -352,7 +352,7 @@ test('security officers are managed separately from 55 resident units and have i
 test('unit receipt preview generator creates valid PDF document and data URI before download', async () => {
   const { buildUnitReceiptPDFDoc, getUnitReceiptPDFDataUri } = await import('./pdfExport');
   const db = createSeedDatabase();
-  const unit = db.residents.find((r) => r.id === 'A-02')!;
+  const unit = db.residents.find((r) => r.id === 'B1-02') || db.residents[1];
   const tx = db.transactions.find((t) => t.unitId === unit.id)!;
 
   const doc = buildUnitReceiptPDFDoc(db, unit, tx);
@@ -405,9 +405,9 @@ test('TransactionsView search bar filters by transaction type, unit ID, and date
   assert.equal(expenseOnly.every((t) => t.type === 'expense'), true);
 
   // 2. Filter by Unit ID
-  const unitA05Txs = allTxs.filter((t) => t.unitId === 'A-05');
-  assert.ok(unitA05Txs.length > 0);
-  assert.equal(unitA05Txs.every((t) => t.unitId === 'A-05'), true);
+  const unitTxs = allTxs.filter((t) => t.unitId === 'B1-05' || t.unitId === 'A-05');
+  assert.ok(unitTxs.length > 0);
+  assert.equal(unitTxs.every((t) => t.unitId === 'B1-05' || t.unitId === 'A-05'), true);
 
   // Filter non-unit (operational / general)
   const nonUnitTxs = allTxs.filter((t) => !t.unitId);
@@ -423,10 +423,10 @@ test('TransactionsView search bar filters by transaction type, unit ID, and date
 
   // 4. Combined Multi-Criteria Filter (Type + Unit + Date Range)
   const combined = allTxs.filter(
-    (t) => t.type === 'income' && t.unitId === 'A-02' && t.date >= '2026-07-01' && t.date <= '2026-08-31'
+    (t) => t.type === 'income' && (t.unitId === 'B1-02' || t.unitId === 'A-02') && t.date >= '2026-07-01' && t.date <= '2026-08-31'
   );
   assert.ok(combined.length >= 1);
-  assert.equal(combined.every((t) => t.type === 'income' && t.unitId === 'A-02'), true);
+  assert.equal(combined.every((t) => t.type === 'income' && (t.unitId === 'B1-02' || t.unitId === 'A-02')), true);
 });
 
 test('TransactionsView summary section displays accurate total income, total expenses, and net balance for filtered transactions', () => {
@@ -452,8 +452,8 @@ test('TransactionsView summary section displays accurate total income, total exp
   assert.ok(nonUnitExpense > 0);
   assert.equal(nonUnitNet, nonUnitIncome - nonUnitExpense);
 
-  // Filter 3: Single unit (A-05) across all time
-  const a05Txs = allTxs.filter((t) => t.unitId === 'A-05');
+  // Filter 3: Single unit (B1-05) across all time
+  const a05Txs = allTxs.filter((t) => t.unitId === 'B1-05' || t.unitId === 'A-05');
   const a05Income = a05Txs.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
   const a05Expense = a05Txs.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
   const a05Net = a05Income - a05Expense;
@@ -563,23 +563,23 @@ test('resident payment confirmation submission and admin approval lifecycle crea
   assert.ok(Array.isArray(db.paymentConfirmations));
   assert.ok(db.paymentConfirmations.length >= 2);
 
-  // Initial state for unit A-05 (which is unpaid in October 2026)
+  // Initial state for unit B1-05 (which is unpaid in October 2026)
   const unpaidBefore = db.transactions.find(
-    (t) => t.unitId === 'A-05' && t.periodMonth === '2026-10' && t.type === 'income'
+    (t) => (t.unitId === 'B1-05' || t.unitId === 'A-05') && t.periodMonth === '2026-10' && t.type === 'income'
   );
-  assert.equal(unpaidBefore, undefined, 'A-05 has not paid October yet');
+  assert.equal(unpaidBefore, undefined, 'B1-05 has not paid October yet');
 
   const pendingConfirmation = db.paymentConfirmations.find(
-    (c) => c.unitId === 'A-05' && c.status === 'MENUNGGU_VERIFIKASI'
+    (c) => (c.unitId === 'B1-05' || c.unitId === 'A-05') && c.status === 'MENUNGGU_VERIFIKASI'
   );
-  assert.ok(pendingConfirmation, 'A-05 has a pending confirmation in seed data');
+  assert.ok(pendingConfirmation, 'B1-05 has a pending confirmation in seed data');
   assert.deepEqual(pendingConfirmation.periodMonths, ['2026-10']);
   assert.equal(pendingConfirmation.amount, 100000);
 
   // Simulate Admin Approval
   const balanceBefore = calculateRealtimeSummary(db, '2026-10').currentBalance;
   const newTxId = `TRX-CONF-${Date.now()}`;
-  const receiptNo = `SK/KW/2026/10/A05`;
+  const receiptNo = `SK/KW/2026/10/B105`;
 
   // Approve confirmation
   pendingConfirmation.status = 'DISETUJUI';
@@ -606,11 +606,11 @@ test('resident payment confirmation submission and admin approval lifecycle crea
   const balanceAfter = calculateRealtimeSummary(db, '2026-10').currentBalance;
   assert.equal(balanceAfter, balanceBefore + 100000, 'Balance increases by approved amount');
 
-  // Verify A-05 is now marked paid for October 2026
+  // Verify unit is now marked paid for October 2026
   const paidNow = db.transactions.find(
-    (t) => t.unitId === 'A-05' && t.periodMonth === '2026-10' && t.type === 'income'
+    (t) => (t.unitId === pendingConfirmation.unitId || t.unitId === 'B1-05') && t.periodMonth === '2026-10' && t.type === 'income'
   );
-  assert.ok(paidNow, 'A-05 is now marked paid');
+  assert.ok(paidNow, 'Unit is now marked paid');
   assert.equal(paidNow.amount, 100000);
 });
 
@@ -778,10 +778,9 @@ test('automated compilation process compiles quarterly LPJ summarizing all incom
   assert.equal(lpj.transactions.length, lpj.totalTransactionsCount);
   assert.equal(lpj.transactions.length, lpj.incomeTransactions.length + lpj.expenseTransactions.length);
 
-  // Validate block realization breakdown across 4 blocks
-  assert.equal(lpj.blockRealization.length, 4);
+  // Validate block realization breakdown across 10 blocks (B1-B10)
+  assert.equal(lpj.blockRealization.length, 10);
   for (const block of lpj.blockRealization) {
-    assert.ok(['A', 'B', 'C', 'D'].includes(block.block));
     assert.ok(block.targetAmount > 0);
     assert.ok(block.realizedAmount >= 0);
     assert.ok(block.realizationPercent >= 0 && block.realizationPercent <= 100);
@@ -895,31 +894,33 @@ test('Ketua (A-01) and Bendahara (A-09) are strictly exempt from monthly iuran a
   const db = createSeedDatabase();
 
   // 1. Exemption check functions
+  assert.equal(isUnitExemptFromIuran('B1-01'), true);
+  assert.equal(isUnitExemptFromIuran('B1-09'), true);
   assert.equal(isUnitExemptFromIuran('A-01'), true);
   assert.equal(isUnitExemptFromIuran('A-09'), true);
-  assert.equal(isUnitExemptFromIuran('A-02'), false);
-  assert.equal(isUnitExemptFromIuran('B-01'), false);
+  assert.equal(isUnitExemptFromIuran('B1-02'), false);
+  assert.equal(isUnitExemptFromIuran('B2-01'), false);
 
-  const ketuaInfo = getUnitExemptionInfo('A-01');
+  const ketuaInfo = getUnitExemptionInfo('B1-01') || getUnitExemptionInfo('A-01');
   assert.ok(ketuaInfo);
   assert.equal(ketuaInfo?.roleTitle, 'Ketua');
 
-  const bendaharaInfo = getUnitExemptionInfo('A-09');
+  const bendaharaInfo = getUnitExemptionInfo('B1-09') || getUnitExemptionInfo('A-09');
   assert.ok(bendaharaInfo);
   assert.equal(bendaharaInfo?.roleTitle, 'Bendahara');
 
   // 2. Unpaid billing calculation excludes exempt units
   const billingList = getUnpaidResidentsForBilling(db, '2026-10');
-  const foundA01 = billingList.some((b) => b.resident.id === 'A-01');
-  const foundA09 = billingList.some((b) => b.resident.id === 'A-09');
-  assert.equal(foundA01, false, 'Ketua A-01 must not be billed');
-  assert.equal(foundA09, false, 'Bendahara A-09 must not be billed');
+  const foundKetua = billingList.some((b) => b.resident.id === 'B1-01' || b.resident.id === 'A-01');
+  const foundBendahara = billingList.some((b) => b.resident.id === 'B1-09' || b.resident.id === 'A-09');
+  assert.equal(foundKetua, false, 'Ketua must not be billed');
+  assert.equal(foundBendahara, false, 'Bendahara must not be billed');
 
   // 3. QRIS unpaid months returns empty array for exempt units
-  const unpaidMonthsA01 = getUnitUnpaidMonths(db, 'A-01', '2026-10');
-  const unpaidMonthsA09 = getUnitUnpaidMonths(db, 'A-09', '2026-10');
-  assert.deepEqual(unpaidMonthsA01, []);
-  assert.deepEqual(unpaidMonthsA09, []);
+  const unpaidMonthsKetua = getUnitUnpaidMonths(db, 'B1-01', '2026-10');
+  const unpaidMonthsBendahara = getUnitUnpaidMonths(db, 'B1-09', '2026-10');
+  assert.deepEqual(unpaidMonthsKetua, []);
+  assert.deepEqual(unpaidMonthsBendahara, []);
 
   // 4. Realtime summary reflects 53 billable units (55 - 2 = 53)
   const summary = calculateRealtimeSummary(db, '2026-10');
@@ -934,7 +935,7 @@ test('Ketua (A-01) and Bendahara (A-09) are strictly exempt from monthly iuran a
   if (ketuaAuth.ok) {
     assert.equal(ketuaAuth.session.role, 'ketua');
     assert.equal(ketuaAuth.session.isAdmin, true);
-    assert.equal(ketuaAuth.session.unitId, 'A-01');
+    assert.ok(ketuaAuth.session.unitId === 'B1-01' || ketuaAuth.session.unitId === 'A-01');
   }
 
   const bendaharaAuth = authenticateAdmin({ adminRole: 'bendahara', username: 'bendahara', password: 'bendahara123' }, db.settings);
@@ -942,7 +943,7 @@ test('Ketua (A-01) and Bendahara (A-09) are strictly exempt from monthly iuran a
   if (bendaharaAuth.ok) {
     assert.equal(bendaharaAuth.session.role, 'bendahara');
     assert.equal(bendaharaAuth.session.isAdmin, true);
-    assert.equal(bendaharaAuth.session.unitId, 'A-09');
+    assert.ok(bendaharaAuth.session.unitId === 'B1-09' || bendaharaAuth.session.unitId === 'A-09');
   }
 });
 
@@ -951,12 +952,12 @@ test('resident CRUD operations correctly add, update, and delete residents while
   const initialCount = db.residents.length;
   assert.equal(initialCount, 55);
 
-  // 1. Add new resident in Block D
+  // 1. Add new resident in Block B10
   const newResident: ResidentUnit = {
-    id: 'D-15',
-    block: 'D',
+    id: 'B10-15',
+    block: 'B10',
     houseNumber: '15',
-    streetName: 'Jl. Saung Flamboyan',
+    streetName: 'Gang Anggur',
     headOfFamily: 'Hendra Gunawan',
     whatsapp: '081234567890',
     email: 'hendra@example.com',
@@ -972,30 +973,30 @@ test('resident CRUD operations correctly add, update, and delete residents while
 
   db.residents.push(newResident);
   assert.equal(db.residents.length, 56);
-  const foundNew = db.residents.find((r) => r.id === 'D-15');
+  const foundNew = db.residents.find((r) => r.id === 'B10-15');
   assert.ok(foundNew);
   assert.equal(foundNew?.headOfFamily, 'Hendra Gunawan');
 
   // 2. Edit/Update resident
-  const target = db.residents.find((r) => r.id === 'D-15');
+  const target = db.residents.find((r) => r.id === 'B10-15');
   if (target) {
     target.headOfFamily = 'Hendra Gunawan, S.T.';
     target.familyMembers = 5;
   }
-  const updated = db.residents.find((r) => r.id === 'D-15');
+  const updated = db.residents.find((r) => r.id === 'B10-15');
   assert.equal(updated?.headOfFamily, 'Hendra Gunawan, S.T.');
   assert.equal(updated?.familyMembers, 5);
 
-  // 3. Protected units A-01 and A-09 cannot be deleted
-  const isProtected = (id: string) => id === 'A-01' || id === 'A-09';
-  assert.equal(isProtected('A-01'), true, 'Ketua unit A-01 is protected');
-  assert.equal(isProtected('A-09'), true, 'Bendahara unit A-09 is protected');
-  assert.equal(isProtected('D-15'), false, 'Standard unit D-15 is not protected');
+  // 3. Protected units B1-01 and B1-09 cannot be deleted
+  const isProtected = (id: string) => id === 'B1-01' || id === 'B1-09' || id === 'A-01' || id === 'A-09';
+  assert.equal(isProtected('B1-01'), true, 'Ketua unit B1-01 is protected');
+  assert.equal(isProtected('B1-09'), true, 'Bendahara unit B1-09 is protected');
+  assert.equal(isProtected('B10-15'), false, 'Standard unit B10-15 is not protected');
 
   // 4. Delete newly added resident
-  db.residents = db.residents.filter((r) => r.id !== 'D-15');
+  db.residents = db.residents.filter((r) => r.id !== 'B10-15');
   assert.equal(db.residents.length, 55);
-  assert.equal(db.residents.find((r) => r.id === 'D-15'), undefined);
+  assert.equal(db.residents.find((r) => r.id === 'B10-15'), undefined);
 });
 
 test('blocks and gang names support Gang Duren, Gang Anggur, B1-B9 blocks and management CRUD', () => {
@@ -1009,40 +1010,40 @@ test('blocks and gang names support Gang Duren, Gang Anggur, B1-B9 blocks and ma
 
   // Verify B1 through B9 are present in default blocks
   const blockIds = db.settings.customBlocks.map((b) => b.id);
-  ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'].forEach((bId) => {
+  ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'].forEach((bId) => {
     assert.ok(blockIds.includes(bId), `Block ${bId} must exist in default blocks`);
   });
 
   // Verify resident street names use Gang Duren and Gang Anggur
   const firstResident = db.residents[0];
   assert.equal(firstResident.streetName, 'Gang Duren');
-  const bResident = db.residents.find((r) => r.block === 'B');
+  const bResident = db.residents.find((r) => r.block === 'B6' || r.block === 'B7');
   assert.equal(bResident?.streetName, 'Gang Anggur');
 
-  // 1. Add new custom block (e.g. B10)
-  const newBlock = { id: 'B10', name: 'Blok B10', defaultStreet: 'Gang Duren' };
+  // 1. Add new custom block (e.g. B11)
+  const newBlock = { id: 'B11', name: 'Blok B11', defaultStreet: 'Gang Duren' };
   db.settings.customBlocks.push(newBlock);
-  assert.ok(db.settings.customBlocks.some((b) => b.id === 'B10'));
+  assert.ok(db.settings.customBlocks.some((b) => b.id === 'B11'));
 
   // 2. Add new gang name (e.g. Gang Mangga)
   db.settings.customStreets.push('Gang Mangga');
   assert.ok(db.settings.customStreets.includes('Gang Mangga'));
 
   // 3. Edit block
-  const targetBlock = db.settings.customBlocks.find((b) => b.id === 'B10');
+  const targetBlock = db.settings.customBlocks.find((b) => b.id === 'B11');
   if (targetBlock) {
-    targetBlock.name = 'Blok B10 Barat';
+    targetBlock.name = 'Blok B11 Barat';
     targetBlock.defaultStreet = 'Gang Mangga';
   }
-  const updatedBlock = db.settings.customBlocks.find((b) => b.id === 'B10');
-  assert.equal(updatedBlock?.name, 'Blok B10 Barat');
+  const updatedBlock = db.settings.customBlocks.find((b) => b.id === 'B11');
+  assert.equal(updatedBlock?.name, 'Blok B11 Barat');
   assert.equal(updatedBlock?.defaultStreet, 'Gang Mangga');
 
   // 4. Delete block validation
   // Cannot delete block with existing residents
   const hasResidents = (blk: string) => db.residents.some((r) => r.block === blk);
-  assert.equal(hasResidents('A'), true);
-  assert.equal(hasResidents('B10'), false);
+  assert.equal(hasResidents('B1'), true);
+  assert.equal(hasResidents('B11'), false);
 
   // Safe to delete B10
   db.settings.customBlocks = db.settings.customBlocks.filter((b) => b.id !== 'B10');

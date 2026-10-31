@@ -74,37 +74,31 @@ const RESIDENT_NAMES_55: string[] = [
 ];
 
 export const DEFAULT_BLOCKS: BlockConfig[] = [
-  { id: 'A', name: 'Blok A', defaultStreet: 'Gang Duren' },
-  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Anggur' },
-  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Anggur' },
-  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Anggur' },
+  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Duren' },
+  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Duren' },
+  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Duren' },
   { id: 'B4', name: 'Blok B4', defaultStreet: 'Gang Duren' },
   { id: 'B5', name: 'Blok B5', defaultStreet: 'Gang Duren' },
-  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Duren' },
+  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Anggur' },
   { id: 'B7', name: 'Blok B7', defaultStreet: 'Gang Anggur' },
   { id: 'B8', name: 'Blok B8', defaultStreet: 'Gang Anggur' },
   { id: 'B9', name: 'Blok B9', defaultStreet: 'Gang Anggur' },
-  { id: 'B', name: 'Blok B', defaultStreet: 'Gang Anggur' },
-  { id: 'C', name: 'Blok C', defaultStreet: 'Gang Duren' },
-  { id: 'D', name: 'Blok D', defaultStreet: 'Gang Anggur' },
+  { id: 'B10', name: 'Blok B10', defaultStreet: 'Gang Anggur' },
 ];
 
 export const DEFAULT_STREETS: string[] = ['Gang Duren', 'Gang Anggur'];
 
 const STREET_BY_BLOCK: Record<string, string> = {
-  A: 'Gang Duren',
-  B1: 'Gang Anggur',
-  B2: 'Gang Anggur',
-  B3: 'Gang Anggur',
+  B1: 'Gang Duren',
+  B2: 'Gang Duren',
+  B3: 'Gang Duren',
   B4: 'Gang Duren',
   B5: 'Gang Duren',
-  B6: 'Gang Duren',
+  B6: 'Gang Anggur',
   B7: 'Gang Anggur',
   B8: 'Gang Anggur',
   B9: 'Gang Anggur',
-  B: 'Gang Anggur',
-  C: 'Gang Duren',
-  D: 'Gang Anggur',
+  B10: 'Gang Anggur',
 };
 
 const PAYMENT_METHODS: PaymentMethod[] = [
@@ -294,27 +288,27 @@ export const DEFAULT_SECURITY_OFFICERS: SecurityOfficer[] = [
   },
 ];
 
-const UNPAID_SEPT_2026 = new Set(['A-12', 'B-14', 'C-11']);
+const UNPAID_SEPT_2026 = new Set(['B2-03', 'B5-04', 'B8-01']);
 
 const UNPAID_OCT_2026 = new Set([
-  'A-05',
-  'A-12',
-  'A-15',
-  'B-04',
-  'B-09',
-  'B-14',
-  'C-03',
-  'C-08',
-  'C-11',
-  'C-15',
-  'D-06',
-  'D-09',
+  'B1-05',
+  'B2-03',
+  'B2-06',
+  'B3-04',
+  'B4-04',
+  'B5-04',
+  'B6-03',
+  'B7-03',
+  'B8-01',
+  'B8-05',
+  'B10-01',
+  'B10-04',
 ]);
 
 export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
   {
     id: 'CONF-2026-001',
-    unitId: 'A-05',
+    unitId: 'B1-05',
     residentName: 'Agus Pratama Putra',
     whatsapp: '081298765435',
     periodMonths: ['2026-10'],
@@ -325,13 +319,13 @@ export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
     senderAccountName: 'Agus Pratama Putra',
     notes: 'Iuran bulan Oktober 2026 via m-BCA mohon diverifikasi',
     proofImageUrl: DEFAULT_QRIS_IMAGE_DATA_URL,
-    proofFileName: 'bukti-transfer-bca-A05.png',
+    proofFileName: 'bukti-transfer-bca-B105.png',
     status: 'MENUNGGU_VERIFIKASI',
     submittedAt: '2026-10-24T10:15:00.000Z',
   },
   {
     id: 'CONF-2026-002',
-    unitId: 'A-02',
+    unitId: 'B1-02',
     residentName: 'Budi Santoso',
     whatsapp: '081298765432',
     periodMonths: ['2026-10'],
@@ -340,25 +334,31 @@ export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
     transferDate: '2026-10-05',
     senderBank: 'Bank BCA',
     senderAccountName: 'Budi Santoso',
-    notes: 'Iuran bulan Oktober 2026 unit A-02',
+    notes: 'Iuran bulan Oktober 2026 unit B1-02',
     proofImageUrl: DEFAULT_QRIS_IMAGE_DATA_URL,
-    proofFileName: 'struk-transfer-A02.png',
+    proofFileName: 'struk-transfer-B102.png',
     status: 'DISETUJUI',
     submittedAt: '2026-10-05T08:30:00.000Z',
     verifiedAt: '2026-10-05T09:00:00.000Z',
     verifiedBy: 'Andriansyah (Bendahara)',
     resultingTransactionId: 'TRX-20261005-001',
-    resultingReceiptNumber: 'SK/KW/2026/10/A02',
+    resultingReceiptNumber: 'SK/KW/2026/10/B102',
   },
 ];
 
 export function createSeedDatabase(): DatabaseState {
   const residents: ResidentUnit[] = [];
   const blockCounts: Array<{ block: BlockCode; count: number }> = [
-    { block: 'A', count: 15 },
-    { block: 'B', count: 15 },
-    { block: 'C', count: 15 },
-    { block: 'D', count: 10 },
+    { block: 'B1', count: 9 },
+    { block: 'B2', count: 6 },
+    { block: 'B3', count: 5 },
+    { block: 'B4', count: 5 },
+    { block: 'B5', count: 5 },
+    { block: 'B6', count: 5 },
+    { block: 'B7', count: 5 },
+    { block: 'B8', count: 5 },
+    { block: 'B9', count: 5 },
+    { block: 'B10', count: 5 },
   ];
 
   let idx = 0;
@@ -389,9 +389,9 @@ export function createSeedDatabase(): DatabaseState {
       const vehiclePlate = `F ${1120 + idx * 17} ${plateLetters}`;
 
       let notes = 'Warga tetap aktif';
-      if (unitId === 'A-01') notes = 'Ketua Lingkungan (Bebas Iuran)';
-      else if (unitId === 'A-09') notes = 'Bendahara Kas (Bebas Iuran)';
-      else if (unitId === 'B-01') notes = 'Sekretaris Lingkungan';
+      if (unitId === 'B1-01' || unitId === 'A-01') notes = 'Ketua Lingkungan (Bebas Iuran)';
+      else if (unitId === 'B1-09' || unitId === 'A-09') notes = 'Bendahara Kas (Bebas Iuran)';
+      else if (unitId === 'B2-01') notes = 'Sekretaris Lingkungan';
       else if (occupancyStatus === 'Dikontrakkan') notes = 'Iuran dibayar oleh penyewa bulanan';
       else if (occupancyStatus === 'Kosong Terawat') notes = 'Rumah singgah akhir pekan, iuran tetap berjalan';
 
@@ -399,7 +399,7 @@ export function createSeedDatabase(): DatabaseState {
         id: unitId,
         block,
         houseNumber,
-        streetName: STREET_BY_BLOCK[block],
+        streetName: STREET_BY_BLOCK[block] || (block.startsWith('B6') || block.startsWith('B7') || block.startsWith('B8') || block.startsWith('B9') || block.startsWith('B10') ? 'Gang Anggur' : 'Gang Duren'),
         headOfFamily: fullName,
         nik,
         kkNumber,
@@ -433,8 +433,8 @@ export function createSeedDatabase(): DatabaseState {
   const seedMonthlyIuran = (periodMonth: string, skipSet: Set<string>) => {
     const [year, month] = periodMonth.split('-');
     residents.forEach((res, i) => {
-      // Ketua (A-01) dan Bendahara (A-09) tidak ditarik iuran
-      if (res.id === 'A-01' || res.id === 'A-09') return;
+      // Ketua (B1-01 / A-01) dan Bendahara (B1-09 / A-09) tidak ditarik iuran
+      if (res.id === 'B1-01' || res.id === 'B1-09' || res.id === 'A-01' || res.id === 'A-09') return;
       if (skipSet.has(res.id)) return;
       const payDay = String(1 + (i % 10)).padStart(2, '0');
       const method = PAYMENT_METHODS[i % PAYMENT_METHODS.length];
