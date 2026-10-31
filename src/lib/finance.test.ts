@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import type { LedgerTransaction } from '../types/finance';
+import type { LedgerTransaction, ResidentUnit } from '../types/finance';
 import { createSeedDatabase } from './seedData';
 import {
   calculateMonthlyReport,
@@ -962,11 +962,12 @@ test('resident CRUD operations correctly add, update, and delete residents while
     email: 'hendra@example.com',
     familyMembers: 4,
     nik: '3201019901010001',
-    kk: '3201019901010002',
+    kkNumber: '3201019901010002',
     occupancyStatus: 'Dihuni Pemilik',
     vehiclePlate: 'B 1234 HG',
+    joinedYear: 2026,
     notes: 'Warga pindahan baru',
-    pin: '7890',
+    accessPin: '7890',
   };
 
   db.residents.push(newResident);

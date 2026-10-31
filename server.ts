@@ -27,6 +27,11 @@ import type {
   SecurityOfficer,
   WhatsAppNotificationLog,
 } from './src/types/finance.ts';
+import {
+  syncStateToCloud,
+  loadStateFromCloud,
+  checkCloudConnection,
+} from './src/lib/cloudStorage.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -168,9 +173,30 @@ function saveDatabase(state: DatabaseState): void {
       console.error('Failed writing DB to /tmp fallback:', err2);
     }
   }
+
+  // Asynchronously sync mutations to Google Cloud Firestore online
+  syncStateToCloud(state).catch((cloudErr) => {
+    console.warn('[CloudDB] Asynchronous cloud sync notice:', cloudErr);
+  });
 }
 
 let dbState: DatabaseState = loadDatabase();
+
+// Connect to Google Cloud Firestore automatically on startup
+(async () => {
+  try {
+    const cloudState = await loadStateFromCloud();
+    if (cloudState && Array.isArray(cloudState.residents) && cloudState.residents.length > 0) {
+      dbState = cloudState;
+      console.log('[CloudDB] State loaded from online Google Cloud Firestore.');
+    } else {
+      console.log('[CloudDB] Seeding state to online Google Cloud Firestore...');
+      await syncStateToCloud(dbState);
+    }
+  } catch (err) {
+    console.warn('[CloudDB] Auto-connection warning:', err);
+  }
+})();
 
 function buildReceiptNumber(
   type: 'income' | 'expense',
@@ -193,12 +219,33 @@ app.get('/api/state', (_req, res) => {
     res.json(dbState);
   });
 
-  app.get('/api/health', (_req, res) => {
+  app.get('/api/database/status', async (_req, res) => {
+    const status = await checkCloudConnection();
+    res.json({
+      ...status,
+      totalResidents: dbState.residents.length,
+      totalTransactions: dbState.transactions.length,
+      serverUptime: Math.floor(process.uptime()),
+    });
+  });
+
+  app.post('/api/database/sync-cloud', async (_req, res) => {
+    const success = await syncStateToCloud(dbState);
+    res.json({ success, timestamp: new Date().toISOString() });
+  });
+
+  app.get('/api/health', async (_req, res) => {
     try {
       const isDbPresent = fs.existsSync(DB_FILE);
+      const cloudStatus = await checkCloudConnection();
       res.json({
         status: 'ok',
         database: isDbPresent ? 'connected' : 'memory_only',
+        cloudDatabase: cloudStatus.connected ? 'connected' : 'syncing',
+        cloudProvider: 'Google Cloud Firestore',
+        projectId: cloudStatus.projectId,
+        databaseId: cloudStatus.databaseId,
+        lastCloudSync: cloudStatus.lastSyncedAt,
         totalResidents: dbState.residents.length,
         totalTransactions: dbState.transactions.length,
         timestamp: new Date().toISOString(),

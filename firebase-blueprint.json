@@ -1,0 +1,405 @@
+{
+  "entities": {
+    "Resident": {
+      "title": "Resident",
+      "description": "Housing resident unit profile and contact information",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unit ID e.g. A-01, B1-02",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 32
+        },
+        "block": {
+          "type": "string",
+          "description": "Block code",
+          "maxLength": 16
+        },
+        "number": {
+          "type": "string",
+          "description": "House number",
+          "maxLength": 16
+        },
+        "residentName": {
+          "type": "string",
+          "description": "Full name of head of family",
+          "maxLength": 128
+        },
+        "phone": {
+          "type": "string",
+          "description": "Active WhatsApp number",
+          "maxLength": 32
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address",
+          "maxLength": 128
+        },
+        "nik": {
+          "type": "string",
+          "description": "National identification number",
+          "maxLength": 32
+        },
+        "kk": {
+          "type": "string",
+          "description": "Family card number",
+          "maxLength": 32
+        },
+        "occupantStatus": {
+          "type": "string",
+          "description": "Occupancy status",
+          "enum": ["owner_occupied", "rented", "vacant"]
+        },
+        "occupantCount": {
+          "type": "number",
+          "description": "Number of occupants"
+        },
+        "vehiclePlate": {
+          "type": "string",
+          "description": "Vehicle license plate",
+          "maxLength": 64
+        },
+        "portalPin": {
+          "type": "string",
+          "description": "4-digit resident portal PIN",
+          "maxLength": 16
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes",
+          "maxLength": 500
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street or alley name",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["id", "block", "number", "residentName", "phone"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial ledger income or expense record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": ["income", "expense"]
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "amount": {
+          "type": "number"
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "unitId": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "receiptNumber": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "periodMonth": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "proofUrl": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "createdBy": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "type", "category", "amount", "date", "description"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Headline community activity news and announcements",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "photos": {
+          "type": "string",
+          "description": "JSON serialized or primary photo URL",
+          "maxLength": 8192
+        },
+        "author": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "title", "content", "date"]
+    },
+    "SecurityReport": {
+      "title": "SecurityReport",
+      "description": "Security officer shift log and incident documentation",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 64
+        },
+        "officerName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "shift": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "incidentType": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "photos": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "officerName", "shift", "date", "description"]
+    },
+    "PaymentConfirmation": {
+      "title": "PaymentConfirmation",
+      "description": "Resident payment confirmation tickets",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 64
+        },
+        "unitId": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "residentName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "monthPeriod": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "amount": {
+          "type": "number"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "referenceNumber": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "proofUrl": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "verified", "rejected"]
+        },
+        "submittedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reviewedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reviewedBy": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "rejectionReason": {
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "required": ["id", "unitId", "monthPeriod", "amount", "status"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Paguyuban administration settings and configuration",
+      "type": "object",
+      "properties": {
+        "neighborhoodName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "rtRw": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "chairpersonName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "treasurerName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "secretaryName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "monthlyDuesAmount": {
+          "type": "number"
+        },
+        "securityDuesAmount": {
+          "type": "number"
+        },
+        "trashDuesAmount": {
+          "type": "number"
+        },
+        "emergencyDuesAmount": {
+          "type": "number"
+        },
+        "qrisImageUrl": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "qrisMerchantName": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "qrisNmid": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "publishArrearsToResidents": {
+          "type": "boolean"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["neighborhoodName", "monthlyDuesAmount"]
+    }
+  },
+  "firestore": {
+    "/residents/{residentId}": {
+      "schema": {
+        "$ref": "#/entities/Resident"
+      },
+      "description": "Collection of resident housing units"
+    },
+    "/transactions/{transactionId}": {
+      "schema": {
+        "$ref": "#/entities/Transaction"
+      },
+      "description": "Collection of financial income and expense ledger entries"
+    },
+    "/announcements/{announcementId}": {
+      "schema": {
+        "$ref": "#/entities/Announcement"
+      },
+      "description": "Community news, activity headlines, and documentation"
+    },
+    "/securityReports/{reportId}": {
+      "schema": {
+        "$ref": "#/entities/SecurityReport"
+      },
+      "description": "Security officer shift reports and patrol documentation"
+    },
+    "/paymentConfirmations/{confirmationId}": {
+      "schema": {
+        "$ref": "#/entities/PaymentConfirmation"
+      },
+      "description": "Resident payment confirmation tickets"
+    },
+    "/settings/{settingId}": {
+      "schema": {
+        "$ref": "#/entities/Settings"
+      },
+      "description": "Global administration settings document"
+    }
+  }
+}

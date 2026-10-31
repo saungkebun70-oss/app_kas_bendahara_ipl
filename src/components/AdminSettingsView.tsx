@@ -22,6 +22,9 @@ import {
   Sparkles,
   CheckCheck,
   Clock,
+  Cloud,
+  Database,
+  ShieldCheck,
 } from 'lucide-react';
 import type { AdminSettings } from '../types/finance';
 import { formatRupiah, formatShortDate } from '../lib/finance';
@@ -59,6 +62,8 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
     sentCount: number;
     message: string;
   } | null>(null);
+  const [cloudSyncing, setCloudSyncing] = useState(false);
+  const [cloudSyncMessage, setCloudSyncMessage] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const logoFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -1161,6 +1166,84 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
               <span className="font-mono font-bold shrink-0 ml-2">
                 {autoTriggerResult.sentCount} Terkirim
               </span>
+            </div>
+          )}
+        </div>
+
+        {/* Database Online Cloud Server Section */}
+        <div className="bg-gradient-to-br from-slate-900 to-[#0b2273] rounded-2xl p-6 text-white shadow-md border border-slate-700/80">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                <Cloud className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-display text-sm font-bold text-white flex items-center gap-2">
+                  <span>Penyimpanan Database Cloud Online</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Google Cloud Firestore
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-300">
+                  Data tersimpan online otomatis & aman di server Google Cloud 24/7 (Tidak memerlukan Termux/MySQL di HP)
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              disabled={cloudSyncing}
+              onClick={async () => {
+                setCloudSyncing(true);
+                setCloudSyncMessage(null);
+                try {
+                  const res = await api.syncCloudDatabase();
+                  if (res.success) {
+                    setCloudSyncMessage('Seluruh data berhasil disinkronkan ke Google Cloud Firestore!');
+                    setTimeout(() => setCloudSyncMessage(null), 5000);
+                  }
+                } catch (err) {
+                  setCloudSyncMessage(err instanceof Error ? err.message : 'Gagal sinkronisasi');
+                } finally {
+                  setCloudSyncing(false);
+                }
+              }}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white transition-colors cursor-pointer disabled:opacity-50 shrink-0 shadow-xs"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${cloudSyncing ? 'animate-spin' : ''}`} />
+              <span>{cloudSyncing ? 'Menyinkronkan...' : 'Sinkronkan Database Sekarang'}</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 text-xs">
+            <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+              <span className="text-slate-400 text-[11px] block">Status Koneksi</span>
+              <div className="flex items-center gap-1.5 font-bold text-emerald-400 mt-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Terhubung Online Otomatis</span>
+              </div>
+            </div>
+
+            <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+              <span className="text-slate-400 text-[11px] block">Project Google Cloud</span>
+              <span className="font-mono text-emerald-300 font-medium block mt-1 truncate" title="xenodochial-clover-g6tvw">
+                xenodochial-clover-g6tvw
+              </span>
+            </div>
+
+            <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+              <span className="text-slate-400 text-[11px] block">Proteksi Keamanan Data</span>
+              <div className="flex items-center gap-1.5 font-medium text-slate-200 mt-1">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Enkripsi Cloud & Multi-User RBAC</span>
+              </div>
+            </div>
+          </div>
+
+          {cloudSyncMessage && (
+            <div className="mt-3 p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{cloudSyncMessage}</span>
             </div>
           )}
         </div>

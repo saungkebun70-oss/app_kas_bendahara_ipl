@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // App state synchronization document
+    match /appState/{stateId} {
+      allow read, write: if isValidId(stateId);
+    }
+
+    // Settings collection
+    match /settings/{settingId} {
+      allow read, write: if isValidId(settingId);
+    }
+
+    // Residents collection
+    match /residents/{residentId} {
+      allow read, write: if isValidId(residentId);
+    }
+
+    // Transactions collection
+    match /transactions/{transactionId} {
+      allow read, write: if isValidId(transactionId);
+    }
+
+    // Announcements / activities collection
+    match /announcements/{announcementId} {
+      allow read, write: if isValidId(announcementId);
+    }
+
+    // Security reports collection
+    match /securityReports/{reportId} {
+      allow read, write: if isValidId(reportId);
+    }
+
+    // Payment confirmations collection
+    match /paymentConfirmations/{confirmationId} {
+      allow read, write: if isValidId(confirmationId);
+    }
+  }
+}

@@ -78,6 +78,11 @@ export const api = {
   async getHealth(): Promise<{
     status: string;
     database: string;
+    cloudDatabase?: string;
+    cloudProvider?: string;
+    projectId?: string;
+    databaseId?: string;
+    lastCloudSync?: string | null;
     totalResidents: number;
     totalTransactions: number;
     timestamp: string;
@@ -90,12 +95,39 @@ export const api = {
     const data = await handleJson<{
       status: string;
       database: string;
+      cloudDatabase?: string;
+      cloudProvider?: string;
+      projectId?: string;
+      databaseId?: string;
+      lastCloudSync?: string | null;
       totalResidents: number;
       totalTransactions: number;
       timestamp: string;
       uptimeSeconds: number;
     }>(res);
     return { ...data, latencyMs };
+  },
+
+  async getDatabaseStatus(): Promise<{
+    provider: string;
+    projectId: string;
+    databaseId: string;
+    connected: boolean;
+    lastSyncedAt: string | null;
+    totalResidents: number;
+    totalTransactions: number;
+    serverUptime: number;
+    error?: string;
+  }> {
+    const res = await fetch('/api/database/status');
+    return handleJson(res);
+  },
+
+  async syncCloudDatabase(): Promise<{ success: boolean; timestamp: string }> {
+    const res = await fetch('/api/database/sync-cloud', {
+      method: 'POST',
+    });
+    return handleJson(res);
   },
 
   async sendPresenceHeartbeat(payload: {

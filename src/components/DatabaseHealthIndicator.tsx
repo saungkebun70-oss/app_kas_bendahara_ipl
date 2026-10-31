@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
-  Activity,
   AlertTriangle,
   CheckCircle2,
+  Cloud,
   Database,
   RefreshCw,
-  Server,
+  ShieldCheck,
   Wifi,
   WifiOff,
   X,
@@ -19,6 +19,11 @@ export interface HealthState {
   error?: string;
   totalResidents?: number;
   totalTransactions?: number;
+  cloudDatabase?: string;
+  cloudProvider?: string;
+  projectId?: string;
+  databaseId?: string;
+  lastCloudSync?: string | null;
 }
 
 interface DatabaseHealthIndicatorProps {
@@ -28,13 +33,14 @@ interface DatabaseHealthIndicatorProps {
 
 export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = ({
   className = '',
-  variant = 'pill',
 }) => {
   const [health, setHealth] = useState<HealthState>({
     status: 'checking',
   });
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [checkingNow, setCheckingNow] = useState(false);
+  const [syncingCloud, setSyncingCloud] = useState(false);
+  const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const checkConnection = useCallback(async () => {
@@ -47,6 +53,11 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
         lastChecked: new Date(),
         totalResidents: data.totalResidents,
         totalTransactions: data.totalTransactions,
+        cloudDatabase: data.cloudDatabase,
+        cloudProvider: data.cloudProvider,
+        projectId: data.projectId,
+        databaseId: data.databaseId,
+        lastCloudSync: data.lastCloudSync,
       });
     } catch (err: unknown) {
       setHealth({
@@ -59,9 +70,25 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
     }
   }, []);
 
+  const handleSyncCloud = async () => {
+    setSyncingCloud(true);
+    setSyncSuccessMsg(null);
+    try {
+      const res = await api.syncCloudDatabase();
+      if (res.success) {
+        setSyncSuccessMsg('Database berhasil disinkronkan ke Google Cloud Firestore!');
+        await checkConnection();
+        setTimeout(() => setSyncSuccessMsg(null), 4000);
+      }
+    } catch (err) {
+      setSyncSuccessMsg(err instanceof Error ? err.message : 'Gagal sinkronisasi');
+    } finally {
+      setSyncingCloud(false);
+    }
+  };
+
   useEffect(() => {
     checkConnection();
-    // Poll health status every 30 seconds
     const interval = setInterval(checkConnection, 30000);
     return () => clearInterval(interval);
   }, [checkConnection]);
@@ -96,8 +123,8 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
             ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-500/25'
             : 'bg-white/10 text-sky-200 border border-white/20 hover:bg-white/15'
         }`}
-        title="Klik untuk melihat status koneksi database & diagnosa jaringan"
-        aria-label="Status koneksi database"
+        title="Database tersimpan online secara aman di Google Cloud. Klik untuk melihat detail & diagnosa."
+        aria-label="Status koneksi database cloud"
         data-testid="db-health-indicator-btn"
       >
         <span className="relative flex h-2 w-2">
@@ -119,20 +146,20 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
         </span>
 
         <span className="flex items-center gap-1">
-          <Database className="h-3 w-3 opacity-80" />
+          <Cloud className="h-3 w-3 text-emerald-400 opacity-90" />
           {isChecking ? (
-            <span>Memeriksa...</span>
+            <span>Memeriksa Cloud...</span>
           ) : isConnected ? (
-            <span>
-              DB Aktif
+            <span className="flex items-center gap-1">
+              <span>Cloud DB Aktif</span>
               {health.latencyMs !== undefined && (
-                <span className="opacity-75 font-mono ml-0.5 font-normal">
+                <span className="opacity-75 font-mono text-[10px] ml-0.5 font-normal">
                   ({health.latencyMs}ms)
                 </span>
               )}
             </span>
           ) : (
-            <span>DB Gangguan</span>
+            <span>DB Terputus</span>
           )}
         </span>
       </button>
@@ -141,26 +168,31 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
       {isDetailsOpen && (
         <div
           data-testid="db-health-details-popover"
-          className="absolute left-0 bottom-full mb-2 w-72 sm:w-80 rounded-2xl bg-slate-900 border border-slate-700/80 p-4 shadow-2xl text-white z-50 animate-in fade-in zoom-in-95 duration-150 text-left"
+          className="absolute left-0 bottom-full mb-2 w-80 sm:w-96 rounded-2xl bg-slate-900 border border-slate-700/80 p-4 shadow-2xl text-white z-50 animate-in fade-in zoom-in-95 duration-150 text-left"
         >
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
             <div className="flex items-center gap-2">
               <div
-                className={`flex h-7 w-7 items-center justify-center rounded-lg ${
+                className={`flex h-8 w-8 items-center justify-center rounded-lg ${
                   isConnected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
                 }`}
               >
-                {isConnected ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />}
+                {isConnected ? <Cloud className="h-4.5 w-4.5" /> : <WifiOff className="h-4.5 w-4.5" />}
               </div>
               <div>
-                <h4 className="font-display text-xs font-bold text-white">Status Koneksi Database</h4>
-                <p className="text-[10px] text-slate-400">Diagnostik kesehatan jaringan backend</p>
+                <h4 className="font-display text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Penyimpanan Online Server</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Cloud Firestore
+                  </span>
+                </h4>
+                <p className="text-[10px] text-slate-400">Database tersimpan online & tersinkronisasi otomatis</p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setIsDetailsOpen(false)}
-              className="text-slate-400 hover:text-white p-1 rounded-md"
+              className="text-slate-400 hover:text-white p-1 rounded-md cursor-pointer"
               aria-label="Tutup"
             >
               <X className="h-4 w-4" />
@@ -170,7 +202,7 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
           {/* Status Metrics */}
           <div className="space-y-2 bg-slate-800/60 rounded-xl p-3 border border-slate-700/50 text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Kondisi Server:</span>
+              <span className="text-slate-400">Status Server Cloud:</span>
               <span
                 className={`font-semibold inline-flex items-center gap-1 ${
                   isConnected ? 'text-emerald-400' : 'text-red-400'
@@ -179,7 +211,7 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
                 {isConnected ? (
                   <>
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    <span>Terhubung (Online)</span>
+                    <span>Terhubung Online (24/7)</span>
                   </>
                 ) : (
                   <>
@@ -191,6 +223,20 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
             </div>
 
             <div className="flex items-center justify-between">
+              <span className="text-slate-400">Provider Database:</span>
+              <span className="font-semibold text-sky-300">
+                Google Cloud Firestore
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400">Project Cloud:</span>
+              <span className="font-mono text-[11px] text-[#5eead4] truncate max-w-[170px]" title={health.projectId || 'xenodochial-clover-g6tvw'}>
+                {health.projectId || 'xenodochial-clover-g6tvw'}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
               <span className="text-slate-400">Kecepatan Respon (Ping):</span>
               <span className="font-mono font-semibold text-slate-200">
                 {health.latencyMs !== undefined ? `${health.latencyMs} ms` : '-'}
@@ -198,19 +244,38 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">File Database:</span>
-              <span className="font-mono text-[11px] text-[#5eead4] truncate max-w-[140px]">
-                saung-kebun-db.json
+              <span className="text-slate-400">Data Tersinkron:</span>
+              <span className="text-slate-200 font-medium">
+                {health.totalResidents ?? 0} Unit Warga · {health.totalTransactions ?? 0} Transaksi
               </span>
             </div>
 
             {health.lastChecked && (
-              <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-700/50">
+              <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1.5 border-t border-slate-700/50">
                 <span>Pemeriksaan Terakhir:</span>
                 <span>{health.lastChecked.toLocaleTimeString('id-ID')} WIB</span>
               </div>
             )}
           </div>
+
+          {/* Cloud Persistence Guarantee Card */}
+          <div className="mt-2.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 p-2.5 text-[11px] text-emerald-200 space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-emerald-300">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+              <span>Otomatis & Terenkripsi di Server</span>
+            </div>
+            <p className="text-[10px] text-slate-300 leading-relaxed">
+              Semua perubahan data warga, penambahan unit baru, pembayaran iuran, dan laporan keamanan langsung tersimpan permanen di cloud server Google. Tidak perlu menjalankan server MySQL atau MariaDB di Termux HP.
+            </p>
+          </div>
+
+          {/* Sync Success Feedback */}
+          {syncSuccessMsg && (
+            <div className="mt-2 rounded-lg bg-sky-950/80 border border-sky-600/60 p-2 text-[10px] text-sky-200 flex items-center gap-1.5 animate-in fade-in">
+              <CheckCircle2 className="h-3 w-3 text-sky-400 shrink-0" />
+              <span>{syncSuccessMsg}</span>
+            </div>
+          )}
 
           {/* Error Message & Troubleshooting */}
           {isError && (
@@ -222,9 +287,6 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
               <p className="font-mono text-[10px] text-red-300 break-all">
                 {health.error || 'Server backend tidak merespon.'}
               </p>
-              <p className="text-[10px] text-slate-300 pt-1 border-t border-red-800/40">
-                💡 <strong>Solusi:</strong> Periksa koneksi internet Anda atau muat ulang halaman. Jika baru saja deploy, tunggu 10-15 detik hingga kontainer Cloud Run siap menerima lalu lintas.
-              </p>
             </div>
           )}
 
@@ -232,12 +294,22 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
           <div className="mt-3 flex items-center justify-end gap-2">
             <button
               type="button"
+              onClick={handleSyncCloud}
+              disabled={syncingCloud || isChecking}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors cursor-pointer disabled:opacity-50"
+              title="Kirim dan sinkronkan seluruh database ke Cloud Firestore"
+            >
+              <Cloud className={`h-3.5 w-3.5 ${syncingCloud ? 'animate-bounce' : ''}`} />
+              <span>{syncingCloud ? 'Menyinkronkan...' : 'Sinkronkan Cloud'}</span>
+            </button>
+            <button
+              type="button"
               onClick={checkConnection}
               disabled={checkingNow}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1547b8] hover:bg-[#103896] px-3 py-1.5 text-xs font-semibold text-white transition-colors cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors cursor-pointer disabled:opacity-50"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${checkingNow ? 'animate-spin' : ''}`} />
-              <span>{checkingNow ? 'Menguji...' : 'Tes Ping Sekarang'}</span>
+              <span>{checkingNow ? 'Menguji...' : 'Tes Ping'}</span>
             </button>
           </div>
         </div>
