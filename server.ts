@@ -7,12 +7,16 @@ import {
   createSeedDatabase,
   DEFAULT_ADMIN_SETTINGS,
   DEFAULT_ANNOUNCEMENTS,
+  DEFAULT_BLOCKS,
   DEFAULT_PAYMENT_CONFIRMATIONS,
   DEFAULT_SECURITY_OFFICERS,
   DEFAULT_SECURITY_REPORTS,
+  DEFAULT_STREETS,
 } from './src/lib/seedData.ts';
 import type {
   AdminSettings,
+  BlockCode,
+  BlockConfig,
   CommunityActivityAnnouncement,
   DatabaseState,
   LedgerTransaction,
@@ -28,16 +32,15 @@ const __dirname = path.dirname(__filename);
 
 const DATA_DIR = path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'saung-kebun-db.json');
+const TMP_DB_FILE = path.join('/tmp', 'saung-kebun-db.json');
 
 function loadDatabase(): DatabaseState {
   try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (fs.existsSync(DB_FILE)) {
-      const raw = fs.readFileSync(DB_FILE, 'utf-8');
+    const candidateFile = fs.existsSync(TMP_DB_FILE) ? TMP_DB_FILE : DB_FILE;
+    if (fs.existsSync(candidateFile)) {
+      const raw = fs.readFileSync(candidateFile, 'utf-8');
       const parsed = JSON.parse(raw) as DatabaseState;
-      if (Array.isArray(parsed.residents) && parsed.residents.length === 55) {
+      if (Array.isArray(parsed.residents) && parsed.residents.length > 0) {
         parsed.settings = {
           ...DEFAULT_ADMIN_SETTINGS,
           ...parsed.settings,
@@ -58,7 +61,46 @@ function loadDatabase(): DatabaseState {
           publishedQuarterlyLPJ: Array.isArray(parsed.settings?.publishedQuarterlyLPJ)
             ? parsed.settings.publishedQuarterlyLPJ
             : DEFAULT_ADMIN_SETTINGS.publishedQuarterlyLPJ,
+          customBlocks:
+            Array.isArray(parsed.settings?.customBlocks) && parsed.settings.customBlocks.length > 0
+              ? parsed.settings.customBlocks
+              : [...DEFAULT_BLOCKS],
+          customStreets:
+            Array.isArray(parsed.settings?.customStreets) && parsed.settings.customStreets.length > 0
+              ? parsed.settings.customStreets
+              : [...DEFAULT_STREETS],
         };
+        // Ensure all B1-B9 blocks exist in customBlocks if not already
+        const existingBlockIds = new Set((parsed.settings.customBlocks || []).map((b) => b.id.toUpperCase()));
+        for (const defBlock of DEFAULT_BLOCKS) {
+          if (!existingBlockIds.has(defBlock.id.toUpperCase())) {
+            parsed.settings.customBlocks?.push({ ...defBlock });
+          }
+        }
+        // Migrate old street names to Gang Duren / Gang Anggur
+        if (Array.isArray(parsed.residents)) {
+          parsed.residents = parsed.residents.map((r: ResidentUnit) => {
+            let nextStreet = r.streetName || '';
+            if (
+              nextStreet.startsWith('Jl. Saung Melati') ||
+              nextStreet.includes('Melati') ||
+              nextStreet.includes('Cendana')
+            ) {
+              nextStreet = 'Gang Duren';
+            } else if (
+              nextStreet.startsWith('Jl. Kebun') ||
+              nextStreet.includes('Mawar') ||
+              nextStreet.includes('Kenanga') ||
+              nextStreet.includes('Asri')
+            ) {
+              nextStreet = 'Gang Anggur';
+            }
+            return {
+              ...r,
+              streetName: nextStreet || (r.block.startsWith('B') ? 'Gang Anggur' : 'Gang Duren'),
+            };
+          });
+        }
         if (parsed.settings.chairpersonName) {
           parsed.settings.chairpersonName = parsed.settings.chairpersonName.trim();
           if (parsed.settings.chairpersonName.includes('Hendra Wijaya')) {
@@ -96,8 +138,12 @@ function saveDatabase(state: DatabaseState): void {
     const tmpFile = `${DB_FILE}.tmp`;
     fs.writeFileSync(tmpFile, JSON.stringify(state, null, 2), 'utf-8');
     fs.renameSync(tmpFile, DB_FILE);
-  } catch (err) {
-    console.error('Failed writing DB file:', err);
+  } catch {
+    try {
+      fs.writeFileSync(TMP_DB_FILE, JSON.stringify(state, null, 2), 'utf-8');
+    } catch (err2) {
+      console.error('Failed writing DB to /tmp fallback:', err2);
+    }
   }
 }
 
@@ -117,11 +163,10 @@ function buildReceiptNumber(
   return `SK/${prefix}/${year}/${month}/${String(seq).padStart(3, '0')}`;
 }
 
-async function startServer() {
-  const app = express();
-  app.use(express.json({ limit: '10mb' }));
+export const app = express();
+app.use(express.json({ limit: '10mb' }));
 
-  app.get('/api/state', (_req, res) => {
+app.get('/api/state', (_req, res) => {
     res.json(dbState);
   });
 
@@ -398,6 +443,72 @@ async function startServer() {
     res.json(dbState);
   });
 
+  app.post('/api/residents', (req, res) => {
+    const raw = req.body as Partial<ResidentUnit>;
+    const block = (raw.block || 'A').toUpperCase() as BlockCode;
+    const houseNumber = String(raw.houseNumber || '').trim();
+    if (!houseNumber) {
+      res.status(400).json({ error: 'Nomor rumah wajib diisi.' });
+      return;
+    }
+    const id = raw.id ? raw.id.trim().toUpperCase() : `${block}-${houseNumber.padStart(2, '0')}`;
+
+    if (dbState.residents.some((r) => r.id.toLowerCase() === id.toLowerCase())) {
+      res.status(400).json({ error: `Unit ${id} sudah terdaftar dalam sistem.` });
+      return;
+    }
+    if (!raw.headOfFamily || raw.headOfFamily.trim().length < 2) {
+      res.status(400).json({ error: 'Nama kepala keluarga minimal 2 karakter.' });
+      return;
+    }
+    if (!raw.whatsapp || raw.whatsapp.replace(/\D/g, '').length < 9) {
+      res.status(400).json({ error: 'Nomor WhatsApp warga harus valid (minimal 9 digit).' });
+      return;
+    }
+
+    const blockList = dbState.settings.customBlocks || DEFAULT_BLOCKS;
+    const blockMatch = blockList.find((b) => b.id.toUpperCase() === block.toUpperCase());
+    const defaultGang = blockMatch?.defaultStreet || (block.toUpperCase().startsWith('B') ? 'Gang Anggur' : 'Gang Duren');
+
+    const cleanWaDigits = raw.whatsapp.replace(/\D/g, '');
+    const defaultPin = raw.accessPin?.trim() || cleanWaDigits.slice(-4) || '1234';
+
+    const newResident: ResidentUnit = {
+      id,
+      block,
+      houseNumber,
+      streetName: raw.streetName?.trim() || defaultGang,
+      headOfFamily: raw.headOfFamily.trim(),
+      nik: raw.nik?.trim() || `320101${cleanWaDigits.slice(-6).padStart(6, '0')}0001`,
+      kkNumber: raw.kkNumber?.trim() || `320101${cleanWaDigits.slice(-6).padStart(6, '0')}0002`,
+      whatsapp: raw.whatsapp.trim(),
+      email: raw.email?.trim() || '',
+      occupancyStatus: raw.occupancyStatus || 'Dihuni Pemilik',
+      familyMembers: Number(raw.familyMembers) || 1,
+      vehiclePlate: raw.vehiclePlate?.trim() || '-',
+      joinedYear: Number(raw.joinedYear) || 2026,
+      notes: raw.notes?.trim() || '',
+      accessPin: defaultPin,
+    };
+
+    const nextResidents = [...dbState.residents, newResident];
+    nextResidents.sort((a, b) => {
+      if (a.block !== b.block) {
+        return a.block.localeCompare(b.block, undefined, { numeric: true, sensitivity: 'base' });
+      }
+      const nA = Number(a.houseNumber.replace(/\D/g, '')) || 0;
+      const nB = Number(b.houseNumber.replace(/\D/g, '')) || 0;
+      return nA - nB || a.id.localeCompare(b.id);
+    });
+
+    dbState = {
+      ...dbState,
+      residents: nextResidents,
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
   app.put('/api/residents/:id', (req, res) => {
     const { id } = req.params;
     const updates = req.body as Partial<ResidentUnit>;
@@ -420,8 +531,8 @@ async function startServer() {
       ...dbState.residents[idx],
       ...updates,
       id: dbState.residents[idx].id,
-      block: dbState.residents[idx].block,
-      houseNumber: dbState.residents[idx].houseNumber,
+      block: updates.block || dbState.residents[idx].block,
+      houseNumber: updates.houseNumber || dbState.residents[idx].houseNumber,
     };
 
     const nextResidents = [...dbState.residents];
@@ -429,6 +540,170 @@ async function startServer() {
     dbState = {
       ...dbState,
       residents: nextResidents,
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  app.delete('/api/residents/:id', (req, res) => {
+    const { id } = req.params;
+    if (id === 'A-01' || id === 'A-09') {
+      res.status(400).json({ error: 'Unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat dihapus.' });
+      return;
+    }
+    const idx = dbState.residents.findIndex((r) => r.id === id);
+    if (idx === -1) {
+      res.status(404).json({ error: 'Unit warga tidak ditemukan.' });
+      return;
+    }
+
+    dbState = {
+      ...dbState,
+      residents: dbState.residents.filter((r) => r.id !== id),
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  // --- Blok & Gang / Jalan Management Endpoints ---
+  app.post('/api/settings/blocks', (req, res) => {
+    const { id, name, defaultStreet } = req.body as Partial<BlockConfig>;
+    if (!id || !name) {
+      res.status(400).json({ error: 'Kode Blok dan Nama Blok wajib diisi.' });
+      return;
+    }
+    const cleanId = id.trim().toUpperCase();
+    const cleanName = name.trim();
+    const currentBlocks: BlockConfig[] = dbState.settings.customBlocks || [...DEFAULT_BLOCKS];
+
+    if (currentBlocks.some((b) => b.id.toUpperCase() === cleanId)) {
+      res.status(400).json({ error: `Blok ${cleanId} sudah terdaftar dalam sistem.` });
+      return;
+    }
+
+    const newBlock: BlockConfig = {
+      id: cleanId,
+      name: cleanName,
+      defaultStreet: defaultStreet?.trim() || 'Gang Duren',
+    };
+
+    const nextBlocks = [...currentBlocks, newBlock];
+    dbState = {
+      ...dbState,
+      settings: {
+        ...dbState.settings,
+        customBlocks: nextBlocks,
+      },
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  app.put('/api/settings/blocks/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, defaultStreet } = req.body as Partial<BlockConfig>;
+    const currentBlocks: BlockConfig[] = dbState.settings.customBlocks || [...DEFAULT_BLOCKS];
+    const idx = currentBlocks.findIndex((b) => b.id.toUpperCase() === id.toUpperCase());
+    if (idx === -1) {
+      res.status(404).json({ error: `Blok ${id} tidak ditemukan.` });
+      return;
+    }
+
+    const updated: BlockConfig = {
+      ...currentBlocks[idx],
+      ...(name ? { name: name.trim() } : {}),
+      ...(defaultStreet ? { defaultStreet: defaultStreet.trim() } : {}),
+    };
+
+    const nextBlocks = [...currentBlocks];
+    nextBlocks[idx] = updated;
+
+    dbState = {
+      ...dbState,
+      settings: {
+        ...dbState.settings,
+        customBlocks: nextBlocks,
+      },
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  app.delete('/api/settings/blocks/:id', (req, res) => {
+    const { id } = req.params;
+    const cleanId = id.trim().toUpperCase();
+
+    // Check if any resident units currently belong to this block
+    const residentCount = dbState.residents.filter(
+      (r) => r.block.toUpperCase() === cleanId || r.id.startsWith(`${cleanId}-`)
+    ).length;
+
+    if (residentCount > 0) {
+      res.status(400).json({
+        error: `Blok ${cleanId} tidak dapat dihapus karena masih digunakan oleh ${residentCount} warga terdaftar. Pindahkan atau hapus data warga pada blok ini terlebih dahulu.`,
+      });
+      return;
+    }
+
+    if (cleanId === 'A') {
+      res.status(400).json({ error: 'Blok A adalah blok utama pengurus dan tidak dapat dihapus.' });
+      return;
+    }
+
+    const currentBlocks: BlockConfig[] = dbState.settings.customBlocks || [...DEFAULT_BLOCKS];
+    const nextBlocks = currentBlocks.filter((b) => b.id.toUpperCase() !== cleanId);
+
+    dbState = {
+      ...dbState,
+      settings: {
+        ...dbState.settings,
+        customBlocks: nextBlocks,
+      },
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  app.post('/api/settings/streets', (req, res) => {
+    const { name } = req.body as { name?: string };
+    if (!name || !name.trim()) {
+      res.status(400).json({ error: 'Nama Gang / Jalan wajib diisi.' });
+      return;
+    }
+    const cleanName = name.trim();
+    const currentStreets = dbState.settings.customStreets || [...DEFAULT_STREETS];
+    if (currentStreets.some((s) => s.toLowerCase() === cleanName.toLowerCase())) {
+      res.json(dbState);
+      return;
+    }
+
+    const nextStreets = [...currentStreets, cleanName];
+    dbState = {
+      ...dbState,
+      settings: {
+        ...dbState.settings,
+        customStreets: nextStreets,
+      },
+    };
+    saveDatabase(dbState);
+    res.json(dbState);
+  });
+
+  app.delete('/api/settings/streets', (req, res) => {
+    const { name } = req.body as { name?: string };
+    if (!name) {
+      res.status(400).json({ error: 'Nama Gang wajib disertakan.' });
+      return;
+    }
+    const currentStreets = dbState.settings.customStreets || [...DEFAULT_STREETS];
+    const nextStreets = currentStreets.filter((s) => s.toLowerCase() !== name.toLowerCase());
+
+    dbState = {
+      ...dbState,
+      settings: {
+        ...dbState.settings,
+        customStreets: nextStreets,
+      },
     };
     saveDatabase(dbState);
     res.json(dbState);
@@ -1544,6 +1819,7 @@ Kembalikan kategori utama yang paling sesuai dengan uraian transaksi tersebut, b
     res.json(dbState);
   });
 
+export async function startServer() {
   // In AI Studio preview environment, nginx listens on 8080 and proxies to port 3000.
   // The Node dev server must always listen on port 3000.
   let targetPort = 3000;
@@ -1597,7 +1873,11 @@ Kembalikan kategori utama yang paling sesuai dengan uraian transaksi tersebut, b
   });
 }
 
-startServer().catch((err) => {
-  console.error('Server failed to start:', err);
-  process.exit(1);
-});
+export default app;
+
+if (process.env.VERCEL !== '1' && !process.env.NOW_REGION) {
+  startServer().catch((err) => {
+    console.error('Server failed to start:', err);
+    process.exit(1);
+  });
+}

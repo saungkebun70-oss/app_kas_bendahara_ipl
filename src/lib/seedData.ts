@@ -1,6 +1,7 @@
 import type {
   AdminSettings,
   BlockCode,
+  BlockConfig,
   CommunityActivityAnnouncement,
   DatabaseState,
   LedgerTransaction,
@@ -72,11 +73,38 @@ const RESIDENT_NAMES_55: string[] = [
   'Melati Kusuma',
 ];
 
-const STREET_BY_BLOCK: Record<BlockCode, string> = {
-  A: 'Jl. Saung Melati',
-  B: 'Jl. Kebun Asri',
-  C: 'Jl. Saung Cendana',
-  D: 'Jl. Kebun Kenanga',
+export const DEFAULT_BLOCKS: BlockConfig[] = [
+  { id: 'A', name: 'Blok A', defaultStreet: 'Gang Duren' },
+  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Anggur' },
+  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Anggur' },
+  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Anggur' },
+  { id: 'B4', name: 'Blok B4', defaultStreet: 'Gang Duren' },
+  { id: 'B5', name: 'Blok B5', defaultStreet: 'Gang Duren' },
+  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Duren' },
+  { id: 'B7', name: 'Blok B7', defaultStreet: 'Gang Anggur' },
+  { id: 'B8', name: 'Blok B8', defaultStreet: 'Gang Anggur' },
+  { id: 'B9', name: 'Blok B9', defaultStreet: 'Gang Anggur' },
+  { id: 'B', name: 'Blok B', defaultStreet: 'Gang Anggur' },
+  { id: 'C', name: 'Blok C', defaultStreet: 'Gang Duren' },
+  { id: 'D', name: 'Blok D', defaultStreet: 'Gang Anggur' },
+];
+
+export const DEFAULT_STREETS: string[] = ['Gang Duren', 'Gang Anggur'];
+
+const STREET_BY_BLOCK: Record<string, string> = {
+  A: 'Gang Duren',
+  B1: 'Gang Anggur',
+  B2: 'Gang Anggur',
+  B3: 'Gang Anggur',
+  B4: 'Gang Duren',
+  B5: 'Gang Duren',
+  B6: 'Gang Duren',
+  B7: 'Gang Anggur',
+  B8: 'Gang Anggur',
+  B9: 'Gang Anggur',
+  B: 'Gang Anggur',
+  C: 'Gang Duren',
+  D: 'Gang Anggur',
 };
 
 const PAYMENT_METHODS: PaymentMethod[] = [
@@ -122,6 +150,8 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   publishedQuarterlyLPJ: ['2026-Q3'],
   appLogoUrl: '',
   appLogoFileName: '',
+  customBlocks: DEFAULT_BLOCKS,
+  customStreets: DEFAULT_STREETS,
 };
 
 

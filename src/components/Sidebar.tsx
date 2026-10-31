@@ -122,8 +122,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-20 items-center justify-between px-6">
-          <div className="flex items-center gap-3">
+        <div className="relative flex h-20 items-center justify-between px-4 sm:px-5 backdrop-blur-md bg-white/[0.04] border-b border-white/10 shadow-2xs after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gradient-to-r after:from-transparent after:via-[#5eead4]/40 after:to-transparent min-w-0 overflow-hidden">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-[#5eead4] ring-1 ring-white/25 overflow-hidden">
               {settings?.appLogoUrl ? (
                 <img
@@ -148,11 +148,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </svg>
               )}
             </div>
-            <div className="min-w-0">
-              <span className="block truncate font-display text-base sm:text-lg font-bold tracking-tight text-white">
+            <div className="min-w-0 flex-1">
+              <span className="block truncate font-display text-sm sm:text-base font-bold tracking-tight text-white leading-snug">
                 {settings?.housingName ? settings.housingName : 'Saung Kebun'}
               </span>
-              <span className="block truncate text-[11px] text-sky-200/80">
+              <span className="block truncate text-[11px] text-sky-200/80 leading-normal mt-0.5">
                 {isWarga
                   ? `Portal Warga · Unit ${session.unitId}`
                   : isSatpam
@@ -166,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={onCloseMobile}
             aria-label="Tutup menu navigasi"
-            className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white lg:hidden"
+            className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white shrink-0 ml-1.5 lg:hidden"
           >
             <X className="h-5 w-5" />
           </button>

@@ -1,5 +1,6 @@
 import type {
   AdminSettings,
+  BlockConfig,
   CommunityActivityAnnouncement,
   DatabaseState,
   PaymentConfirmation,
@@ -151,11 +152,70 @@ export const api = {
     return handleJson<DatabaseState>(res);
   },
 
+  async addResident(resident: Partial<ResidentUnit>): Promise<DatabaseState> {
+    const res = await fetch('/api/residents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(resident),
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
   async updateResident(id: string, updates: Partial<ResidentUnit>): Promise<DatabaseState> {
     const res = await fetch(`/api/residents/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async deleteResident(id: string): Promise<DatabaseState> {
+    const res = await fetch(`/api/residents/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async addBlock(block: BlockConfig): Promise<DatabaseState> {
+    const res = await fetch('/api/settings/blocks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(block),
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async updateBlock(id: string, updates: Partial<BlockConfig>): Promise<DatabaseState> {
+    const res = await fetch(`/api/settings/blocks/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async deleteBlock(id: string): Promise<DatabaseState> {
+    const res = await fetch(`/api/settings/blocks/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async addStreet(name: string): Promise<DatabaseState> {
+    const res = await fetch('/api/settings/streets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    return handleJson<DatabaseState>(res);
+  },
+
+  async deleteStreet(name: string): Promise<DatabaseState> {
+    const res = await fetch('/api/settings/streets', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
     });
     return handleJson<DatabaseState>(res);
   },

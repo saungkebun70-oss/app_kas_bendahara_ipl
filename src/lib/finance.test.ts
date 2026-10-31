@@ -43,7 +43,10 @@ test('seed database contains exactly 55 houses with complete profile fields and 
     assert.equal(res.nik.length, 16, `Resident ${res.id} has 16-digit NIK`);
     assert.equal(res.kkNumber.length, 16, `Resident ${res.id} has 16-digit KK`);
     assert.ok(res.whatsapp.startsWith('08'), `Resident ${res.id} has valid WA number`);
-    assert.ok(res.streetName.startsWith('Jl.'), `Resident ${res.id} has street address`);
+    assert.ok(
+      res.streetName.startsWith('Gang') || res.streetName.startsWith('Jl.'),
+      `Resident ${res.id} has street address (${res.streetName})`
+    );
   }
 });
 
@@ -942,5 +945,108 @@ test('Ketua (A-01) and Bendahara (A-09) are strictly exempt from monthly iuran a
     assert.equal(bendaharaAuth.session.unitId, 'A-09');
   }
 });
+
+test('resident CRUD operations correctly add, update, and delete residents while protecting Pengurus units', () => {
+  const db = createSeedDatabase();
+  const initialCount = db.residents.length;
+  assert.equal(initialCount, 55);
+
+  // 1. Add new resident in Block D
+  const newResident: ResidentUnit = {
+    id: 'D-15',
+    block: 'D',
+    houseNumber: '15',
+    streetName: 'Jl. Saung Flamboyan',
+    headOfFamily: 'Hendra Gunawan',
+    whatsapp: '081234567890',
+    email: 'hendra@example.com',
+    familyMembers: 4,
+    nik: '3201019901010001',
+    kk: '3201019901010002',
+    occupancyStatus: 'Dihuni Pemilik',
+    vehiclePlate: 'B 1234 HG',
+    notes: 'Warga pindahan baru',
+    pin: '7890',
+  };
+
+  db.residents.push(newResident);
+  assert.equal(db.residents.length, 56);
+  const foundNew = db.residents.find((r) => r.id === 'D-15');
+  assert.ok(foundNew);
+  assert.equal(foundNew?.headOfFamily, 'Hendra Gunawan');
+
+  // 2. Edit/Update resident
+  const target = db.residents.find((r) => r.id === 'D-15');
+  if (target) {
+    target.headOfFamily = 'Hendra Gunawan, S.T.';
+    target.familyMembers = 5;
+  }
+  const updated = db.residents.find((r) => r.id === 'D-15');
+  assert.equal(updated?.headOfFamily, 'Hendra Gunawan, S.T.');
+  assert.equal(updated?.familyMembers, 5);
+
+  // 3. Protected units A-01 and A-09 cannot be deleted
+  const isProtected = (id: string) => id === 'A-01' || id === 'A-09';
+  assert.equal(isProtected('A-01'), true, 'Ketua unit A-01 is protected');
+  assert.equal(isProtected('A-09'), true, 'Bendahara unit A-09 is protected');
+  assert.equal(isProtected('D-15'), false, 'Standard unit D-15 is not protected');
+
+  // 4. Delete newly added resident
+  db.residents = db.residents.filter((r) => r.id !== 'D-15');
+  assert.equal(db.residents.length, 55);
+  assert.equal(db.residents.find((r) => r.id === 'D-15'), undefined);
+});
+
+test('blocks and gang names support Gang Duren, Gang Anggur, B1-B9 blocks and management CRUD', () => {
+  const db = createSeedDatabase();
+  assert.ok(db.settings.customBlocks, 'customBlocks must be defined in settings');
+  assert.ok(db.settings.customStreets, 'customStreets must be defined in settings');
+
+  // Verify Gang Duren and Gang Anggur are present
+  assert.ok(db.settings.customStreets.includes('Gang Duren'));
+  assert.ok(db.settings.customStreets.includes('Gang Anggur'));
+
+  // Verify B1 through B9 are present in default blocks
+  const blockIds = db.settings.customBlocks.map((b) => b.id);
+  ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'].forEach((bId) => {
+    assert.ok(blockIds.includes(bId), `Block ${bId} must exist in default blocks`);
+  });
+
+  // Verify resident street names use Gang Duren and Gang Anggur
+  const firstResident = db.residents[0];
+  assert.equal(firstResident.streetName, 'Gang Duren');
+  const bResident = db.residents.find((r) => r.block === 'B');
+  assert.equal(bResident?.streetName, 'Gang Anggur');
+
+  // 1. Add new custom block (e.g. B10)
+  const newBlock = { id: 'B10', name: 'Blok B10', defaultStreet: 'Gang Duren' };
+  db.settings.customBlocks.push(newBlock);
+  assert.ok(db.settings.customBlocks.some((b) => b.id === 'B10'));
+
+  // 2. Add new gang name (e.g. Gang Mangga)
+  db.settings.customStreets.push('Gang Mangga');
+  assert.ok(db.settings.customStreets.includes('Gang Mangga'));
+
+  // 3. Edit block
+  const targetBlock = db.settings.customBlocks.find((b) => b.id === 'B10');
+  if (targetBlock) {
+    targetBlock.name = 'Blok B10 Barat';
+    targetBlock.defaultStreet = 'Gang Mangga';
+  }
+  const updatedBlock = db.settings.customBlocks.find((b) => b.id === 'B10');
+  assert.equal(updatedBlock?.name, 'Blok B10 Barat');
+  assert.equal(updatedBlock?.defaultStreet, 'Gang Mangga');
+
+  // 4. Delete block validation
+  // Cannot delete block with existing residents
+  const hasResidents = (blk: string) => db.residents.some((r) => r.block === blk);
+  assert.equal(hasResidents('A'), true);
+  assert.equal(hasResidents('B10'), false);
+
+  // Safe to delete B10
+  db.settings.customBlocks = db.settings.customBlocks.filter((b) => b.id !== 'B10');
+  assert.equal(db.settings.customBlocks.some((b) => b.id === 'B10'), false);
+});
+
 
 

@@ -1,4 +1,10 @@
-export type BlockCode = 'A' | 'B' | 'C' | 'D';
+export type BlockCode = string;
+
+export interface BlockConfig {
+  id: string; // e.g. "A", "B1", "B2", "B3", ..., "B9"
+  name: string; // e.g. "Blok A", "Blok B1"
+  defaultStreet?: string; // e.g. "Gang Duren", "Gang Anggur"
+}
 
 export type OccupancyStatus = 'Dihuni Pemilik' | 'Dikontrakkan' | 'Kosong Terawat';
 
@@ -113,6 +119,8 @@ export interface AdminSettings {
   publishedQuarterlyLPJ?: string[]; // e.g. ["2026-Q3", "2026-Q4"]
   appLogoUrl?: string;
   appLogoFileName?: string;
+  customBlocks?: BlockConfig[];
+  customStreets?: string[];
 }
 
 export type AnnouncementCategory =

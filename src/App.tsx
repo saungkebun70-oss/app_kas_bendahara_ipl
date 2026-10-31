@@ -4,6 +4,7 @@ import type { DatabaseState, LedgerTransaction, ResidentUnit } from './types/fin
 import type { AuthSession } from './lib/auth';
 import { api } from './lib/api';
 import { getUnpaidResidentsForBilling } from './lib/finance';
+import { createSeedDatabase } from './lib/seedData';
 import { downloadMonthlyReportPDF } from './lib/pdfExport';
 import { Sidebar, type NavTab } from './components/Sidebar';
 import { LoginView } from './components/LoginView';
@@ -155,8 +156,25 @@ export default function App() {
       setError(null);
       const data = await api.getState();
       setDb(data);
+      try {
+        localStorage.setItem('saung_kebun_cached_state', JSON.stringify(data));
+      } catch {}
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal memuat database');
+      console.warn('API error, falling back to local database state:', err);
+      try {
+        const cached = localStorage.getItem('saung_kebun_cached_state');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && Array.isArray(parsed.residents)) {
+            setDb(parsed);
+            setError(null);
+            return;
+          }
+        }
+      } catch {}
+      const fallbackState = createSeedDatabase();
+      setDb(fallbackState);
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -488,6 +506,38 @@ export default function App() {
                   handleQuickPaySingleMonth(unitId, selectedMonth)
                 }
                 isAdmin={isAdmin}
+                onAddResident={async (resident) => {
+                  const nextState = await api.addResident(resident);
+                  setDb(nextState);
+                }}
+                onUpdateResident={async (unitId, payload) => {
+                  const nextState = await api.updateResident(unitId, payload);
+                  setDb(nextState);
+                }}
+                onDeleteResident={async (unitId) => {
+                  const nextState = await api.deleteResident(unitId);
+                  setDb(nextState);
+                }}
+                onAddBlock={async (block) => {
+                  const nextState = await api.addBlock(block);
+                  setDb(nextState);
+                }}
+                onUpdateBlock={async (id, updates) => {
+                  const nextState = await api.updateBlock(id, updates);
+                  setDb(nextState);
+                }}
+                onDeleteBlock={async (id) => {
+                  const nextState = await api.deleteBlock(id);
+                  setDb(nextState);
+                }}
+                onAddStreet={async (name) => {
+                  const nextState = await api.addStreet(name);
+                  setDb(nextState);
+                }}
+                onDeleteStreet={async (name) => {
+                  const nextState = await api.deleteStreet(name);
+                  setDb(nextState);
+                }}
               />
             )}
 

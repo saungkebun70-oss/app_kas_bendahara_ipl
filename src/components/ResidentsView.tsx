@@ -1,12 +1,26 @@
 import React, { useMemo, useState } from 'react';
-import { Check, Search, History, PlusCircle, ShieldCheck } from 'lucide-react';
-import type { BlockCode, DatabaseState } from '../types/finance';
+import {
+  Check,
+  Search,
+  History,
+  PlusCircle,
+  ShieldCheck,
+  UserPlus,
+  Edit3,
+  Trash2,
+  AlertTriangle,
+  Layers,
+  MapPin,
+} from 'lucide-react';
+import type { BlockCode, BlockConfig, DatabaseState, ResidentUnit } from '../types/finance';
 import {
   formatMonthLabel,
   formatRupiah,
   isUnitExemptFromIuran,
   maskNik,
 } from '../lib/finance';
+import { ResidentFormModal } from './ResidentFormModal';
+import { ManageBlocksModal } from './ManageBlocksModal';
 
 interface ResidentsViewProps {
   state: DatabaseState;
@@ -15,6 +29,14 @@ interface ResidentsViewProps {
   onSelectUnit: (unitId: string) => void;
   onQuickPayCurrentMonth: (unitId: string) => Promise<void>;
   isAdmin: boolean;
+  onAddResident?: (resident: Partial<ResidentUnit>) => Promise<void>;
+  onUpdateResident?: (unitId: string, updates: Partial<ResidentUnit>) => Promise<void>;
+  onDeleteResident?: (unitId: string) => Promise<void>;
+  onAddBlock?: (block: BlockConfig) => Promise<void>;
+  onUpdateBlock?: (id: string, updates: Partial<BlockConfig>) => Promise<void>;
+  onDeleteBlock?: (id: string) => Promise<void>;
+  onAddStreet?: (name: string) => Promise<void>;
+  onDeleteStreet?: (name: string) => Promise<void>;
 }
 
 const PERIOD_OPTIONS = ['2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
@@ -26,11 +48,58 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
   onSelectUnit,
   onQuickPayCurrentMonth,
   isAdmin,
+  onAddResident,
+  onUpdateResident,
+  onDeleteResident,
+  onAddBlock,
+  onUpdateBlock,
+  onDeleteBlock,
+  onAddStreet,
+  onDeleteStreet,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [blockFilter, setBlockFilter] = useState<'ALL' | BlockCode>('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'UNPAID' | 'EXEMPT'>('ALL');
   const [payingUnitId, setPayingUnitId] = useState<string | null>(null);
+
+  // Modals state for Add, Edit, Delete, Manage Blocks
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isManageBlocksOpen, setIsManageBlocksOpen] = useState(false);
+  const [editResident, setEditResident] = useState<ResidentUnit | null>(null);
+  const [deleteConfirmResident, setDeleteConfirmResident] = useState<ResidentUnit | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const availableBlocks = useMemo(() => {
+    const configured = state.settings.customBlocks || [];
+    const fromResidents = new Set(state.residents.map((r) => r.block));
+    const blockMap = new Map<string, BlockConfig>();
+
+    for (const b of configured) {
+      blockMap.set(b.id.toUpperCase(), b);
+    }
+    for (const bId of fromResidents) {
+      const upper = bId.toUpperCase();
+      if (!blockMap.has(upper)) {
+        blockMap.set(upper, {
+          id: upper,
+          name: `Blok ${upper}`,
+          defaultStreet: upper.startsWith('B') ? 'Gang Anggur' : 'Gang Duren',
+        });
+      }
+    }
+    return Array.from(blockMap.values()).sort((a, b) =>
+      a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' })
+    );
+  }, [state.settings.customBlocks, state.residents]);
+
+  const availableStreets = useMemo(() => {
+    const streets = new Set<string>(state.settings.customStreets || ['Gang Duren', 'Gang Anggur']);
+    for (const r of state.residents) {
+      if (r.streetName) streets.add(r.streetName);
+    }
+    return Array.from(streets);
+  }, [state.settings.customStreets, state.residents]);
 
   const paidUnitMap = useMemo(() => {
     const map = new Map<string, { receiptNumber: string; date: string }>();
@@ -104,29 +173,53 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium text-slate-500">
-            Database Terenkripsi Lokal · 55 Unit Hunian Terdaftar (Blok A, B, C, D)
+            Database Terenkripsi Lokal · {state.residents.length} Unit Hunian Terdaftar (Blok {availableBlocks.map((b) => b.id).join(', ')})
           </p>
           <h1 className="mt-1 font-display text-2xl font-bold tracking-tight text-slate-900">
-            Direktori 55 Warga &amp; Riwayat Transaksi Unit
+            Direktori {state.residents.length} Warga &amp; Riwayat Transaksi Unit
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="res-period-select" className="text-xs font-medium text-slate-600 whitespace-nowrap">
-            Cek Status Bulan:
-          </label>
-          <select
-            id="res-period-select"
-            value={activePeriodMonth}
-            onChange={(e) => onChangePeriodMonth(e.target.value)}
-            className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:border-emerald-800 focus:outline-none"
-          >
-            {PERIOD_OPTIONS.map((pm) => (
-              <option key={pm} value={pm}>
-                {formatMonthLabel(pm)}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {isAdmin && onAddBlock && (
+            <button
+              type="button"
+              onClick={() => setIsManageBlocksOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs hover:bg-stone-50 transition-colors cursor-pointer"
+            >
+              <Layers className="h-4 w-4 text-emerald-800" />
+              <span>Kelola Blok &amp; Gang</span>
+            </button>
+          )}
+
+          {isAdmin && onAddResident && (
+            <button
+              type="button"
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-900 px-3.5 py-2 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-emerald-800 transition-colors cursor-pointer"
+            >
+              <UserPlus className="h-4 w-4" />
+              <span>Tambah Warga Baru</span>
+            </button>
+          )}
+
+          <div className="flex items-center gap-2">
+            <label htmlFor="res-period-select" className="text-xs font-medium text-slate-600 whitespace-nowrap">
+              Cek Status:
+            </label>
+            <select
+              id="res-period-select"
+              value={activePeriodMonth}
+              onChange={(e) => onChangePeriodMonth(e.target.value)}
+              className="rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:border-emerald-800 focus:outline-none"
+            >
+              {PERIOD_OPTIONS.map((pm) => (
+                <option key={pm} value={pm}>
+                  {formatMonthLabel(pm)}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -136,7 +229,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           <input
             type="search"
             aria-label="Cari unit rumah, nama kepala keluarga, WhatsApp, atau plat kendaraan"
-            placeholder="Cari unit (A-01), nama warga, nomor WA, atau plat..."
+            placeholder="Cari unit (A-01, B1-01), nama warga, nomor WA, plat, atau nama gang..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -144,25 +237,36 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
         </div>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 w-full">
-          {/* Blok Filter with responsive wrapping (prevent button clipping) */}
+          {/* Blok Filter with responsive horizontal scroll / wrap */}
           <div className="w-full lg:w-auto">
             <div
-              className="flex flex-wrap items-center gap-1 sm:gap-1.5 rounded-xl bg-stone-100/90 p-1 w-full sm:w-auto"
+              className="flex items-center gap-1 sm:gap-1.5 rounded-xl bg-stone-100/90 p-1 w-full sm:w-auto overflow-x-auto max-w-full"
               role="group"
               aria-label="Filter Blok Rumah"
             >
-              {(['ALL', 'A', 'B', 'C', 'D'] as const).map((blk) => (
+              <button
+                type="button"
+                onClick={() => setBlockFilter('ALL')}
+                className={`text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                  blockFilter === 'ALL'
+                    ? 'bg-white text-slate-900 shadow-xs font-bold ring-1 ring-stone-200'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                }`}
+              >
+                Semua ({state.residents.length})
+              </button>
+              {availableBlocks.map((blk) => (
                 <button
-                  key={blk}
+                  key={blk.id}
                   type="button"
-                  onClick={() => setBlockFilter(blk)}
-                  className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
-                    blockFilter === blk
+                  onClick={() => setBlockFilter(blk.id)}
+                  className={`text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                    blockFilter === blk.id
                       ? 'bg-white text-slate-900 shadow-xs font-bold ring-1 ring-stone-200'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                   }`}
                 >
-                  {blk === 'ALL' ? 'Semua (55)' : `Blok ${blk}`}
+                  Blok {blk.id}
                 </button>
               ))}
             </div>
@@ -184,7 +288,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
-                Semua (55)
+                Semua ({state.residents.length})
               </button>
               <button
                 type="button"
@@ -328,13 +432,13 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         {txCount} riwayat kwitansi
                       </span>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
                         {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
                           <button
                             type="button"
                             disabled={payingUnitId === res.id}
                             onClick={() => handleQuickPay(res.id)}
-                            className="inline-flex items-center gap-1 rounded-lg bg-emerald-900 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800 disabled:opacity-50 cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-lg bg-emerald-900 px-2 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800 disabled:opacity-50 cursor-pointer"
                           >
                             <PlusCircle className="h-3.5 w-3.5" />
                             <span>{payingUnitId === res.id ? '...' : 'Bayar'}</span>
@@ -343,11 +447,41 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectUnit(res.id)}
-                          className="inline-flex items-center gap-1 rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800 hover:bg-stone-100 cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs font-semibold text-slate-800 hover:bg-stone-100 cursor-pointer"
                         >
                           <History className="h-3.5 w-3.5 text-slate-500" />
-                          <span>Profil &amp; Riwayat</span>
+                          <span>Profil</span>
                         </button>
+                        {isAdmin && onUpdateResident && (
+                          <button
+                            type="button"
+                            onClick={() => setEditResident(res)}
+                            title="Edit data warga"
+                            className="inline-flex items-center gap-1 rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 cursor-pointer"
+                          >
+                            <Edit3 className="h-3.5 w-3.5 text-blue-600" />
+                            <span>Edit</span>
+                          </button>
+                        )}
+                        {isAdmin && onDeleteResident && (
+                          <button
+                            type="button"
+                            disabled={isUnitExemptFromIuran(res.id)}
+                            onClick={() => {
+                              setDeleteError(null);
+                              setDeleteConfirmResident(res);
+                            }}
+                            title={
+                              isUnitExemptFromIuran(res.id)
+                                ? 'Unit Pengurus Lingkungan tidak dapat dihapus'
+                                : `Hapus unit ${res.id}`
+                            }
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 text-rose-600" />
+                            <span>Hapus</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -427,7 +561,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           {txCount} kwitansi
                         </td>
                         <td className="py-3 pl-3 pr-5 text-right whitespace-nowrap">
-                          <div className="inline-flex items-center justify-end gap-2">
+                          <div className="inline-flex items-center justify-end gap-1.5">
                             {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
                               <button
                                 type="button"
@@ -450,6 +584,40 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                               <History className="h-3.5 w-3.5 text-slate-500" />
                               <span>Profil &amp; Riwayat</span>
                             </button>
+
+                            {isAdmin && onUpdateResident && (
+                              <button
+                                type="button"
+                                onClick={() => setEditResident(res)}
+                                aria-label={`Ubah data warga Unit ${res.id}`}
+                                title="Ubah data warga"
+                                className="inline-flex items-center gap-1 rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 hover:border-blue-300 whitespace-nowrap shrink-0 cursor-pointer"
+                              >
+                                <Edit3 className="h-3.5 w-3.5 text-blue-600" />
+                                <span>Edit</span>
+                              </button>
+                            )}
+
+                            {isAdmin && onDeleteResident && (
+                              <button
+                                type="button"
+                                disabled={isUnitExemptFromIuran(res.id)}
+                                onClick={() => {
+                                  setDeleteError(null);
+                                  setDeleteConfirmResident(res);
+                                }}
+                                aria-label={`Hapus data warga Unit ${res.id}`}
+                                title={
+                                  isUnitExemptFromIuran(res.id)
+                                    ? 'Unit Pengurus Lingkungan tidak dapat dihapus'
+                                    : `Hapus data Unit ${res.id}`
+                                }
+                                className="inline-flex items-center gap-1 rounded-md border border-rose-200 bg-rose-50/70 px-2.5 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shrink-0 cursor-pointer"
+                              >
+                                <Trash2 className="h-3.5 w-3.5 text-rose-600" />
+                                <span>Hapus</span>
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -461,6 +629,133 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           </>
         )}
       </div>
+
+      {/* Add Resident Modal */}
+      {isAddModalOpen && onAddResident && (
+        <ResidentFormModal
+          isOpen={isAddModalOpen}
+          mode="add"
+          existingIds={state.residents.map((r) => r.id)}
+          availableBlocks={availableBlocks}
+          availableStreets={availableStreets}
+          onOpenManageBlocks={() => setIsManageBlocksOpen(true)}
+          onClose={() => setIsAddModalOpen(false)}
+          onSave={onAddResident}
+        />
+      )}
+
+      {/* Edit Resident Modal */}
+      {editResident && onUpdateResident && (
+        <ResidentFormModal
+          isOpen={Boolean(editResident)}
+          mode="edit"
+          resident={editResident}
+          existingIds={state.residents.map((r) => r.id)}
+          availableBlocks={availableBlocks}
+          availableStreets={availableStreets}
+          onOpenManageBlocks={() => setIsManageBlocksOpen(true)}
+          onClose={() => setEditResident(null)}
+          onSave={async (updates) => {
+            await onUpdateResident(editResident.id, updates);
+            setEditResident(null);
+          }}
+        />
+      )}
+
+      {/* Manage Blocks & Gangs Modal */}
+      {isManageBlocksOpen && onAddBlock && onUpdateBlock && onDeleteBlock && onAddStreet && onDeleteStreet && (
+        <ManageBlocksModal
+          isOpen={isManageBlocksOpen}
+          onClose={() => setIsManageBlocksOpen(false)}
+          state={state}
+          onAddBlock={onAddBlock}
+          onUpdateBlock={onUpdateBlock}
+          onDeleteBlock={onDeleteBlock}
+          onAddStreet={onAddStreet}
+          onDeleteStreet={onDeleteStreet}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmResident && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150"
+        >
+          <div
+            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-stone-200 space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600">
+                <AlertTriangle className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-display text-base font-bold text-slate-900">
+                  Hapus Data Warga?
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Tindakan ini akan menghapus unit dari direktori lingkungan.
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-rose-200/80 bg-rose-50/60 p-3.5 text-xs text-rose-900 space-y-1">
+              <p className="font-semibold">
+                Unit {deleteConfirmResident.id} — {deleteConfirmResident.headOfFamily}
+              </p>
+              <p className="text-slate-600">
+                Alamat: {deleteConfirmResident.streetName} · Status: {deleteConfirmResident.occupancyStatus}
+              </p>
+              <p className="text-rose-700 font-medium pt-1">
+                Data warga ini tidak akan muncul lagi di daftar iuran atau portal warga.
+              </p>
+            </div>
+
+            {deleteError && (
+              <div className="rounded-lg bg-rose-100 p-2.5 text-xs font-semibold text-rose-800">
+                {deleteError}
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                disabled={deletingId !== null}
+                onClick={() => {
+                  setDeleteConfirmResident(null);
+                  setDeleteError(null);
+                }}
+                className="rounded-lg border border-stone-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-stone-50 cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={deletingId !== null}
+                onClick={async () => {
+                  if (!onDeleteResident) return;
+                  setDeletingId(deleteConfirmResident.id);
+                  setDeleteError(null);
+                  try {
+                    await onDeleteResident(deleteConfirmResident.id);
+                    setDeleteConfirmResident(null);
+                  } catch (err) {
+                    setDeleteError(err instanceof Error ? err.message : 'Gagal menghapus warga');
+                  } finally {
+                    setDeletingId(null);
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-rose-700 disabled:opacity-50 cursor-pointer"
+              >
+                <Trash2 className="h-4 w-4" />
+                <span>{deletingId ? 'Menghapus...' : 'Ya, Hapus Data Warga'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
