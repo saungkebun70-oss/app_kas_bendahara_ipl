@@ -265,7 +265,7 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
               <span>Otomatis & Terenkripsi di Server</span>
             </div>
             <p className="text-[10px] text-slate-300 leading-relaxed">
-              Semua perubahan data warga, penambahan unit baru, pembayaran iuran, dan laporan keamanan langsung tersimpan permanen di cloud server Google. Tidak perlu menjalankan server MySQL atau MariaDB di Termux HP.
+              Semua perubahan data warga, penambahan unit baru, pembayaran iuran, dan laporan keamanan langsung tersimpan permanen di cloud server Google.
             </p>
           </div>
 

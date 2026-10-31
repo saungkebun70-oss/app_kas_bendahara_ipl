@@ -1185,7 +1185,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                   </span>
                 </h3>
                 <p className="text-xs text-slate-300">
-                  Data tersimpan online otomatis & aman di server Google Cloud 24/7 (Tidak memerlukan Termux/MySQL di HP)
+                  Data tersimpan online otomatis & aman di server Google Cloud 24/7
                 </p>
               </div>
             </div>
