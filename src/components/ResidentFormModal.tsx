@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, UserPlus, Edit3, Home, User, Phone, Shield, AlertCircle, MapPin, Layers } from 'lucide-react';
+import { X, UserPlus, Edit3, Home, User, Phone, AlertCircle, Shuffle, KeyRound } from 'lucide-react';
 import type { BlockCode, BlockConfig, OccupancyStatus, ResidentUnit } from '../types/finance';
 
 interface ResidentFormModalProps {
@@ -15,19 +15,25 @@ interface ResidentFormModalProps {
 }
 
 const FALLBACK_BLOCKS: BlockConfig[] = [
-  { id: 'B1', name: 'Blok B1', defaultStreet: 'Gang Duren' },
-  { id: 'B2', name: 'Blok B2', defaultStreet: 'Gang Duren' },
-  { id: 'B3', name: 'Blok B3', defaultStreet: 'Gang Duren' },
-  { id: 'B4', name: 'Blok B4', defaultStreet: 'Gang Duren' },
-  { id: 'B5', name: 'Blok B5', defaultStreet: 'Gang Duren' },
-  { id: 'B6', name: 'Blok B6', defaultStreet: 'Gang Anggur' },
-  { id: 'B7', name: 'Blok B7', defaultStreet: 'Gang Anggur' },
-  { id: 'B8', name: 'Blok B8', defaultStreet: 'Gang Anggur' },
-  { id: 'B9', name: 'Blok B9', defaultStreet: 'Gang Anggur' },
-  { id: 'B10', name: 'Blok B10', defaultStreet: 'Gang Anggur' },
+  { id: 'B3', name: 'Blok B3' },
+  { id: 'B5', name: 'Blok B5' },
+  { id: 'B6', name: 'Blok B6' },
+  { id: 'B7', name: 'Blok B7' },
+  { id: 'B8', name: 'Blok B8' },
 ];
 
-const FALLBACK_STREETS: string[] = ['Gang Duren', 'Gang Anggur'];
+function generateUniqueCode(block: string, existingIds: string[]): string {
+  const existingNums = existingIds
+    .filter((id) => id.toUpperCase().startsWith(`${block.toUpperCase()}-`))
+    .map((id) => parseInt(id.split('-')[1], 10))
+    .filter((n) => !isNaN(n));
+  const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : 1;
+  const candidate = `${block}-${String(nextNum).padStart(2, '0')}`;
+  if (!existingIds.some((id) => id.toLowerCase() === candidate.toLowerCase())) {
+    return candidate;
+  }
+  return `${block}-U${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+}
 
 export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
   isOpen,
@@ -37,15 +43,13 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
   existingIds,
   onSave,
   availableBlocks,
-  availableStreets,
   onOpenManageBlocks,
 }) => {
   const blocks = availableBlocks && availableBlocks.length > 0 ? availableBlocks : FALLBACK_BLOCKS;
-  const streets = availableStreets && availableStreets.length > 0 ? availableStreets : FALLBACK_STREETS;
 
-  const [block, setBlock] = useState<BlockCode>('B1');
+  const [unitId, setUnitId] = useState('');
+  const [block, setBlock] = useState<BlockCode>('B3');
   const [houseNumber, setHouseNumber] = useState('');
-  const [streetName, setStreetName] = useState('Gang Duren');
   const [headOfFamily, setHeadOfFamily] = useState('');
   const [nik, setNik] = useState('');
   const [kkNumber, setKkNumber] = useState('');
@@ -64,44 +68,25 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
     if (isOpen) {
       setError(null);
       if (mode === 'edit' && resident) {
+        setUnitId(resident.id);
         setBlock(resident.block);
-        const initHouseNum =
-          resident.houseNumber ||
-          (resident.id.includes('-') ? resident.id.split('-').slice(1).join('-') : resident.id);
-        setHouseNumber(initHouseNum);
-        let initialStreet = resident.streetName || 'Gang Duren';
-        if (
-          initialStreet.startsWith('Jl. Saung Melati') ||
-          initialStreet.includes('Melati') ||
-          initialStreet.includes('Cendana')
-        ) {
-          initialStreet = 'Gang Duren';
-        } else if (
-          initialStreet.startsWith('Jl. Kebun') ||
-          initialStreet.includes('Mawar') ||
-          initialStreet.includes('Kenanga') ||
-          initialStreet.includes('Asri')
-        ) {
-          initialStreet = 'Gang Anggur';
-        }
-        setStreetName(initialStreet);
+        setHouseNumber(resident.houseNumber || '');
+        setHeadOfFamily(resident.headOfFamily || '');
         setNik(resident.nik || '');
         setKkNumber(resident.kkNumber || '');
-        setWhatsapp(resident.whatsapp);
+        setWhatsapp(resident.whatsapp || '');
         setEmail(resident.email || '');
-        setOccupancyStatus(resident.occupancyStatus);
-        setFamilyMembers(resident.familyMembers || 1);
+        setOccupancyStatus(resident.occupancyStatus || 'Dihuni Pemilik');
+        setFamilyMembers(resident.familyMembers ?? 1);
         setVehiclePlate(resident.vehiclePlate || '');
         setAccessPin(resident.accessPin || '');
         setNotes(resident.notes || '');
       } else {
-        // Reset form for add
-        const defaultBlk = blocks[0]?.id || 'A';
-        const blkMatch = blocks.find((b) => b.id === defaultBlk);
-        const defStreet = blkMatch?.defaultStreet || streets[0] || 'Gang Duren';
+        const defaultBlk = blocks[0]?.id || 'B3';
+        const autoCode = generateUniqueCode(defaultBlk, existingIds);
+        setUnitId(autoCode);
         setBlock(defaultBlk);
         setHouseNumber('');
-        setStreetName(defStreet);
         setHeadOfFamily('');
         setNik('');
         setKkNumber('');
@@ -110,31 +95,26 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
         setOccupancyStatus('Dihuni Pemilik');
         setFamilyMembers(2);
         setVehiclePlate('');
-        setAccessPin('');
+        setAccessPin(String(Math.floor(1000 + Math.random() * 9000)));
         setNotes('');
       }
     }
-  }, [isOpen, mode, resident, blocks, streets]);
+  }, [isOpen, mode, resident, blocks, existingIds]);
 
   const handleBlockChange = (newBlock: BlockCode) => {
     setBlock(newBlock);
-    const blkMatch = blocks.find((b) => b.id.toUpperCase() === newBlock.toUpperCase());
-    const targetStreet = blkMatch?.defaultStreet || (newBlock.toUpperCase().startsWith('B') ? 'Gang Anggur' : 'Gang Duren');
-    setStreetName(targetStreet);
-  };
-
-  const handleWhatsappChange = (value: string) => {
-    setWhatsapp(value);
-    // If adding and PIN is empty or derived from old WA, suggest last 4 digits
     if (mode === 'add') {
-      const digits = value.replace(/\D/g, '');
-      if (digits.length >= 4) {
-        setAccessPin(digits.slice(-4));
-      }
+      const autoCode = generateUniqueCode(newBlock, existingIds);
+      setUnitId(autoCode);
     }
   };
 
-  const computedUnitId = `${block}-${houseNumber.trim() ? houseNumber.trim().padStart(2, '0') : '??'}`;
+  const handleGenerateNewCode = () => {
+    if (mode === 'add') {
+      const newCode = `${block}-U${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+      setUnitId(newCode);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,52 +126,20 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
       return;
     }
 
-    const cleanWa = whatsapp.trim();
-    const waDigits = cleanWa.replace(/\D/g, '');
-    if (waDigits.length < 9) {
-      setError('Nomor WhatsApp harus valid minimal 9 digit.');
-      return;
-    }
-
-    const cleanNum = houseNumber.trim();
-    if (!cleanNum) {
-      setError('Nomor rumah wajib diisi.');
-      return;
-    }
-    const unitId = `${block}-${cleanNum.padStart(2, '0')}`;
-
-    if (mode === 'add') {
-      if (existingIds.some((id) => id.toLowerCase() === unitId.toLowerCase())) {
-        setError(`Unit ${unitId} sudah terdaftar dalam sistem.`);
-        return;
-      }
-    } else if (resident && unitId.toLowerCase() !== resident.id.toLowerCase()) {
-      if (
-        existingIds.some(
-          (id) =>
-            id.toLowerCase() === unitId.toLowerCase() &&
-            id.toLowerCase() !== resident.id.toLowerCase()
-        )
-      ) {
-        setError(`Unit ${unitId} sudah digunakan oleh warga lain. Silakan masukkan nomor lain.`);
-        return;
-      }
-    }
-
-    const cleanPin = accessPin.trim() || waDigits.slice(-4) || '1234';
-
+    const cleanPin = accessPin.trim() || String(Math.floor(1000 + Math.random() * 9000));
     setLoading(true);
+
     try {
       if (mode === 'add') {
+        const finalUnitId = unitId.trim() || generateUniqueCode(block, existingIds);
         await onSave({
-          id: unitId,
+          id: finalUnitId,
           block,
-          houseNumber: cleanNum,
-          streetName: streetName.trim() || streets[0] || 'Gang Duren',
+          houseNumber: houseNumber.trim() || finalUnitId.split('-')[1] || '-',
           headOfFamily: cleanName,
-          nik: nik.trim() || `320101${waDigits.slice(-6).padStart(6, '0')}0001`,
-          kkNumber: kkNumber.trim() || `320101${waDigits.slice(-6).padStart(6, '0')}0002`,
-          whatsapp: cleanWa,
+          nik: nik.trim(),
+          kkNumber: kkNumber.trim(),
+          whatsapp: whatsapp.trim(),
           email: email.trim(),
           occupancyStatus,
           familyMembers: Number(familyMembers) || 1,
@@ -201,15 +149,15 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
           accessPin: cleanPin,
         });
       } else if (resident) {
+        // Edit mode: ID Unit selalu dipertahankan dari kode unik resident.id
         await onSave({
-          id: unitId,
+          id: resident.id,
           block,
-          houseNumber: cleanNum,
-          streetName: streetName.trim() || resident.streetName,
+          houseNumber: houseNumber.trim() || resident.houseNumber,
           headOfFamily: cleanName,
           nik: nik.trim(),
           kkNumber: kkNumber.trim(),
-          whatsapp: cleanWa,
+          whatsapp: whatsapp.trim(),
           email: email.trim(),
           occupancyStatus,
           familyMembers: Number(familyMembers) || 1,
@@ -220,7 +168,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
       }
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat menyimpan data');
+      setError(err instanceof Error ? err.message : 'Gagal menyimpan data warga.');
     } finally {
       setLoading(false);
     }
@@ -230,29 +178,26 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
 
   return (
     <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="resident-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150"
     >
-      <div
-        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl bg-white shadow-2xl border border-stone-200 overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-stone-200 overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-stone-200 bg-stone-50/80 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-900 text-white shadow-xs">
-              {mode === 'add' ? <UserPlus className="h-5 w-5" /> : <Edit3 className="h-5 w-5" />}
+        <div className="flex items-center justify-between bg-stone-900 text-white px-6 py-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
+              {mode === 'add' ? <UserPlus className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
             </div>
             <div>
-              <h2 id="resident-modal-title" className="font-display text-base font-bold text-slate-900">
-                {mode === 'add' ? 'Tambah Data Warga Baru' : `Ubah Data Warga (${resident?.id})`}
-              </h2>
-              <p className="text-xs text-slate-500">
+              <h3 id="resident-modal-title" className="font-display text-sm sm:text-base font-bold">
+                {mode === 'add' ? 'Tambah Warga Baru' : `Perbarui Data Warga (${resident?.id})`}
+              </h3>
+              <p className="text-[11px] text-stone-300">
                 {mode === 'add'
-                  ? 'Daftarkan rumah dan warga baru ke dalam pembukuan kas & portal lingkungan'
-                  : `Perbarui profil dan data kepemilikan unit ${resident?.id}`}
+                  ? 'ID Unit dibuat dari kode unik otomatis sehingga data dapat diperbarui bebas'
+                  : 'Ubah informasi profil warga tanpa mengubah kode unik ID unit'}
               </p>
             </div>
           </div>
@@ -260,7 +205,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Tutup form"
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-stone-200/70 hover:text-slate-700 transition-colors cursor-pointer"
+            className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-800 hover:text-white transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -280,15 +225,27 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
                 <Home className="h-3.5 w-3.5 text-emerald-800" />
-                <span>Identitas Unit Rumah</span>
+                <span>Identitas Unit &amp; Kode Unik</span>
               </span>
-              <span className="font-mono text-xs font-bold rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-200 px-2.5 py-1">
-                ID Unit: {computedUnitId}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-bold rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 px-2.5 py-1">
+                  ID Unit: {mode === 'edit' ? resident?.id : unitId}
+                </span>
+                {mode === 'add' && (
+                  <button
+                    type="button"
+                    onClick={handleGenerateNewCode}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-800 hover:text-emerald-950 bg-white border border-stone-300 rounded px-2 py-0.5 cursor-pointer shadow-2xs"
+                  >
+                    <Shuffle className="w-3 h-3" />
+                    <span>Acak Kode</span>
+                  </button>
+                )}
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
-              <div className="sm:col-span-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="block text-xs font-semibold text-slate-700">
                     Pilih Blok <span className="text-rose-600">*</span>
@@ -310,77 +267,23 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 >
                   {blocks.map((b) => (
                     <option key={b.id} value={b.id}>
-                      {b.name} ({b.defaultStreet || 'Gang Duren'})
+                      {b.name}
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="sm:col-span-3">
+              <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Nomor Rumah <span className="text-rose-600">*</span>
+                  Nomor Rumah (Opsional)
                 </label>
                 <input
                   type="text"
-                  required
-                  placeholder="Contoh: 02"
+                  placeholder="Contoh: 01, 15, atau -"
                   value={houseNumber}
                   onChange={(e) => setHouseNumber(e.target.value)}
-                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none focus:ring-1 focus:ring-emerald-800"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-900 focus:border-emerald-800 focus:outline-none"
                 />
-                <p className="text-[10px] text-slate-400 mt-1">
-                  Dapat diubah bebas
-                </p>
-              </div>
-
-              <div className="sm:col-span-5">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">
-                    Nama Jalan / Gang <span className="text-rose-600">*</span>
-                  </label>
-                  {onOpenManageBlocks && (
-                    <button
-                      type="button"
-                      onClick={onOpenManageBlocks}
-                      className="text-[10px] text-emerald-800 hover:text-emerald-950 font-semibold underline cursor-pointer"
-                    >
-                      + Tambah Gang
-                    </button>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  list="resident-street-suggestions"
-                  required
-                  placeholder="Pilih atau ketik nama gang..."
-                  value={streetName}
-                  onChange={(e) => setStreetName(e.target.value)}
-                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none font-medium"
-                />
-                <datalist id="resident-street-suggestions">
-                  {streets.map((s) => (
-                    <option key={s} value={s} />
-                  ))}
-                </datalist>
-
-                {/* Quick-click pills for Gang Duren, Gang Anggur, etc. */}
-                <div className="flex flex-wrap items-center gap-1 mt-1.5">
-                  <span className="text-[10px] text-slate-400">Pilih cepat:</span>
-                  {streets.map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setStreetName(s)}
-                      className={`rounded-md px-1.5 py-0.5 text-[10px] font-medium border transition-colors cursor-pointer ${
-                        streetName === s
-                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
-                          : 'bg-stone-100 text-slate-600 border-stone-200 hover:bg-stone-200'
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -400,7 +303,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder="Nama lengkap sesuai KTP"
+                  placeholder="Nama warga / kepala keluarga"
                   value={headOfFamily}
                   onChange={(e) => setHeadOfFamily(e.target.value)}
                   className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs font-medium text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -409,31 +312,27 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Nomor WhatsApp (Aktif) <span className="text-rose-600">*</span>
+                  Nomor WhatsApp / Telepon (Opsional)
                 </label>
                 <div className="relative">
                   <Phone className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
                   <input
                     type="tel"
-                    required
-                    placeholder="0812-xxxx-xxxx"
+                    placeholder="Kosongkan jika tidak ada"
                     value={whatsapp}
-                    onChange={(e) => handleWhatsappChange(e.target.value)}
+                    onChange={(e) => setWhatsapp(e.target.value)}
                     className="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
                   />
                 </div>
-                <p className="mt-1 text-[10px] text-slate-500">
-                  Digunakan untuk notifikasi tagihan iuran &amp; broadcast warga.
-                </p>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Email (Opsional)
+                  Email Warga (Opsional)
                 </label>
                 <input
                   type="email"
-                  placeholder="warga@example.com"
+                  placeholder="Kosongkan jika tidak ada"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -442,12 +341,11 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Nomor Induk Kependudukan (NIK)
+                  NIK KTP (Opsional)
                 </label>
                 <input
                   type="text"
-                  maxLength={16}
-                  placeholder="16 digit NIK KTP"
+                  placeholder="Kosongkan jika tidak ada"
                   value={nik}
                   onChange={(e) => setNik(e.target.value)}
                   className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -456,12 +354,11 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Nomor Kartu Keluarga (KK)
+                  Nomor Kartu Keluarga (Opsional)
                 </label>
                 <input
                   type="text"
-                  maxLength={16}
-                  placeholder="16 digit No. KK"
+                  placeholder="Kosongkan jika tidak ada"
                   value={kkNumber}
                   onChange={(e) => setKkNumber(e.target.value)}
                   className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -470,14 +367,14 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
             </div>
           </div>
 
-          {/* Occupancy & Security Details */}
+          {/* Occupancy & Security Settings */}
           <div className="space-y-4">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <Shield className="h-3.5 w-3.5 text-emerald-800" />
-              <span>Status Hunian &amp; Akses Portal</span>
+              <KeyRound className="h-3.5 w-3.5 text-emerald-800" />
+              <span>Status Hunian &amp; PIN Akses</span>
             </span>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Status Hunian
@@ -485,7 +382,7 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 <select
                   value={occupancyStatus}
                   onChange={(e) => setOccupancyStatus(e.target.value as OccupancyStatus)}
-                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 focus:border-emerald-800 focus:outline-none"
                 >
                   <option value="Dihuni Pemilik">Dihuni Pemilik</option>
                   <option value="Dikontrakkan">Dikontrakkan</option>
@@ -499,98 +396,84 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 </label>
                 <input
                   type="number"
-                  min={1}
-                  max={25}
+                  min="0"
+                  max="20"
                   value={familyMembers}
-                  onChange={(e) => setFamilyMembers(Number(e.target.value) || 1)}
+                  onChange={(e) => setFamilyMembers(Number(e.target.value))}
                   className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Plat Nomor Kendaraan
+                  Plat Kendaraan
                 </label>
                 <input
                   type="text"
-                  placeholder="Contoh: F 1120 SK"
+                  placeholder="Contoh: T 1234 KBN / -"
                   value={vehiclePlate}
                   onChange={(e) => setVehiclePlate(e.target.value)}
-                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs text-slate-900 focus:border-emerald-800 focus:outline-none uppercase"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                PIN Masuk Portal Warga (4 Digit)
-              </label>
-              <div className="flex items-center gap-2">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    PIN Akses Portal Warga
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setAccessPin(String(Math.floor(1000 + Math.random() * 9000)))}
+                    className="text-[10px] text-emerald-800 hover:text-emerald-950 font-semibold underline cursor-pointer"
+                  >
+                    Acak PIN
+                  </button>
+                </div>
                 <input
                   type="text"
                   maxLength={6}
-                  placeholder="Default: 4 digit terakhir WA"
+                  placeholder="PIN angka unik (contoh: 3001)"
                   value={accessPin}
                   onChange={(e) => setAccessPin(e.target.value)}
-                  className="w-48 rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-bold text-slate-900 tracking-wider focus:border-emerald-800 focus:outline-none"
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 font-mono text-xs font-bold text-slate-900 focus:border-emerald-800 focus:outline-none"
                 />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const random = Math.floor(1000 + Math.random() * 9000).toString();
-                    setAccessPin(random);
-                  }}
-                  className="rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-stone-100 transition-colors cursor-pointer"
-                >
-                  Acak PIN Baru
-                </button>
               </div>
-              <p className="mt-1 text-[10px] text-slate-500">
-                Warga menggunakan Nomor Unit dan PIN ini saat masuk ke Portal Warga mandiri.
-              </p>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Catatan Tambahan (Opsional)
-              </label>
-              <textarea
-                rows={2}
-                placeholder="Catatan khusus terkait unit/warga..."
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
-              />
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Catatan Tambahan
+                </label>
+                <input
+                  type="text"
+                  placeholder="Catatan khusus unit rumah ini..."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs text-slate-900 focus:border-emerald-800 focus:outline-none"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Modal Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-200">
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
             <button
               type="button"
-              disabled={loading}
               onClick={onClose}
-              className="rounded-lg border border-stone-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-stone-50 transition-colors cursor-pointer"
+              disabled={loading}
+              className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-stone-50 transition-colors cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-900 px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition-colors disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-900 px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 disabled:opacity-50 transition-colors cursor-pointer"
             >
               {loading ? (
                 <span>Menyimpan...</span>
-              ) : mode === 'add' ? (
-                <>
-                  <UserPlus className="h-4 w-4" />
-                  <span>Simpan Warga Baru</span>
-                </>
               ) : (
-                <>
-                  <Edit3 className="h-4 w-4" />
-                  <span>Simpan Perubahan</span>
-                </>
+                <span>{mode === 'add' ? 'Simpan Warga Baru' : 'Simpan Perubahan'}</span>
               )}
             </button>
           </div>

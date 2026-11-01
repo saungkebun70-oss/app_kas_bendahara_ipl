@@ -119,7 +119,7 @@ export function sortTransactionsChronologically(transactions: LedgerTransaction[
 
 export interface BlockSummary {
   block: BlockCode;
-  streetName: string;
+  streetName?: string;
   totalUnits: number;
   paidUnits: number;
   unpaidUnits: number;
@@ -361,15 +361,49 @@ export function getLast6MonthsCashFlow(
 }
 
 
-export const EXEMPT_OFFICER_UNIT_IDS = ['B1-01', 'B1-09', 'A-01', 'A-09'] as const;
+export const EXEMPT_OFFICER_UNIT_IDS = [
+  'B3-07', // Ketua: Bp. Erlangga
+  'B7-16', // Bendahara: Bp. Andriansyah
+  'B8-05', // Pembina: Bp. Iwan
+  'B5-21', // Humas: Bp. Doni
+  'B5-24', // Humas: Bp. Wahyu
+  'B8-06', // Seksi Olahraga: Bp. Deni
+  'B3-20',
+  'A-01',
+  'A-09',
+] as const;
 
 export function isUnitExemptFromIuran(unitId: string): boolean {
-  return unitId === 'B1-01' || unitId === 'B1-09' || unitId === 'A-01' || unitId === 'A-09';
+  return (
+    unitId === 'B3-07' ||
+    unitId === 'B7-16' ||
+    unitId === 'B8-05' ||
+    unitId === 'B5-21' ||
+    unitId === 'B5-24' ||
+    unitId === 'B8-06' ||
+    unitId === 'B3-20' ||
+    unitId === 'A-01' ||
+    unitId === 'A-09'
+  );
 }
 
-export function getUnitExemptionInfo(unitId: string): { isExempt: boolean; roleLabel?: string; roleTitle?: string } {
-  if (unitId === 'B1-01' || unitId === 'A-01') return { isExempt: true, roleLabel: 'Ketua (Bebas Iuran)', roleTitle: 'Ketua' };
-  if (unitId === 'B1-09' || unitId === 'A-09') return { isExempt: true, roleLabel: 'Bendahara (Bebas Iuran)', roleTitle: 'Bendahara' };
+export function getUnitExemptionInfo(unitId: string): {
+  isExempt: boolean;
+  roleLabel?: string;
+  roleTitle?: string;
+} {
+  if (unitId === 'B3-07' || unitId === 'A-01')
+    return { isExempt: true, roleLabel: 'Ketua Pengurus (Bebas Iuran)', roleTitle: 'Ketua Pengurus' };
+  if (unitId === 'B7-16' || unitId === 'B3-20' || unitId === 'A-09')
+    return { isExempt: true, roleLabel: 'Bendahara Kas (Bebas Iuran)', roleTitle: 'Bendahara Kas' };
+  if (unitId === 'B8-05')
+    return { isExempt: true, roleLabel: 'Pembina (Bebas Iuran)', roleTitle: 'Pembina' };
+  if (unitId === 'B5-21')
+    return { isExempt: true, roleLabel: 'Humas (Bebas Iuran)', roleTitle: 'Humas' };
+  if (unitId === 'B5-24')
+    return { isExempt: true, roleLabel: 'Humas (Bebas Iuran)', roleTitle: 'Humas' };
+  if (unitId === 'B8-06')
+    return { isExempt: true, roleLabel: 'Seksi Olahraga (Bebas Iuran)', roleTitle: 'Seksi Olahraga' };
   return { isExempt: false };
 }
 
@@ -458,8 +492,10 @@ export function calculateRealtimeSummary(
     targetIuranRevenue > 0 ? Math.round((monthIncome / targetIuranRevenue) * 100) : 0;
   const unpaidPotentialAmount = unpaidUnitsCount * settings.monthlyFee;
 
-  const rawBlocks = settings?.customBlocks?.map((b) => b.id) || Array.from(new Set(residents.map((r) => r.block)));
-  const blocks: BlockCode[] = rawBlocks.length > 0 ? rawBlocks : ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'];
+  const blocks: BlockCode[] =
+    settings.customBlocks && settings.customBlocks.length > 0
+      ? settings.customBlocks.map((b) => b.id)
+      : Array.from(new Set(residents.map((r) => r.block)));
   const blockBreakdown: BlockSummary[] = blocks.map((block) => {
     const unitsInBlock = residents.filter((r) => r.block === block);
     const billableInBlock = unitsInBlock.filter((r) => !isUnitExemptFromIuran(r.id));
@@ -467,7 +503,7 @@ export function calculateRealtimeSummary(
     const unpaidInBlock = billableInBlock.length - paidInBlock;
     return {
       block,
-      streetName: unitsInBlock[0]?.streetName ?? `Blok ${block}`,
+      streetName: `Blok ${block}`,
       totalUnits: unitsInBlock.length,
       paidUnits: paidInBlock,
       unpaidUnits: unpaidInBlock,
@@ -724,7 +760,7 @@ export interface QuarterlyLPJReport {
   expenseByCategory: CategoryAggregate[];
   blockRealization: Array<{
     block: BlockCode;
-    streetName: string;
+    streetName?: string;
     unitsCount: number;
     expectedPaymentsCount: number;
     actualPaymentsCount: number;
@@ -824,8 +860,10 @@ export function calculateQuarterlyLPJ(
     };
   }).filter((c) => c.amount > 0);
 
-  const rawBlocks = state.settings?.customBlocks?.map((b) => b.id) || Array.from(new Set(state.residents.map((r) => r.block)));
-  const blocks: BlockCode[] = rawBlocks.length > 0 ? rawBlocks : ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10'];
+  const blocks: BlockCode[] =
+    state.settings.customBlocks && state.settings.customBlocks.length > 0
+      ? state.settings.customBlocks.map((b) => b.id)
+      : Array.from(new Set(state.residents.map((r) => r.block)));
   const blockRealization = blocks.map((block) => {
     const units = state.residents.filter((r) => r.block === block);
     const billableUnits = units.filter((r) => !isUnitExemptFromIuran(r.id));
@@ -842,7 +880,7 @@ export function calculateQuarterlyLPJ(
 
     return {
       block,
-      streetName: units[0]?.streetName ?? `Blok ${block}`,
+      streetName: `Blok ${block}`,
       unitsCount: units.length,
       expectedPaymentsCount,
       actualPaymentsCount,
@@ -975,7 +1013,7 @@ export function getUnpaidResidentsForBilling(
     const formattedMessage = formatWhatsAppReminderMessage(settings.whatsappTemplate, {
       nama: resident.headOfFamily,
       unit: resident.id,
-      alamat: resident.streetName,
+      alamat: `Blok ${resident.block}`,
       periode: unpaidLabels.join(', '),
       nominal: formatRupiah(totalArrears),
       jatuhTempo: settings.dueDayOfMonth,

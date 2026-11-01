@@ -156,7 +156,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
       return (
         r.id.toLowerCase().includes(q) ||
         r.headOfFamily.toLowerCase().includes(q) ||
-        r.streetName.toLowerCase().includes(q) ||
+        r.block.toLowerCase().includes(q) ||
         r.whatsapp.toLowerCase().includes(q) ||
         r.vehiclePlate.toLowerCase().includes(q)
       );
@@ -193,7 +193,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs hover:bg-stone-50 transition-colors cursor-pointer"
             >
               <Layers className="h-4 w-4 text-emerald-800" />
-              <span>Kelola Blok &amp; Gang</span>
+              <span>Kelola Blok</span>
             </button>
           )}
 
@@ -245,7 +245,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           <input
             type="search"
             aria-label="Cari unit rumah, nama kepala keluarga, WhatsApp, atau plat kendaraan"
-            placeholder="Cari unit (A-01, B1-01), nama warga, nomor WA, plat, atau nama gang..."
+            placeholder="Cari unit (B3-01, B5-18, B6-01, B7-03, B8-01), nama warga, nomor WA, plat..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
@@ -430,15 +430,15 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
 
                     <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-stone-200/60 text-slate-600">
                       <div>
-                        <span className="text-[10px] text-slate-400 block">Alamat / Status</span>
+                        <span className="text-[10px] text-slate-400 block">Blok / Status</span>
                         <span className="font-medium text-slate-800 truncate block">
-                          {res.streetName} ({res.occupancyStatus})
+                          Blok {res.block} ({res.occupancyStatus})
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-slate-400 block">WhatsApp / Plat</span>
+                        <span className="text-[10px] text-slate-400 block">Kontak / Plat</span>
                         <span className="font-mono text-slate-700 truncate block">
-                          {res.whatsapp} · {res.vehiclePlate}
+                          {res.whatsapp || '—'} · {res.vehiclePlate || '-'}
                         </span>
                       </div>
                     </div>
@@ -511,9 +511,9 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                 <thead className="sticky top-0 z-10 bg-stone-100/95 backdrop-blur-xs shadow-2xs">
                   <tr className="border-b border-stone-200 text-xs font-semibold text-slate-700">
                     <th className="py-3 pl-5 pr-3">Unit</th>
-                    <th className="px-3 py-3">Kepala Keluarga &amp; NIK</th>
-                    <th className="px-3 py-3">Alamat &amp; Hunian</th>
-                    <th className="px-3 py-3">WhatsApp &amp; Plat</th>
+                    <th className="px-3 py-3">Kepala Keluarga</th>
+                    <th className="px-3 py-3">Blok &amp; Hunian</th>
+                    <th className="px-3 py-3">Kontak &amp; Plat</th>
                     <th className="px-3 py-3">Status {formatMonthLabel(activePeriodMonth).split(' ')[0]}</th>
                     <th className="px-3 py-3 text-right">Riwayat</th>
                     <th className="py-3 pl-3 pr-5 text-right">Tindakan</th>
@@ -532,16 +532,16 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         <td className="px-3 py-3">
                           <div className="font-semibold text-slate-900">{res.headOfFamily}</div>
                           <div className="font-mono text-xs text-slate-500 tabular-nums">
-                            NIK {maskNik(res.nik, isAdmin)} · {res.familyMembers} jiwa
+                            {res.familyMembers} jiwa · Sejak {res.joinedYear}
                           </div>
                         </td>
                         <td className="px-3 py-3 text-xs text-slate-600">
-                          <div className="text-slate-800">{res.streetName}</div>
+                          <div className="text-slate-900 font-semibold">Blok {res.block}</div>
                           <div className="text-slate-500">{res.occupancyStatus}</div>
                         </td>
                         <td className="px-3 py-3 font-mono text-xs text-slate-700 tabular-nums whitespace-nowrap">
-                          <div>{res.whatsapp}</div>
-                          <div className="text-slate-500">{res.vehiclePlate}</div>
+                          <div>{res.whatsapp || '—'}</div>
+                          <div className="text-slate-500">{res.vehiclePlate || '-'}</div>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap">
                           {isUnitExemptFromIuran(res.id) ? (
@@ -722,7 +722,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                 Unit {deleteConfirmResident.id} — {deleteConfirmResident.headOfFamily}
               </p>
               <p className="text-slate-600">
-                Alamat: {deleteConfirmResident.streetName} · Status: {deleteConfirmResident.occupancyStatus}
+                Blok {deleteConfirmResident.block} · Status: {deleteConfirmResident.occupancyStatus}
               </p>
               <p className="text-rose-700 font-medium pt-1">
                 Data warga ini tidak akan muncul lagi di daftar iuran atau portal warga.

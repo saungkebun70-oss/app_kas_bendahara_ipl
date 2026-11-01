@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   UserCheck,
+  Users,
 } from 'lucide-react';
 import type { DatabaseState, LedgerTransaction, ResidentUnit } from '../types/finance';
 import type { AuthSession } from '../lib/auth';
@@ -39,6 +40,7 @@ import { downloadMonthlyReportPDF, downloadQuarterlyLPJPDF, downloadUnitReceiptP
 import { WargaPaymentConfirmationModal } from './WargaPaymentConfirmationModal';
 import { HeadlineInformasiShowcase } from './HeadlineInformasiShowcase';
 import { DocumentationPhotoGallery } from './DocumentationPhotoGallery';
+import { StrukturPengurusTable } from './StrukturPengurusTable';
 
 export type WargaPortalTab =
   | 'iuran'
@@ -46,7 +48,8 @@ export type WargaPortalTab =
   | 'kegiatan'
   | 'keamanan'
   | 'tunggakan'
-  | 'laporan';
+  | 'laporan'
+  | 'pengurus';
 
 interface WargaPortalViewProps {
   state: DatabaseState;
@@ -124,7 +127,7 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                 Portal Akun Warga · Unit {resident.id}
               </span>
               <span aria-hidden="true">·</span>
-              <span>{resident.streetName}</span>
+              <span>Blok {resident.block}</span>
               <span aria-hidden="true">·</span>
               <span>{resident.occupancyStatus}</span>
               {isExempt && (
@@ -305,6 +308,21 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
           >
             <FileSpreadsheet className="w-4 h-4" />
             <span>Laporan Kas &amp; LPJ</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={currentTab === 'pengurus'}
+            onClick={() => handleTabChange('pengurus')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+              currentTab === 'pengurus'
+                ? 'bg-gradient-to-r from-[#0b2273] to-[#0f766e] text-white shadow-xs font-extrabold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Struktur Pengurus ({state.settings.committeeMembers?.length || 6})</span>
           </button>
         </div>
       </div>
@@ -858,7 +876,7 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                   <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-600">
                     <th className="py-2.5 pl-4 pr-3">Unit Rumah</th>
                     <th className="px-3 py-2.5">Nama Kepala Keluarga</th>
-                    <th className="px-3 py-2.5">Blok &amp; Jalan</th>
+                    <th className="px-3 py-2.5">Blok</th>
                     <th className="px-3 py-2.5">Bulan Menunggak</th>
                     <th className="py-2.5 pl-3 pr-4 text-right">Total Tunggakan</th>
                   </tr>
@@ -872,8 +890,8 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
                       <td className="px-3 py-2.5 font-semibold text-slate-900">
                         {item.resident.headOfFamily}
                       </td>
-                      <td className="px-3 py-2.5 text-slate-600">
-                        {item.resident.streetName}
+                      <td className="px-3 py-2.5 text-slate-600 font-medium">
+                        Blok {item.resident.block}
                       </td>
                       <td className="px-3 py-2.5">
                         <div className="flex flex-wrap gap-1">
@@ -1114,6 +1132,23 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
               </div>
             );
           })()}
+        </section>
+      )}
+
+      {/* ========================================================================= */}
+      {/* HALAMAN 7: TABEL STRUKTUR KEPENGURUSAN SAUNG KEBUN                        */}
+      {/* ========================================================================= */}
+      {currentTab === 'pengurus' && (
+        <section
+          aria-label="Struktur Kepengurusan Saung Kebun"
+          data-testid="warga-pengurus-section"
+          className="space-y-4"
+        >
+          <StrukturPengurusTable
+            committeeMembers={state.settings.committeeMembers}
+            housingName={state.settings.housingName}
+            rtRwLabel={state.settings.rtRwLabel}
+          />
         </section>
       )}
 

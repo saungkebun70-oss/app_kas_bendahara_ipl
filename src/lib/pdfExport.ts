@@ -203,7 +203,7 @@ export function downloadMonthlyReportPDF(state: DatabaseState, periodMonth: stri
     String(idx + 1),
     u.resident.id,
     u.resident.headOfFamily,
-    u.resident.streetName,
+    `Blok ${u.resident.block}`,
     u.paid && u.transaction ? formatShortDate(u.transaction.date) : '-',
     u.paid && u.transaction ? u.transaction.paymentMethod : '-',
     u.paid ? formatRupiah(u.transaction?.amount ?? state.settings.monthlyFee) : 'Rp 0',
@@ -213,7 +213,7 @@ export function downloadMonthlyReportPDF(state: DatabaseState, periodMonth: stri
   autoTable(doc, {
     startY: 42.5,
     margin: { left: 14, right: 14 },
-    head: [['No', 'Unit', 'Nama Kepala Keluarga', 'Alamat Jalan', 'Tgl Bayar', 'Metode', 'Nominal', 'Status']],
+    head: [['No', 'Unit', 'Nama Kepala Keluarga', 'Blok', 'Tgl Bayar', 'Metode', 'Nominal', 'Status']],
     body: unitRows,
     theme: 'striped',
     styles: { fontSize: 7.5, cellPadding: 1.5 },
@@ -342,10 +342,9 @@ export function downloadQuarterlyLPJPDF(
   autoTable(doc, {
     startY: nextY + 3,
     margin: { left: 14, right: 14 },
-    head: [['Blok', 'Jalan', 'Jumlah Unit', 'Target 3 Bln', 'Realisasi Masuk', 'Tunggakan', 'Capaian']],
+    head: [['Blok', 'Jumlah Unit', 'Target 3 Bln', 'Realisasi Masuk', 'Tunggakan', 'Capaian']],
     body: lpj.blockRealization.map((b) => [
       `Blok ${b.block}`,
-      b.streetName,
       `${b.unitsCount} Rumah`,
       formatRupiah(b.targetAmount),
       formatRupiah(b.realizedAmount),

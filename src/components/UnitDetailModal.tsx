@@ -91,7 +91,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
       setNik(resident.nik);
       setKkNumber(resident.kkNumber);
       setWhatsapp(resident.whatsapp);
-      setEmail(resident.email);
+      setEmail(resident.email || '');
       setOccupancyStatus(resident.occupancyStatus);
       setFamilyMembers(resident.familyMembers);
       setVehiclePlate(resident.vehiclePlate);
@@ -218,7 +218,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                 Unit {resident.id}
               </span>
               <span aria-hidden="true">·</span>
-              <span>{resident.streetName}</span>
+              <span>Blok {resident.block}</span>
               <span aria-hidden="true">·</span>
               <span>{resident.occupancyStatus}</span>
             </div>
@@ -598,11 +598,12 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   </div>
                   <div>
                     <label htmlFor="edit-wa" className="block text-xs font-medium text-slate-700">
-                      Nomor WhatsApp Aktif
+                      Nomor WhatsApp (Opsional)
                     </label>
                     <input
                       id="edit-wa"
                       type="text"
+                      placeholder="Kosongkan jika belum ada"
                       value={whatsapp}
                       onChange={(e) => setWhatsapp(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
@@ -610,11 +611,12 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   </div>
                   <div>
                     <label htmlFor="edit-nik" className="block text-xs font-medium text-slate-700">
-                      NIK KTP (16 Digit)
+                      NIK KTP (Opsional)
                     </label>
                     <input
                       id="edit-nik"
                       type="text"
+                      placeholder="Kosongkan jika belum ada"
                       value={nik}
                       onChange={(e) => setNik(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
@@ -622,11 +624,12 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   </div>
                   <div>
                     <label htmlFor="edit-kk" className="block text-xs font-medium text-slate-700">
-                      Nomor Kartu Keluarga (KK)
+                      Nomor Kartu Keluarga (Opsional)
                     </label>
                     <input
                       id="edit-kk"
                       type="text"
+                      placeholder="Kosongkan jika belum ada"
                       value={kkNumber}
                       onChange={(e) => setKkNumber(e.target.value)}
                       className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
@@ -719,21 +722,21 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
             ) : (
               <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs sm:grid-cols-3">
                 <div>
-                  <dt className="text-slate-400">WhatsApp Aktif</dt>
+                  <dt className="text-slate-400">WhatsApp / Kontak</dt>
                   <dd className="mt-0.5 font-mono font-semibold text-slate-900 tabular-nums">
-                    {resident.whatsapp}
+                    {resident.whatsapp || '—'}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-slate-400">NIK Kepala Keluarga</dt>
                   <dd className="mt-0.5 font-mono text-slate-800 tabular-nums">
-                    {maskNik(resident.nik, isAdmin)}
+                    {resident.nik ? maskNik(resident.nik, isAdmin) : '—'}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-slate-400">No. Kartu Keluarga</dt>
                   <dd className="mt-0.5 font-mono text-slate-800 tabular-nums">
-                    {maskNik(resident.kkNumber, isAdmin)}
+                    {resident.kkNumber ? maskNik(resident.kkNumber, isAdmin) : '—'}
                   </dd>
                 </div>
                 <div>
@@ -807,7 +810,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
 
                   <a
                     href={`https://wa.me/${resident.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
-                      `Halo Bapak/Ibu ${resident.headOfFamily} (Warga Unit ${resident.id}),\n\nBerikut adalah akun resmi untuk login ke Portal Warga Perumahan Saung Kebun:\n\n🏡 Nomor Unit: ${resident.id}\n🔑 PIN Akses: ${resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}\n🌐 Tautan Portal Warga: ${window.location.origin}/#warga\n\nBapak/Ibu dapat menggunakan akun ini untuk melihat transparansi iuran, konfirmasi bukti pembayaran, serta laporan pos satpam.\n\nSalam hormat,\nPengurus Lingkungan Saung Kebun`
+                      `Halo Bapak/Ibu ${resident.headOfFamily} (Warga Unit ${resident.id}),\n\nBerikut adalah akun resmi untuk login ke Portal Warga Perumahan Saung Kebun:\n\n🏡 Nomor Unit: ${resident.id}\n🔑 PIN Akses: ${resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '—'}\n🌐 Tautan Portal Warga: ${window.location.origin}/#warga\n\nBapak/Ibu dapat menggunakan akun ini untuk melihat transparansi iuran unit Anda, konfirmasi pembayaran, serta laporan pos satpam.\n\nCatatan: Jaga kerahasiaan PIN ini agar akun Anda tidak dapat diakses warga lain.\n\nSalam hormat,\nPengurus Lingkungan Saung Kebun`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -836,10 +839,10 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
                   </span>
                   <div className="mt-1 flex items-center justify-between">
                     <span className="font-mono text-base font-bold text-[#0d5c75]">
-                      {resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '1234'}
+                      {resident.accessPin || resident.whatsapp.replace(/\D/g, '').slice(-4) || '—'}
                     </span>
                     <span className="text-[11px] text-emerald-700 font-medium">
-                      {resident.accessPin ? 'PIN Kustom Acak' : 'PIN Default WhatsApp'}
+                      {resident.accessPin ? 'PIN Unik Acak' : '4 Digit Terakhir WA'}
                     </span>
                   </div>
                 </div>

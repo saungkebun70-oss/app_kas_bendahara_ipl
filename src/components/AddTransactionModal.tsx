@@ -347,7 +347,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             <>
               <div>
                 <label htmlFor="trx-unit" className="block text-xs font-semibold text-slate-700">
-                  Pilih Unit Rumah (55 Rumah Saung Kebun)
+                  Pilih Unit Rumah ({state.residents.length} Rumah Saung Kebun)
                 </label>
                 <select
                   id="trx-unit"

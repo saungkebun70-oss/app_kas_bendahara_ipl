@@ -55,7 +55,7 @@ const MANAGE_NAV_ITEMS: Array<{
   icon: React.ComponentType<{ className?: string }>;
 }> = [
   { id: 'dashboard', label: 'Balance & Kas', icon: LayoutDashboard },
-  { id: 'residents', label: 'Data 55 Warga', icon: Home },
+  { id: 'residents', label: 'Data Warga', icon: Home },
   { id: 'security_officers', label: 'Anggota Satpam', icon: ShieldCheck },
   { id: 'transactions', label: 'Buku Transaksi', icon: BookOpen },
   { id: 'reports', label: 'LPJ 3 Bulan & PDF', icon: FileSpreadsheet },

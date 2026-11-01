@@ -82,9 +82,9 @@ function loadSessionForCurrentPortal(): AuthSession | null {
       return {
         role: 'bendahara',
         isAdmin: true,
-        displayName: 'Andriansyah',
+        displayName: 'Ardiansyah Zein',
         roleLabel: 'Admin — Bendahara',
-        unitId: 'A-09',
+        unitId: 'B3-20',
         loginAt: new Date().toISOString(),
       };
     }
@@ -92,9 +92,9 @@ function loadSessionForCurrentPortal(): AuthSession | null {
       return {
         role: 'warga',
         isAdmin: false,
-        displayName: 'Agus Pratama Putra',
-        roleLabel: 'Warga Unit A-05',
-        unitId: 'A-05',
+        displayName: 'Asep Sukarma',
+        roleLabel: 'Warga Unit B3-01',
+        unitId: 'B3-01',
         loginAt: new Date().toISOString(),
       };
     }
@@ -183,6 +183,49 @@ export default function App() {
   useEffect(() => {
     loadDatabase();
   }, [loadDatabase]);
+
+  // Realtime Server Synchronization: polls state version and updates seamlessly
+  useEffect(() => {
+    let isMounted = true;
+    let lastVersion = 0;
+
+    const checkServerUpdate = async () => {
+      try {
+        const ver = await api.getStateVersion();
+        if (!isMounted) return;
+        if (lastVersion !== 0 && ver.version !== lastVersion) {
+          const freshState = await api.getState();
+          if (isMounted) {
+            setDb(freshState);
+            try {
+              localStorage.setItem('saung_kebun_cached_state', JSON.stringify(freshState));
+            } catch {}
+          }
+        }
+        lastVersion = ver.version;
+      } catch {
+        // ignore transient network hiccups
+      }
+    };
+
+    checkServerUpdate();
+    const pollInterval = setInterval(checkServerUpdate, 4000);
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        checkServerUpdate();
+      }
+    };
+    window.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', checkServerUpdate);
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+      window.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', checkServerUpdate);
+    };
+  }, []);
 
   // Handle URL hash changes (e.g. switching between #warga, #keamanan, #admin)
   useEffect(() => {
@@ -294,7 +337,7 @@ export default function App() {
             Memuat Buku Kas Perumahan Saung Kebun...
           </p>
           <p className="text-xs text-slate-500">
-            Menyiapkan profil 55 rumah &amp; rekapitulasi saldo real-time
+            Menyiapkan profil 116 unit hunian (B3, B5, B6, B7, B8) &amp; rekapitulasi saldo real-time
           </p>
         </div>
       </div>
@@ -676,6 +719,7 @@ export default function App() {
               <AdminSettingsView
                 settings={db.settings}
                 isAdmin={isAdmin}
+                isBendahara={session?.role === 'bendahara'}
                 onSaveSettings={async (updated) => {
                   const nextState = await api.updateSettings(updated);
                   setDb(nextState);
@@ -683,6 +727,13 @@ export default function App() {
                 onResetDemoData={async () => {
                   const resetData = await api.resetDatabase();
                   setDb(resetData);
+                }}
+                onResetTransactions={async () => {
+                  const res = await api.resetTransactions(session?.role || 'bendahara');
+                  if (res.ok && res.state) {
+                    setDb(res.state);
+                  }
+                  return res;
                 }}
                 onTriggerAutomatedReminders={async () => {
                   const res = await api.runAutomatedWhatsAppReminders({

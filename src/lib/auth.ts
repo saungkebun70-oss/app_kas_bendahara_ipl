@@ -88,7 +88,7 @@ export function authenticateAdmin(
         isAdmin: true,
         displayName: settings.chairpersonName,
         roleLabel: 'Admin — Ketua',
-        unitId: 'B1-01',
+        unitId: 'B3-07',
         loginAt: new Date().toISOString(),
       },
     };
@@ -115,7 +115,7 @@ export function authenticateAdmin(
         isAdmin: true,
         displayName: settings.treasurerName,
         roleLabel: 'Admin — Bendahara',
-        unitId: 'B1-09',
+        unitId: 'B7-16',
         loginAt: new Date().toISOString(),
       },
     };
@@ -249,25 +249,21 @@ export function authenticateWarga(
   if (!resident) {
     return {
       ok: false,
-      error: `Unit rumah "${unitId}" tidak terdaftar dalam database 55 rumah Saung Kebun. Periksa kembali penulisan nomor unit Anda.`,
+      error: `Unit rumah "${unitId}" tidak terdaftar dalam database Perumahan Saung Kebun. Periksa kembali penulisan nomor unit Anda (contoh: B3-01, B5-18, B6-01, B7-03, B8-01).`,
     };
   }
 
+  const customPin = resident.accessPin?.trim();
   const waDigits = resident.whatsapp.replace(/\D/g, '');
   const last4Wa = waDigits.slice(-4);
-  const nikLast4 = resident.nik.slice(-4);
-  const customPin = resident.accessPin?.trim();
 
-  const isPinValid =
-    (customPin && pin === customPin) ||
-    pin === DEFAULT_WARGA_PIN ||
-    pin === last4Wa ||
-    pin === nikLast4;
+  // Strict PIN matching: only the resident's specific PIN or personal WhatsApp digits are accepted
+  const isPinValid = customPin ? pin === customPin : (last4Wa && pin === last4Wa);
 
   if (!isPinValid) {
     return {
       ok: false,
-      error: `PIN Warga tidak sesuai untuk Unit ${resident.id}. Pastikan memasukkan PIN resmi yang telah dibagikan oleh Admin Pengurus.`,
+      error: `PIN Akses tidak sesuai untuk Unit ${resident.id}. Masukkan PIN resmi Anda yang telah dikirimkan oleh Pengurus/Admin agar akun tidak tertukar dengan warga lain.`,
     };
   }
 

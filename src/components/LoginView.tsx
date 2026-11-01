@@ -142,7 +142,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
     setError(null);
     const trimmedUnit = wargaUnitInput.trim().toUpperCase();
     if (!trimmedUnit) {
-      setError('Ketik nomor unit rumah Anda (contoh: A-01, B-05, C-10).');
+      setError('Ketik nomor unit rumah Anda (contoh: B3-01, B5-18, B6-01, B7-03, B8-01).');
       return;
     }
     if (!wargaPin.trim()) {
@@ -559,7 +559,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                 <div className="space-y-4">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 border border-sky-200 px-3 py-1 text-xs font-bold text-sky-800">
                     <Home className="h-3.5 w-3.5 text-sky-600" />
-                    <span>Portal Khusus Warga 55 Rumah</span>
+                    <span>Portal Khusus Warga 116 Unit</span>
                   </div>
 
                   <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
@@ -622,7 +622,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                       Login Warga Perumahan
                     </h2>
                     <p className="mt-1 text-xs text-slate-500">
-                      Masukkan Nomor Unit Rumah dan PIN Akun yang telah dibagikan oleh Admin Pengurus.
+                      Masukkan Nomor Unit Rumah dan PIN Akun pribadi yang telah dibagikan oleh Admin Pengurus.
                     </p>
                   </div>
 
@@ -648,7 +648,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         <input
                           id="warga-unit-input"
                           type="text"
-                          placeholder="Ketik nomor unit (contoh: A-01, B-05, C-10)"
+                          placeholder="Ketik nomor unit (contoh: B3-01, B5-18, B6-01, B7-03, B8-01)"
                           value={wargaUnitInput}
                           onChange={(e) => {
                             setWargaUnitInput(e.target.value);
@@ -658,7 +658,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         />
                       </div>
                       <span className="mt-1 block text-[11px] text-slate-400">
-                        Format nomor blok &amp; nomor rumah (contoh: A-01 sampai D-15).
+                        Format nomor blok &amp; nomor rumah (contoh: B3-01 s/d B3-23, B5-01 s/d B5-23, B6-01 s/d B6-23, B7-01 s/d B7-23, B8-01 s/d B8-24).
                       </span>
                     </div>
 
@@ -684,7 +684,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-slate-500">
-                        * Masukkan PIN yang telah dikirimkan oleh Pengurus kepada nomor Anda.
+                        * Masukkan PIN unik yang telah dikirimkan oleh Pengurus secara privat kepada unit Anda.
                       </p>
                     </div>
 
@@ -698,7 +698,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                 </div>
 
                 <div className="mt-6 border-t border-slate-100 pt-3 text-[11px] text-slate-400 flex items-center justify-between">
-                  <span>Akses Privat Warga 55 Rumah</span>
+                  <span>Akses Privat Warga 116 Unit</span>
                   <span>RT/RW Saung Kebun</span>
                 </div>
               </div>

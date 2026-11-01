@@ -9,7 +9,7 @@ import {
   writeBatch,
   serverTimestamp,
 } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+import firebaseConfig from '../../firebase-applet-config.json' with { type: 'json' };
 import type { DatabaseState, ResidentUnit, LedgerTransaction, CommunityActivityAnnouncement, SecurityGuardReport, PaymentConfirmation } from '../types/finance.ts';
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();

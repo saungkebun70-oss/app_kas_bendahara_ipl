@@ -40,12 +40,12 @@ export interface ResidentUnit {
   id: string;
   block: BlockCode;
   houseNumber: string;
-  streetName: string;
+  streetName?: string;
   headOfFamily: string;
   nik: string;
   kkNumber: string;
   whatsapp: string;
-  email: string;
+  email?: string;
   occupancyStatus: OccupancyStatus;
   familyMembers: number;
   vehiclePlate: string;
@@ -121,6 +121,21 @@ export interface AdminSettings {
   appLogoFileName?: string;
   customBlocks?: BlockConfig[];
   customStreets?: string[];
+  committeeMembers?: CommitteeMember[];
+}
+
+export interface CommitteeMember {
+  id: string;
+  role: string;
+  category: 'pembina' | 'ketua' | 'bendahara' | 'humas' | 'olahraga' | 'lainnya';
+  name: string;
+  block: string;
+  houseNumber: string;
+  unitId: string;
+  addressDisplay: string;
+  duties: string;
+  status: 'Aktif' | 'Cuti' | 'Purna';
+  phone?: string;
 }
 
 export type AnnouncementCategory =

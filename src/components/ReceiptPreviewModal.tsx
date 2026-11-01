@@ -186,7 +186,7 @@ export const ReceiptPreviewModal: React.FC<ReceiptPreviewModalProps> = ({
                         Unit Rumah / Blok
                       </td>
                       <td className="py-2.5 px-4 font-mono font-bold text-emerald-900">
-                        {resident.id} ({resident.streetName})
+                        {resident.id} (Blok {resident.block})
                       </td>
                     </tr>
                     <tr className="border-b border-slate-100">

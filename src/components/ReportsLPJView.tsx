@@ -540,7 +540,7 @@ export const ReportsLPJView: React.FC<ReportsLPJViewProps> = ({
                           {b.realizationPercent}%
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500">{b.streetName}</p>
+                      <p className="text-[11px] text-slate-500">{b.unitsCount} Unit Terdaftar</p>
                     </div>
 
                     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">

@@ -323,7 +323,7 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
             <div className="py-12 text-center space-y-2">
               <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
               <p className="text-sm font-semibold text-slate-900">
-                Seluruh 55 Rumah Sudah Lunas!
+                Seluruh {state.residents.length} Rumah Sudah Lunas!
               </p>
               <p className="text-xs text-slate-500">
                 Tidak ada tunggakan iuran pada periode {formatMonthLabel(activePeriodMonth)}.
@@ -351,9 +351,11 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                         <span className="font-semibold text-xs text-slate-900">
                           {item.resident.headOfFamily}
                         </span>
-                        <span className="text-[11px] font-mono text-slate-500">
-                          · {item.resident.whatsapp}
-                        </span>
+                        {item.resident.whatsapp ? (
+                          <span className="text-[11px] font-mono text-slate-500">
+                            · {item.resident.whatsapp}
+                          </span>
+                        ) : null}
                       </div>
                       <div className="flex flex-wrap items-center gap-2 text-[11px]">
                         <span className="text-slate-600">
@@ -482,7 +484,9 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-emerald-900 text-white hover:bg-emerald-800 rounded-lg cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>Kirim Sekarang ke {activePreviewItem.resident.whatsapp}</span>
+                      <span>
+                        Kirim Sekarang{activePreviewItem.resident.whatsapp ? ` ke ${activePreviewItem.resident.whatsapp}` : ''}
+                      </span>
                     </button>
                   )}
                 </div>

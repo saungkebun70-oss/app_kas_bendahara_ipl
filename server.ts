@@ -8,6 +8,7 @@ import {
   DEFAULT_ADMIN_SETTINGS,
   DEFAULT_ANNOUNCEMENTS,
   DEFAULT_BLOCKS,
+  DEFAULT_COMMITTEE_MEMBERS,
   DEFAULT_PAYMENT_CONFIRMATIONS,
   DEFAULT_SECURITY_OFFICERS,
   DEFAULT_SECURITY_REPORTS,
@@ -36,251 +37,9 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const isVercel =
-  process.env.VERCEL === '1' ||
-  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME) ||
-  Boolean(process.env.NOW_REGION);
-const DATA_DIR = isVercel ? '/tmp' : path.join(__dirname, 'data');
-const DB_FILE = isVercel
-  ? path.join('/tmp', 'saung-kebun-db.json')
-  : path.join(DATA_DIR, 'saung-kebun-db.json');
+const DATA_DIR = path.join(__dirname, 'data');
+const DB_FILE = path.join(DATA_DIR, 'saung-kebun-db.json');
 const TMP_DB_FILE = path.join('/tmp', 'saung-kebun-db.json');
-
-function normalizeAndMigrateState(parsed: DatabaseState): { state: DatabaseState; changed: boolean } {
-  let changed = false;
-  parsed.settings = {
-    ...DEFAULT_ADMIN_SETTINGS,
-    ...parsed.settings,
-    qrisImageUrl: parsed.settings?.qrisImageUrl || DEFAULT_ADMIN_SETTINGS.qrisImageUrl,
-    qrisFileName: parsed.settings?.qrisFileName || DEFAULT_ADMIN_SETTINGS.qrisFileName,
-    qrisMerchantName:
-      parsed.settings?.qrisMerchantName || DEFAULT_ADMIN_SETTINGS.qrisMerchantName,
-    qrisNmid: parsed.settings?.qrisNmid || DEFAULT_ADMIN_SETTINGS.qrisNmid,
-    publishArrearsToResidents:
-      parsed.settings?.publishArrearsToResidents ??
-      DEFAULT_ADMIN_SETTINGS.publishArrearsToResidents,
-    hiddenArrearsUnitIds: Array.isArray(parsed.settings?.hiddenArrearsUnitIds)
-      ? parsed.settings.hiddenArrearsUnitIds
-      : [],
-    publishedMonthlyReports: Array.isArray(parsed.settings?.publishedMonthlyReports)
-      ? parsed.settings.publishedMonthlyReports
-      : DEFAULT_ADMIN_SETTINGS.publishedMonthlyReports,
-    publishedQuarterlyLPJ: Array.isArray(parsed.settings?.publishedQuarterlyLPJ)
-      ? parsed.settings.publishedQuarterlyLPJ
-      : DEFAULT_ADMIN_SETTINGS.publishedQuarterlyLPJ,
-    customBlocks:
-      Array.isArray(parsed.settings?.customBlocks) && parsed.settings.customBlocks.length > 0
-        ? parsed.settings.customBlocks
-        : [...DEFAULT_BLOCKS],
-    customStreets:
-      Array.isArray(parsed.settings?.customStreets) && parsed.settings.customStreets.length > 0
-        ? parsed.settings.customStreets
-        : [...DEFAULT_STREETS],
-  };
-
-  // Replace legacy blocks A, B, C, D in customBlocks with B1-B10
-  const hadOldBlocks = (parsed.settings.customBlocks || []).some((b) =>
-    ['A', 'B', 'C', 'D'].includes(b.id.toUpperCase())
-  );
-  if (hadOldBlocks) {
-    changed = true;
-    parsed.settings.customBlocks = (parsed.settings.customBlocks || []).filter(
-      (b) => !['A', 'B', 'C', 'D'].includes(b.id.toUpperCase())
-    );
-  }
-  if (!parsed.settings.customBlocks) {
-    parsed.settings.customBlocks = [];
-  }
-  const existingBlockIds = new Set(parsed.settings.customBlocks.map((b) => b.id.toUpperCase()));
-  for (const defBlock of DEFAULT_BLOCKS) {
-    if (!existingBlockIds.has(defBlock.id.toUpperCase())) {
-      parsed.settings.customBlocks.push({ ...defBlock });
-      changed = true;
-    }
-  }
-  parsed.settings.customBlocks.sort((a, b) =>
-    a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' })
-  );
-
-  // Migrate residents with old blocks A, B, C, D to B1-B10
-  const unitIdMap = new Map<string, string>();
-  if (Array.isArray(parsed.residents)) {
-    parsed.residents = parsed.residents.map((r: ResidentUnit) => {
-      const oldId = r.id;
-      const bUpper = (r.block || '').toUpperCase();
-      const n = Number((r.houseNumber || '').replace(/\D/g, '')) || 1;
-
-      let nextBlock = r.block;
-      let nextHouseNum = r.houseNumber;
-      let nextStreet = r.streetName || '';
-
-      if (bUpper === 'A' || oldId.startsWith('A-')) {
-        if (n <= 9) {
-          nextBlock = 'B1';
-          nextHouseNum = String(n).padStart(2, '0');
-          nextStreet = 'Gang Duren';
-        } else {
-          nextBlock = 'B2';
-          nextHouseNum = String(n - 9).padStart(2, '0');
-          nextStreet = 'Gang Duren';
-        }
-      } else if (
-        bUpper === 'B' ||
-        (oldId.startsWith('B-') &&
-          !oldId.startsWith('B1-') &&
-          !oldId.startsWith('B2-') &&
-          !oldId.startsWith('B3-') &&
-          !oldId.startsWith('B4-') &&
-          !oldId.startsWith('B5-') &&
-          !oldId.startsWith('B6-') &&
-          !oldId.startsWith('B7-') &&
-          !oldId.startsWith('B8-') &&
-          !oldId.startsWith('B9-') &&
-          !oldId.startsWith('B10-'))
-      ) {
-        if (n <= 5) {
-          nextBlock = 'B3';
-          nextHouseNum = String(n).padStart(2, '0');
-          nextStreet = 'Gang Duren';
-        } else if (n <= 10) {
-          nextBlock = 'B4';
-          nextHouseNum = String(n - 5).padStart(2, '0');
-          nextStreet = 'Gang Duren';
-        } else {
-          nextBlock = 'B5';
-          nextHouseNum = String(n - 10).padStart(2, '0');
-          nextStreet = 'Gang Duren';
-        }
-      } else if (bUpper === 'C' || oldId.startsWith('C-')) {
-        if (n <= 5) {
-          nextBlock = 'B6';
-          nextHouseNum = String(n).padStart(2, '0');
-          nextStreet = 'Gang Anggur';
-        } else if (n <= 10) {
-          nextBlock = 'B7';
-          nextHouseNum = String(n - 5).padStart(2, '0');
-          nextStreet = 'Gang Anggur';
-        } else {
-          nextBlock = 'B8';
-          nextHouseNum = String(n - 10).padStart(2, '0');
-          nextStreet = 'Gang Anggur';
-        }
-      } else if (bUpper === 'D' || oldId.startsWith('D-')) {
-        if (n <= 5) {
-          nextBlock = 'B9';
-          nextHouseNum = String(n).padStart(2, '0');
-          nextStreet = 'Gang Anggur';
-        } else {
-          nextBlock = 'B10';
-          nextHouseNum = String(n - 5).padStart(2, '0');
-          nextStreet = 'Gang Anggur';
-        }
-      }
-
-      if (!nextStreet || nextStreet.includes('Melati') || nextStreet.includes('Cendana')) {
-        nextStreet = 'Gang Duren';
-      } else if (
-        nextStreet.includes('Kebun') ||
-        nextStreet.includes('Mawar') ||
-        nextStreet.includes('Kenanga') ||
-        nextStreet.includes('Asri')
-      ) {
-        nextStreet = 'Gang Anggur';
-      }
-
-      const nextId = `${nextBlock}-${nextHouseNum.padStart(2, '0')}`;
-      if (oldId !== nextId) {
-        unitIdMap.set(oldId, nextId);
-        changed = true;
-      }
-
-      let nextNotes = r.notes || '';
-      if (nextId === 'B1-01' || oldId === 'A-01') nextNotes = 'Ketua Lingkungan (Bebas Iuran)';
-      else if (nextId === 'B1-09' || oldId === 'A-09') nextNotes = 'Bendahara Kas (Bebas Iuran)';
-
-      return {
-        ...r,
-        id: nextId,
-        block: nextBlock,
-        houseNumber: nextHouseNum,
-        streetName: nextStreet,
-        notes: nextNotes,
-      };
-    });
-
-    // Sort residents by B1 to B10 then house number
-    parsed.residents.sort((a, b) => {
-      if (a.block !== b.block) {
-        return a.block.localeCompare(b.block, undefined, { numeric: true, sensitivity: 'base' });
-      }
-      const nA = Number(a.houseNumber.replace(/\D/g, '')) || 0;
-      const nB = Number(b.houseNumber.replace(/\D/g, '')) || 0;
-      return nA - nB || a.id.localeCompare(b.id);
-    });
-  }
-
-  // Cascade mapped unit IDs to transactions and payment confirmations
-  if (unitIdMap.size > 0) {
-    changed = true;
-    if (Array.isArray(parsed.transactions)) {
-      parsed.transactions = parsed.transactions.map((t) =>
-        t.unitId && unitIdMap.has(t.unitId)
-          ? { ...t, unitId: unitIdMap.get(t.unitId)! }
-          : t
-      );
-    }
-    if (Array.isArray(parsed.paymentConfirmations)) {
-      parsed.paymentConfirmations = parsed.paymentConfirmations.map((c) =>
-        c.unitId && unitIdMap.has(c.unitId)
-          ? { ...c, unitId: unitIdMap.get(c.unitId)! }
-          : c
-      );
-    }
-  }
-
-  if (parsed.settings.chairpersonName) {
-    parsed.settings.chairpersonName = parsed.settings.chairpersonName.trim();
-    if (parsed.settings.chairpersonName.includes('Hendra Wijaya')) {
-      parsed.settings.chairpersonName = 'Erlangga';
-    }
-  }
-  if (!Array.isArray(parsed.announcements)) {
-    parsed.announcements = DEFAULT_ANNOUNCEMENTS.map((a) => ({ ...a }));
-  } else {
-    parsed.announcements = parsed.announcements.map((a) => {
-      if (!a.photos || !Array.isArray(a.photos) || a.photos.length === 0) {
-        const match = DEFAULT_ANNOUNCEMENTS.find((def) => def.id === a.id);
-        if (match && match.photos && match.photos.length > 0) {
-          return { ...a, photos: [...match.photos] };
-        }
-        return { ...a, photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman] };
-      }
-      return a;
-    });
-  }
-  if (!Array.isArray(parsed.securityReports)) {
-    parsed.securityReports = DEFAULT_SECURITY_REPORTS.map((s) => ({ ...s }));
-  } else {
-    parsed.securityReports = parsed.securityReports.map((s) => {
-      if (!s.photos || !Array.isArray(s.photos) || s.photos.length === 0) {
-        const match = DEFAULT_SECURITY_REPORTS.find((def) => def.id === s.id);
-        if (match && match.photos && match.photos.length > 0) {
-          return { ...s, photos: [...match.photos] };
-        }
-        return { ...s, photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok] };
-      }
-      return s;
-    });
-  }
-  if (!Array.isArray(parsed.securityOfficers)) {
-    parsed.securityOfficers = DEFAULT_SECURITY_OFFICERS.map((o) => ({ ...o }));
-  }
-  if (!Array.isArray(parsed.paymentConfirmations) || parsed.paymentConfirmations.length === 0) {
-    parsed.paymentConfirmations = DEFAULT_PAYMENT_CONFIRMATIONS.map((c: PaymentConfirmation) => ({ ...c }));
-  }
-
-  return { state: parsed, changed };
-}
 
 function loadDatabase(): DatabaseState {
   try {
@@ -288,12 +47,69 @@ function loadDatabase(): DatabaseState {
     if (fs.existsSync(candidateFile)) {
       const raw = fs.readFileSync(candidateFile, 'utf-8');
       const parsed = JSON.parse(raw) as DatabaseState;
-      if (Array.isArray(parsed.residents) && parsed.residents.length > 0) {
-        const { state, changed } = normalizeAndMigrateState(parsed);
-        if (changed) {
-          saveDatabase(state);
+      if (
+        Array.isArray(parsed.residents) &&
+        parsed.residents.length >= 100 &&
+        parsed.residents.some((r) => r.block === 'B3')
+      ) {
+        parsed.settings = {
+          ...DEFAULT_ADMIN_SETTINGS,
+          ...parsed.settings,
+          customBlocks: DEFAULT_BLOCKS,
+        };
+        delete (parsed.settings as any).customStreets;
+
+        // Clean residents: remove streetName, clear nik, kkNumber, and whatsapp
+        if (Array.isArray(parsed.residents)) {
+          parsed.residents = parsed.residents.map((r: ResidentUnit) => {
+            const cleanR = { ...r };
+            delete (cleanR as any).streetName;
+            cleanR.nik = '';
+            cleanR.kkNumber = '';
+            cleanR.whatsapp = '';
+            return cleanR;
+          });
         }
-        return state;
+        parsed.settings.chairpersonName = 'ERLANGGA';
+        parsed.settings.treasurerName = 'ANDRIANSYAH';
+        parsed.settings.supervisorName = 'IWAN';
+        parsed.settings.secretaryName = 'WAHYU';
+        parsed.settings.committeeMembers = DEFAULT_COMMITTEE_MEMBERS.map((m) => ({ ...m }));
+        if (!Array.isArray(parsed.announcements)) {
+          parsed.announcements = DEFAULT_ANNOUNCEMENTS.map((a) => ({ ...a }));
+        } else {
+          parsed.announcements = parsed.announcements.map((a) => {
+            if (!a.photos || !Array.isArray(a.photos) || a.photos.length === 0) {
+              const match = DEFAULT_ANNOUNCEMENTS.find((def) => def.id === a.id);
+              if (match && match.photos && match.photos.length > 0) {
+                return { ...a, photos: [...match.photos] };
+              }
+              return { ...a, photos: [ACTIVITY_PHOTOS.drainase, ACTIVITY_PHOTOS.taman] };
+            }
+            return a;
+          });
+        }
+        if (!Array.isArray(parsed.securityReports)) {
+          parsed.securityReports = DEFAULT_SECURITY_REPORTS.map((s) => ({ ...s }));
+        } else {
+          parsed.securityReports = parsed.securityReports.map((s) => {
+            if (!s.photos || !Array.isArray(s.photos) || s.photos.length === 0) {
+              const match = DEFAULT_SECURITY_REPORTS.find((def) => def.id === s.id);
+              if (match && match.photos && match.photos.length > 0) {
+                return { ...s, photos: [...match.photos] };
+              }
+              return { ...s, photos: [SECURITY_PHOTOS.patroliMalam, SECURITY_PHOTOS.cctvMonitor, SECURITY_PHOTOS.rondaBlok] };
+            }
+            return s;
+          });
+        }
+        if (!Array.isArray(parsed.securityOfficers)) {
+          parsed.securityOfficers = DEFAULT_SECURITY_OFFICERS.map((o) => ({ ...o }));
+        }
+        if (!Array.isArray(parsed.paymentConfirmations) || parsed.paymentConfirmations.length === 0) {
+          parsed.paymentConfirmations = DEFAULT_PAYMENT_CONFIRMATIONS.map((c: PaymentConfirmation) => ({ ...c }));
+        }
+        return parsed;
       }
     }
   } catch (err) {
@@ -304,25 +120,23 @@ function loadDatabase(): DatabaseState {
   return seeded;
 }
 
+let stateVersion = Date.now();
+
 function saveDatabase(state: DatabaseState): void {
+  stateVersion = Date.now();
   try {
     if (!fs.existsSync(DATA_DIR)) {
-      try {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      } catch {}
+      fs.mkdirSync(DATA_DIR, { recursive: true });
     }
-    const tmpFile = path.join('/tmp', `saung-kebun-${Date.now()}-${Math.random().toString(36).slice(2, 6)}.tmp`);
+    const tmpFile = `${DB_FILE}.tmp`;
     fs.writeFileSync(tmpFile, JSON.stringify(state, null, 2), 'utf-8');
+    fs.renameSync(tmpFile, DB_FILE);
+  } catch {
     try {
-      fs.copyFileSync(tmpFile, DB_FILE);
-      fs.unlinkSync(tmpFile);
-    } catch {
-      try {
-        fs.writeFileSync(DB_FILE, JSON.stringify(state, null, 2), 'utf-8');
-      } catch {}
+      fs.writeFileSync(TMP_DB_FILE, JSON.stringify(state, null, 2), 'utf-8');
+    } catch (err2) {
+      console.error('Failed writing DB to /tmp fallback:', err2);
     }
-  } catch (err) {
-    console.warn('[DB] Local filesystem write notice (memory & cloud active):', err);
   }
 
   // Asynchronously sync mutations to Google Cloud Firestore online
@@ -337,15 +151,67 @@ let dbState: DatabaseState = loadDatabase();
 (async () => {
   try {
     const cloudState = await loadStateFromCloud();
-    if (cloudState && Array.isArray(cloudState.residents) && cloudState.residents.length > 0) {
-      const { state, changed } = normalizeAndMigrateState(cloudState);
-      dbState = state;
-      if (changed) {
-        saveDatabase(dbState);
-      }
-      console.log('[CloudDB] State loaded from online Google Cloud Firestore (normalized B1-B10).');
+    if (
+      cloudState &&
+      Array.isArray(cloudState.residents) &&
+      cloudState.residents.length >= 100 &&
+      cloudState.residents.some((r) => r.block === 'B3')
+    ) {
+      // Ensure committeeMembers and officials are present in cloudState
+      const mergedSettings = {
+        ...DEFAULT_ADMIN_SETTINGS,
+        ...cloudState.settings,
+        chairpersonName: 'ERLANGGA',
+        treasurerName: 'ANDRIANSYAH',
+        supervisorName: 'IWAN',
+        secretaryName: 'WAHYU',
+        committeeMembers: DEFAULT_COMMITTEE_MEMBERS.map((m) => ({ ...m })),
+      };
+
+      // Ensure B5-24 exists and officials have clean names
+      let residents = [...cloudState.residents];
+      const updateOfficial = (block: string, houseNumber: string, id: string, name: string, notes: string) => {
+        let r = residents.find((res) => res.id === id || (res.block === block && res.houseNumber === houseNumber));
+        if (r) {
+          r.headOfFamily = name;
+          r.notes = notes;
+        } else {
+          residents.push({
+            id,
+            block: block as any,
+            houseNumber,
+            headOfFamily: name,
+            occupancyStatus: 'Dihuni Pemilik',
+            familyMembers: 4,
+            vehiclePlate: `T 54${houseNumber} SK`,
+            joinedYear: 2024,
+            notes,
+            nik: '',
+            kkNumber: '',
+            whatsapp: '',
+            email: '',
+            accessPin: '1234',
+          });
+        }
+      };
+
+      updateOfficial('B8', '05', 'B8-05', 'IWAN', 'PEMBINA Lingkungan Saung Kebun');
+      updateOfficial('B3', '07', 'B3-07', 'ERLANGGA', 'KETUA Pengurus Lingkungan Saung Kebun');
+      updateOfficial('B7', '16', 'B7-16', 'ANDRIANSYAH', 'BENDAHARA Kas Lingkungan Saung Kebun');
+      updateOfficial('B5', '21', 'B5-21', 'DONI', 'HUMAS Lingkungan Saung Kebun');
+      updateOfficial('B5', '24', 'B5-24', 'WAHYU', 'HUMAS Lingkungan Saung Kebun');
+      updateOfficial('B8', '06', 'B8-06', 'DENI', 'SEKSI OLAH RAGA Lingkungan Saung Kebun');
+
+      dbState = {
+        ...cloudState,
+        settings: mergedSettings,
+        residents,
+      };
+      saveDatabase(dbState);
+      await syncStateToCloud(dbState);
+      console.log('[CloudDB] State loaded and synchronized with committee members in online Google Cloud Firestore.');
     } else {
-      console.log('[CloudDB] Seeding state to online Google Cloud Firestore...');
+      console.log('[CloudDB] Seeding updated B3-B8 state to online Google Cloud Firestore...');
       await syncStateToCloud(dbState);
     }
   } catch (err) {
@@ -370,12 +236,55 @@ function buildReceiptNumber(
 export const app = express();
 app.use(express.json({ limit: '10mb' }));
 
-// Normalize routes when running inside Vercel Serverless Function
-app.use((req, _res, next) => {
-  if (req.url && !req.url.startsWith('/api') && !req.url.startsWith('/@') && !req.url.startsWith('/src')) {
-    req.url = `/api${req.url.startsWith('/') ? '' : '/'}${req.url}`;
+app.get('/api/state/version', (_req, res) => {
+  res.json({ version: stateVersion, timestamp: new Date().toISOString() });
+});
+
+app.get('/api/database/backup', (_req, res) => {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="backup-saung-kebun-${timestamp}.json"`
+  );
+  res.send(JSON.stringify(dbState, null, 2));
+});
+
+app.post('/api/transactions/reset', (req, res) => {
+  const userRole = (req.headers['x-user-role'] as string)?.toLowerCase();
+  if (userRole !== 'bendahara') {
+    res.status(403).json({
+      error: 'Otorisasi ditolak. Reset data transaksi kas (pemasukan & pengeluaran) hanya dapat dilakukan oleh akun Bendahara.',
+    });
+    return;
   }
-  next();
+
+  try {
+    const backupDir = path.join(DATA_DIR, 'backups');
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
+    }
+    const backupFileName = `backup-before-reset-${Date.now()}.json`;
+    const backupFilePath = path.join(backupDir, backupFileName);
+    fs.writeFileSync(backupFilePath, JSON.stringify(dbState, null, 2), 'utf-8');
+
+    dbState = {
+      ...dbState,
+      transactions: [],
+    };
+    saveDatabase(dbState);
+
+    res.json({
+      ok: true,
+      message: 'Data pemasukan dan pengeluaran berhasil direset oleh Bendahara. File backup telah tersimpan aman.',
+      backupFile: backupFileName,
+      state: dbState,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err instanceof Error ? err.message : 'Gagal mereset data transaksi kas',
+    });
+  }
 });
 
 app.get('/api/state', (_req, res) => {
@@ -399,7 +308,7 @@ app.get('/api/state', (_req, res) => {
 
   app.get('/api/health', async (_req, res) => {
     try {
-      const isDbPresent = fs.existsSync(DB_FILE) || fs.existsSync(TMP_DB_FILE);
+      const isDbPresent = fs.existsSync(DB_FILE);
       const cloudStatus = await checkCloudConnection();
       res.json({
         status: 'ok',
@@ -409,24 +318,16 @@ app.get('/api/state', (_req, res) => {
         projectId: cloudStatus.projectId,
         databaseId: cloudStatus.databaseId,
         lastCloudSync: cloudStatus.lastSyncedAt,
-        totalResidents: dbState.residents?.length || 55,
-        totalTransactions: dbState.transactions?.length || 0,
+        totalResidents: dbState.residents.length,
+        totalTransactions: dbState.transactions.length,
         timestamp: new Date().toISOString(),
         uptimeSeconds: Math.floor(process.uptime()),
       });
     } catch (err: unknown) {
-      res.json({
-        status: 'ok',
-        database: 'memory_only',
-        cloudDatabase: 'connected',
-        cloudProvider: 'Google Cloud Firestore',
-        projectId: 'xenodochial-clover-g6tvw',
-        databaseId: 'ai-studio-saungkebunfinanc-e3d0992c-746a-4a12-a30e-55a15c113812',
-        totalResidents: dbState.residents?.length || 55,
-        totalTransactions: dbState.transactions?.length || 0,
-        timestamp: new Date().toISOString(),
-        uptimeSeconds: Math.floor(process.uptime()),
-        notice: err instanceof Error ? err.message : 'Fallback health response',
+      res.status(500).json({
+        status: 'error',
+        database: 'disconnected',
+        error: err instanceof Error ? err.message : 'Unknown database error',
       });
     }
   });
@@ -694,43 +595,41 @@ app.get('/api/state', (_req, res) => {
     }
 
     const raw = req.body as Partial<ResidentUnit>;
-    const block = (raw.block || 'A').toUpperCase() as BlockCode;
-    const houseNumber = String(raw.houseNumber || '').trim();
-    if (!houseNumber) {
-      res.status(400).json({ error: 'Nomor rumah wajib diisi.' });
-      return;
+    const block = (raw.block || 'B3').toUpperCase() as BlockCode;
+    const houseNumber = String(raw.houseNumber || '').trim() || '-';
+    
+    // Gunakan kode unik ID unit agar form warga dapat diperbarui secara fleksibel
+    let id = raw.id ? raw.id.trim().toUpperCase() : '';
+    if (!id) {
+      const candidate = houseNumber !== '-' ? `${block}-${houseNumber.padStart(2, '0')}` : '';
+      if (candidate && !dbState.residents.some((r) => r.id.toLowerCase() === candidate.toLowerCase())) {
+        id = candidate;
+      } else {
+        const randCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+        id = `${block}-U${randCode}`;
+      }
     }
-    const id = raw.id ? raw.id.trim().toUpperCase() : `${block}-${houseNumber.padStart(2, '0')}`;
 
     if (dbState.residents.some((r) => r.id.toLowerCase() === id.toLowerCase())) {
-      res.status(400).json({ error: `Unit ${id} sudah terdaftar dalam sistem.` });
-      return;
+      const randSuffix = Math.floor(100 + Math.random() * 900);
+      id = `${id}-${randSuffix}`;
     }
+
     if (!raw.headOfFamily || raw.headOfFamily.trim().length < 2) {
       res.status(400).json({ error: 'Nama kepala keluarga minimal 2 karakter.' });
       return;
     }
-    if (!raw.whatsapp || raw.whatsapp.replace(/\D/g, '').length < 9) {
-      res.status(400).json({ error: 'Nomor WhatsApp warga harus valid (minimal 9 digit).' });
-      return;
-    }
 
-    const blockList = dbState.settings.customBlocks || DEFAULT_BLOCKS;
-    const blockMatch = blockList.find((b) => b.id.toUpperCase() === block.toUpperCase());
-    const defaultGang = blockMatch?.defaultStreet || (block.toUpperCase().startsWith('B') ? 'Gang Anggur' : 'Gang Duren');
-
-    const cleanWaDigits = raw.whatsapp.replace(/\D/g, '');
-    const defaultPin = raw.accessPin?.trim() || cleanWaDigits.slice(-4) || '1234';
+    const defaultPin = raw.accessPin?.trim() || String(Math.floor(1000 + Math.random() * 9000));
 
     const newResident: ResidentUnit = {
       id,
       block,
       houseNumber,
-      streetName: raw.streetName?.trim() || defaultGang,
       headOfFamily: raw.headOfFamily.trim(),
-      nik: raw.nik?.trim() || `320101${cleanWaDigits.slice(-6).padStart(6, '0')}0001`,
-      kkNumber: raw.kkNumber?.trim() || `320101${cleanWaDigits.slice(-6).padStart(6, '0')}0002`,
-      whatsapp: raw.whatsapp.trim(),
+      nik: raw.nik?.trim() || '',
+      kkNumber: raw.kkNumber?.trim() || '',
+      whatsapp: raw.whatsapp?.trim() || '',
       email: raw.email?.trim() || '',
       occupancyStatus: raw.occupancyStatus || 'Dihuni Pemilik',
       familyMembers: Number(raw.familyMembers) || 1,
@@ -779,66 +678,25 @@ app.get('/api/state', (_req, res) => {
       res.status(400).json({ error: 'Nama kepala keluarga tidak boleh kosong.' });
       return;
     }
-    if (updates.whatsapp !== undefined && updates.whatsapp.replace(/\D/g, '').length < 9) {
-      res.status(400).json({ error: 'Nomor WhatsApp warga harus valid (minimal 9 digit).' });
-      return;
-    }
 
-    const targetBlock = (updates.block || dbState.residents[idx].block).toUpperCase() as BlockCode;
-    const targetHouseNumber = updates.houseNumber !== undefined ? String(updates.houseNumber).trim() : dbState.residents[idx].houseNumber;
-    let targetId = dbState.residents[idx].id;
-
-    if (updates.id && updates.id.trim()) {
-      targetId = updates.id.trim().toUpperCase();
-    } else if (updates.houseNumber !== undefined || updates.block !== undefined) {
-      targetId = `${targetBlock}-${targetHouseNumber.padStart(2, '0')}`;
-    }
-
-    if (targetId.toLowerCase() !== id.toLowerCase()) {
-      if (id === 'A-01' || id === 'A-09' || id === 'B1-01' || id === 'B1-09') {
-        res.status(400).json({ error: 'ID unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat diubah.' });
-        return;
-      }
-      if (dbState.residents.some((r) => r.id.toLowerCase() === targetId.toLowerCase())) {
-        res.status(400).json({ error: `Unit ${targetId} sudah terdaftar untuk warga lain.` });
-        return;
-      }
-    }
-
+    // NIK, KK, No. Telp diizinkan kosong
     const updatedResident: ResidentUnit = {
       ...dbState.residents[idx],
       ...updates,
-      id: targetId,
-      block: targetBlock,
-      houseNumber: targetHouseNumber,
+      id: dbState.residents[idx].id, // Selalu pertahankan kode unik ID asli agar update data warga berjalan aman
+      nik: updates.nik !== undefined ? updates.nik.trim() : (dbState.residents[idx].nik || ''),
+      kkNumber: updates.kkNumber !== undefined ? updates.kkNumber.trim() : (dbState.residents[idx].kkNumber || ''),
+      whatsapp: updates.whatsapp !== undefined ? updates.whatsapp.trim() : (dbState.residents[idx].whatsapp || ''),
+      block: updates.block || dbState.residents[idx].block,
+      houseNumber: updates.houseNumber !== undefined ? updates.houseNumber : dbState.residents[idx].houseNumber,
     };
+    delete (updatedResident as any).streetName;
 
     const nextResidents = [...dbState.residents];
     nextResidents[idx] = updatedResident;
-
-    // Cascade update transactions & payment confirmations if unitId changed
-    let nextTransactions = dbState.transactions || [];
-    let nextConfirmations = dbState.paymentConfirmations || [];
-    if (targetId !== id) {
-      nextTransactions = nextTransactions.map((t) => (t.unitId === id ? { ...t, unitId: targetId } : t));
-      nextConfirmations = nextConfirmations.map((c) => (c.unitId === id ? { ...c, unitId: targetId } : c));
-    }
-
-    // Sort residents
-    nextResidents.sort((a, b) => {
-      if (a.block !== b.block) {
-        return a.block.localeCompare(b.block, undefined, { numeric: true, sensitivity: 'base' });
-      }
-      const nA = Number(a.houseNumber.replace(/\D/g, '')) || 0;
-      const nB = Number(b.houseNumber.replace(/\D/g, '')) || 0;
-      return nA - nB || a.id.localeCompare(b.id);
-    });
-
     dbState = {
       ...dbState,
       residents: nextResidents,
-      transactions: nextTransactions,
-      paymentConfirmations: nextConfirmations,
     };
     saveDatabase(dbState);
     res.json(dbState);
@@ -854,7 +712,7 @@ app.get('/api/state', (_req, res) => {
     }
 
     const { id } = req.params;
-    if (id === 'A-01' || id === 'A-09' || id === 'B1-01' || id === 'B1-09') {
+    if (id === 'A-01' || id === 'A-09') {
       res.status(400).json({ error: 'Unit Pengurus Lingkungan (Ketua/Bendahara) tidak dapat dihapus.' });
       return;
     }
@@ -1212,7 +1070,7 @@ app.get('/api/state', (_req, res) => {
       const message = template
         .replace(/\{nama\}/g, resident.headOfFamily)
         .replace(/\{unit\}/g, resident.id)
-        .replace(/\{alamat\}/g, resident.streetName)
+        .replace(/\{alamat\}/g, resident.streetName || `Blok ${resident.block}`)
         .replace(/\{periode\}/g, period === '2026-10' ? 'Oktober 2026' : period)
         .replace(/\{nominal\}/g, formattedFee)
         .replace(/\{jatuh_tempo\}/g, String(dueDay))

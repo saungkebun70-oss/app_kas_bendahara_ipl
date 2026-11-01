@@ -25,6 +25,9 @@ import {
   Cloud,
   Database,
   ShieldCheck,
+  FileText,
+  AlertTriangle,
+  Lock,
 } from 'lucide-react';
 import type { AdminSettings } from '../types/finance';
 import { formatRupiah, formatShortDate } from '../lib/finance';
@@ -33,20 +36,25 @@ import {
   validateQRISUploadFile,
 } from '../lib/qris';
 import { api } from '../lib/api';
+import { StrukturPengurusTable } from './StrukturPengurusTable';
 
 interface AdminSettingsViewProps {
   settings: AdminSettings;
   isAdmin: boolean;
+  isBendahara?: boolean;
   onSaveSettings: (updated: AdminSettings) => Promise<void>;
   onResetDemoData: () => Promise<void>;
+  onResetTransactions?: () => Promise<{ ok: boolean; backupFile?: string }>;
   onTriggerAutomatedReminders?: () => Promise<{ sentCount: number; message: string }>;
 }
 
 export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
   settings,
   isAdmin,
+  isBendahara = false,
   onSaveSettings,
   onResetDemoData,
+  onResetTransactions,
   onTriggerAutomatedReminders,
 }) => {
   const [formData, setFormData] = useState<AdminSettings>(settings);
@@ -64,6 +72,45 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
   } | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudSyncMessage, setCloudSyncMessage] = useState<string | null>(null);
+  const [resetKasModalOpen, setResetKasModalOpen] = useState(false);
+  const [resetKasConfirmInput, setResetKasConfirmInput] = useState('');
+  const [resettingKas, setResettingKas] = useState(false);
+  const [resetKasMessage, setResetKasMessage] = useState<string | null>(null);
+  const [hasDownloadedBackup, setHasDownloadedBackup] = useState(false);
+
+  const handleDownloadBackup = () => {
+    const link = document.createElement('a');
+    link.href = '/api/database/backup';
+    link.download = `backup-saung-kebun-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setHasDownloadedBackup(true);
+  };
+
+  const handleExecuteResetKas = async () => {
+    if (!isBendahara || !onResetTransactions) return;
+    if (resetKasConfirmInput.trim() !== 'RESET-KAS') return;
+    setResettingKas(true);
+    try {
+      if (!hasDownloadedBackup) {
+        handleDownloadBackup();
+      }
+      const res = await onResetTransactions();
+      setResetKasMessage(
+        res.backupFile
+          ? `Seluruh transaksi kas berhasil direset. Backup server: ${res.backupFile}`
+          : 'Seluruh riwayat transaksi kas (pemasukan & pengeluaran) berhasil direset.'
+      );
+      setResetKasModalOpen(false);
+      setResetKasConfirmInput('');
+      setTimeout(() => setResetKasMessage(null), 8000);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Gagal mereset transaksi kas');
+    } finally {
+      setResettingKas(false);
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const logoFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -769,6 +816,22 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Pembina Lingkungan (Penasihat Paguyuban)
+              </label>
+              <input
+                type="text"
+                disabled={!isAdmin}
+                value={formData.supervisorName || 'BP. IWAN (Blok B08/05)'}
+                onChange={(e) =>
+                  setFormData({ ...formData, supervisorName: e.target.value })
+                }
+                placeholder="Contoh: BP. IWAN (Blok B08/05)"
+                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] disabled:bg-slate-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Nama Ketua Lingkungan / RT (Penandatangan LPJ)
               </label>
               <input
@@ -778,6 +841,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, chairpersonName: e.target.value })
                 }
+                placeholder="Contoh: BP. ERLANGGA (Blok B03/07)"
                 className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] disabled:bg-slate-100"
               />
             </div>
@@ -793,6 +857,23 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, treasurerName: e.target.value })
                 }
+                placeholder="Contoh: BP. ANDRIANSYAH (Blok B07/16)"
+                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] disabled:bg-slate-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Sekretaris / Humas Lingkungan
+              </label>
+              <input
+                type="text"
+                disabled={!isAdmin}
+                value={formData.secretaryName || 'BP. WAHYU (Blok B05/24)'}
+                onChange={(e) =>
+                  setFormData({ ...formData, secretaryName: e.target.value })
+                }
+                placeholder="Contoh: BP. WAHYU (Blok B05/24)"
                 className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] disabled:bg-slate-100"
               />
             </div>
@@ -811,6 +892,18 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                 className="w-full px-3 py-2 text-xs font-mono border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] disabled:bg-slate-100"
               />
             </div>
+          </div>
+
+          {/* Dedicated Struktur Pengurus Table Preview in Settings */}
+          <div className="pt-4 border-t border-slate-100">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">
+              Tabel Susunan Kepengurusan Saung Kebun Resmi:
+            </h3>
+            <StrukturPengurusTable
+              committeeMembers={formData.committeeMembers}
+              housingName={formData.housingName}
+              rtRwLabel={formData.rtRwLabel}
+            />
           </div>
         </div>
 
@@ -1185,7 +1278,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                   </span>
                 </h3>
                 <p className="text-xs text-slate-300">
-                  Data tersimpan online otomatis & aman di server Google Cloud 24/7
+                  Data tersimpan online otomatis & aman di server Google Cloud 24/7 (Tidak memerlukan Termux/MySQL di HP)
                 </p>
               </div>
             </div>
@@ -1248,13 +1341,97 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
           )}
         </div>
 
+        {/* Card Reset Transaksi Kas Khusus Bendahara & Backup Data */}
+        <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50/70 via-white to-red-50/40 p-5 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 pb-3">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Reset Pembukuan Transaksi Kas (Pemasukan &amp; Pengeluaran)
+                  </h3>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 border border-amber-300 px-2 py-0.5 text-[10px] font-bold text-amber-900">
+                    <Lock className="w-2.5 h-2.5" />
+                    Khusus Bendahara
+                  </span>
+                </div>
+                <p className="mt-0.5 text-xs text-slate-600">
+                  Fitur untuk mengosongkan seluruh riwayat penerimaan iuran &amp; pengeluaran kas tanpa menghapus data warga. Sebelum reset, cadangkan data terlebih dahulu.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDownloadBackup}
+              className="inline-flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer shadow-2xs shrink-0"
+            >
+              <Download className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Unduh Backup Data (JSON)</span>
+            </button>
+          </div>
+
+          <div className="bg-amber-100/60 rounded-xl p-3 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
+            <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-semibold">
+                Ketentuan Keamanan Transaksi Kas:
+              </p>
+              <p className="text-[11px] leading-relaxed text-amber-900">
+                1. Tombol reset transaksi <strong>hanya aktif untuk peran Bendahara</strong> demi keamanan dan audit lingkungan.<br />
+                2. Sistem secara otomatis membuat file arsip backup snapshot ke server sebelum reset dieksekusi.<br />
+                3. Profil warga (116 unit hunian Blok B3, B5, B6, B7, B8) tetap aman tersimpan.
+              </p>
+            </div>
+          </div>
+
+          {resetKasMessage && (
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="font-semibold">{resetKasMessage}</span>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div className="text-xs text-slate-500">
+              {isBendahara ? (
+                <span className="text-emerald-700 font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Anda masuk sebagai Bendahara (Otorisasi Penuh Tersedia)
+                </span>
+              ) : (
+                <span className="text-slate-500 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                  Hanya akun Bendahara yang dapat mengeksekusi reset transaksi.
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              disabled={!isBendahara}
+              onClick={() => {
+                setResetKasConfirmInput('');
+                setResetKasModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl bg-red-600 text-white hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Seluruh Transaksi Kas...</span>
+            </button>
+          </div>
+        </div>
+
           {isAdmin && (
             <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
               <div>
                 {confirmReset ? (
                   <div className="inline-flex items-center gap-2">
                     <span className="text-xs text-red-700 font-semibold">
-                      Reset database ke kondisi awal 55 rumah?
+                      Reset database ke master data 116 unit hunian (B3, B5, B6, B7, B8)?
                     </span>
                     <button
                       type="button"
@@ -1281,7 +1458,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                     className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-red-700 bg-slate-100 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Reset Data Standar</span>
+                    <span>Reset Data Master Standar</span>
                   </button>
                 )}
               </div>
@@ -1357,6 +1534,112 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                 className="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg cursor-pointer"
               >
                 Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Dialog Konfirmasi Reset Transaksi Kas Khusus Bendahara */}
+      {resetKasModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reset-kas-modal-title"
+        >
+          <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border-2 border-red-500 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between bg-red-700 text-white px-5 py-4">
+              <div className="flex items-center gap-2.5">
+                <ShieldAlert className="w-5 h-5 text-amber-300" />
+                <h3 id="reset-kas-modal-title" className="font-display text-sm sm:text-base font-bold">
+                  Konfirmasi Reset Pembukuan Kas (Bendahara)
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setResetKasModalOpen(false)}
+                className="p-1 rounded-lg text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-xs text-red-900 space-y-2">
+                <p className="font-bold text-red-950 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                  PERINGATAN: Tindakan ini mengosongkan seluruh riwayat kas!
+                </p>
+                <p className="leading-relaxed text-[11px] text-red-800">
+                  Semua transaksi pemasukan (iuran bulanan) dan pengeluaran operasional akan dihapus dari buku besar. Data daftar warga 116 rumah tetap dipertahankan.
+                </p>
+              </div>
+
+              {/* Langkah 1: Backup */}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-indigo-600" />
+                    Langkah 1: Wajib Cadangkan / Backup Data
+                  </span>
+                  {hasDownloadedBackup && (
+                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      Backup Diunduh
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-600">
+                  Simpan arsip seluruh data warga dan transaksi ke laptop/HP Anda sebelum mereset.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleDownloadBackup}
+                  className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold bg-white border border-indigo-300 text-indigo-700 hover:bg-indigo-50 rounded-lg cursor-pointer transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Unduh File Cadangan (JSON Backup)</span>
+                </button>
+              </div>
+
+              {/* Langkah 2: Konfirmasi Kata Kunci */}
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="reset-confirm-keyword"
+                  className="block text-xs font-semibold text-slate-700"
+                >
+                  Langkah 2: Ketik <span className="font-mono text-red-700 font-bold bg-red-100 px-1 py-0.5 rounded">RESET-KAS</span> untuk melanjutkan:
+                </label>
+                <input
+                  id="reset-confirm-keyword"
+                  type="text"
+                  placeholder="Ketik persis: RESET-KAS"
+                  value={resetKasConfirmInput}
+                  onChange={(e) => setResetKasConfirmInput(e.target.value)}
+                  className="w-full rounded-lg border-2 border-slate-300 px-3.5 py-2 font-mono text-sm tracking-wider uppercase text-slate-900 focus:border-red-600 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setResetKasModalOpen(false)}
+                disabled={resettingKas}
+                className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 rounded-lg cursor-pointer"
+              >
+                Batalkan
+              </button>
+
+              <button
+                type="button"
+                disabled={resetKasConfirmInput.trim() !== 'RESET-KAS' || resettingKas}
+                onClick={handleExecuteResetKas}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-red-700 hover:bg-red-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg cursor-pointer shadow-sm transition-colors"
+              >
+                <RotateCcw className={`w-3.5 h-3.5 ${resettingKas ? 'animate-spin' : ''}`} />
+                <span>{resettingKas ? 'Memproses Reset...' : 'Saya Yakin, Reset Transaksi Kas'}</span>
               </button>
             </div>
           </div>

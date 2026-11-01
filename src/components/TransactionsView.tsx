@@ -75,16 +75,12 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
 
   // Group residents by Block for clean Unit ID selector
   const residentsByBlock = useMemo(() => {
-    const blocks: Record<string, DatabaseState['residents']> = {
-      A: [],
-      B: [],
-      C: [],
-      D: [],
-    };
+    const blocks: Record<string, DatabaseState['residents']> = {};
     for (const r of state.residents) {
-      if (blocks[r.block]) {
-        blocks[r.block].push(r);
+      if (!blocks[r.block]) {
+        blocks[r.block] = [];
       }
+      blocks[r.block].push(r);
     }
     return blocks;
   }, [state.residents]);
@@ -362,36 +358,19 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                 onChange={(e) => setUnitFilter(e.target.value)}
                 className="w-full appearance-none rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs font-semibold text-slate-800 focus:border-emerald-800 focus:outline-none cursor-pointer"
               >
-                <option value="ALL">Semua Unit (55 Rumah &amp; Operasional)</option>
+                <option value="ALL">Semua Unit ({state.residents.length} Rumah &amp; Operasional)</option>
                 <option value="NON_UNIT">Non-Unit (Fasum / Operasional / Pengeluaran)</option>
-                <optgroup label="Blok A (Jl. Saung Melati)">
-                  {residentsByBlock.A.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      Unit {res.id} — {res.headOfFamily}
-                    </option>
+                {Object.keys(residentsByBlock)
+                  .sort()
+                  .map((blockId) => (
+                    <optgroup key={blockId} label={`Blok ${blockId}`}>
+                      {residentsByBlock[blockId].map((res) => (
+                        <option key={res.id} value={res.id}>
+                          Unit {res.id} — {res.headOfFamily} (No. {res.houseNumber})
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
-                </optgroup>
-                <optgroup label="Blok B (Jl. Kebun Asri)">
-                  {residentsByBlock.B.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      Unit {res.id} — {res.headOfFamily}
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Blok C (Jl. Saung Cendana)">
-                  {residentsByBlock.C.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      Unit {res.id} — {res.headOfFamily}
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Blok D (Jl. Kebun Kenanga)">
-                  {residentsByBlock.D.map((res) => (
-                    <option key={res.id} value={res.id}>
-                      Unit {res.id} — {res.headOfFamily}
-                    </option>
-                  ))}
-                </optgroup>
               </select>
               <Home className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
