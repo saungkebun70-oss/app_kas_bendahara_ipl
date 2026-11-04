@@ -36,6 +36,8 @@ export type ExpenseCategory =
 
 export type TransactionCategory = IncomeCategory | ExpenseCategory;
 
+export type ResidentMemberType = 'warga' | 'pengurus';
+
 export interface ResidentUnit {
   id: string;
   block: BlockCode;
@@ -53,6 +55,8 @@ export interface ResidentUnit {
   notes: string;
   lastRemindedAt?: string;
   accessPin?: string;
+  memberType?: ResidentMemberType; // 'warga' | 'pengurus'
+  officerRole?: string; // e.g. 'PEMBINA', 'KETUA', 'BENDAHARA', 'HUMAS', 'SEKSI OLAH RAGA', 'SEKSI KEAMANAN', etc.
 }
 
 export interface LedgerTransaction {

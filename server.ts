@@ -170,11 +170,13 @@ let dbState: DatabaseState = loadDatabase();
 
       // Ensure B5-24 exists and officials have clean names
       let residents = [...cloudState.residents];
-      const updateOfficial = (block: string, houseNumber: string, id: string, name: string, notes: string) => {
+      const updateOfficial = (block: string, houseNumber: string, id: string, name: string, notes: string, role?: string) => {
         let r = residents.find((res) => res.id === id || (res.block === block && res.houseNumber === houseNumber));
         if (r) {
           r.headOfFamily = name;
           r.notes = notes;
+          r.memberType = 'pengurus';
+          r.officerRole = role;
         } else {
           residents.push({
             id,
@@ -186,6 +188,8 @@ let dbState: DatabaseState = loadDatabase();
             vehiclePlate: `T 54${houseNumber} SK`,
             joinedYear: 2024,
             notes,
+            memberType: 'pengurus',
+            officerRole: role,
             nik: '',
             kkNumber: '',
             whatsapp: '',
@@ -195,12 +199,21 @@ let dbState: DatabaseState = loadDatabase();
         }
       };
 
-      updateOfficial('B8', '05', 'B8-05', 'IWAN', 'PEMBINA Lingkungan Saung Kebun');
-      updateOfficial('B3', '07', 'B3-07', 'ERLANGGA', 'KETUA Pengurus Lingkungan Saung Kebun');
-      updateOfficial('B7', '16', 'B7-16', 'ANDRIANSYAH', 'BENDAHARA Kas Lingkungan Saung Kebun');
-      updateOfficial('B5', '21', 'B5-21', 'DONI', 'HUMAS Lingkungan Saung Kebun');
-      updateOfficial('B5', '24', 'B5-24', 'WAHYU', 'HUMAS Lingkungan Saung Kebun');
-      updateOfficial('B8', '06', 'B8-06', 'DENI', 'SEKSI OLAH RAGA Lingkungan Saung Kebun');
+      updateOfficial('B8', '05', 'B8-05', 'IWAN', 'PEMBINA Lingkungan Saung Kebun', 'PEMBINA');
+      updateOfficial('B3', '07', 'B3-07', 'ERLANGGA', 'KETUA Pengurus Lingkungan Saung Kebun', 'KETUA');
+      updateOfficial('B7', '16', 'B7-16', 'ANDRIANSYAH', 'BENDAHARA Kas Lingkungan Saung Kebun', 'BENDAHARA');
+      updateOfficial('B5', '21', 'B5-21', 'DONI', 'HUMAS Lingkungan Saung Kebun', 'HUMAS');
+      updateOfficial('B5', '24', 'B5-24', 'WAHYU', 'HUMAS Lingkungan Saung Kebun', 'HUMAS');
+      updateOfficial('B8', '06', 'B8-06', 'DENI', 'SEKSI OLAH RAGA Lingkungan Saung Kebun', 'SEKSI OLAH RAGA');
+
+      // Ardiansyah Zein (B3-20) is strictly a regular resident, not an officer
+      const b320 = residents.find((res) => res.id === 'B3-20');
+      if (b320) {
+        b320.headOfFamily = 'ARDIANSYAH ZEIN';
+        b320.memberType = 'warga';
+        b320.officerRole = undefined;
+        b320.notes = 'Warga tetap aktif';
+      }
 
       dbState = {
         ...cloudState,
@@ -1182,8 +1195,49 @@ app.get('/api/state', (_req, res) => {
       return;
     }
 
+    let updatedResidents = [...dbState.residents];
+    if (Array.isArray(incoming.committeeMembers)) {
+      updatedResidents = updatedResidents.map((r) => {
+        const officer = incoming.committeeMembers?.find((m) => m.unitId === r.id);
+        if (officer && officer.status === 'Aktif') {
+          return {
+            ...r,
+            memberType: 'pengurus' as const,
+            officerRole: officer.role,
+            headOfFamily: officer.name || r.headOfFamily,
+            notes: `${officer.role} Lingkungan Saung Kebun`,
+          };
+        } else {
+          const wasOfficer = r.memberType === 'pengurus';
+          return {
+            ...r,
+            memberType: 'warga' as const,
+            officerRole: undefined,
+            notes: wasOfficer || r.id === 'B3-20' ? 'Warga tetap aktif' : r.notes,
+          };
+        }
+      });
+    }
+
+    // Always guarantee B3-20 is never pengurus unless explicitly in committeeMembers
+    const isB320InCommittee = incoming.committeeMembers?.some(
+      (m) => m.unitId === 'B3-20' && m.status === 'Aktif'
+    );
+    if (!isB320InCommittee) {
+      const idxB320 = updatedResidents.findIndex((r) => r.id === 'B3-20');
+      if (idxB320 !== -1) {
+        updatedResidents[idxB320] = {
+          ...updatedResidents[idxB320],
+          memberType: 'warga',
+          officerRole: undefined,
+          notes: 'Warga tetap aktif',
+        };
+      }
+    }
+
     dbState = {
       ...dbState,
+      residents: updatedResidents,
       settings: {
         ...dbState.settings,
         ...incoming,

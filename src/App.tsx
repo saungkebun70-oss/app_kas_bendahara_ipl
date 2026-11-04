@@ -82,9 +82,9 @@ function loadSessionForCurrentPortal(): AuthSession | null {
       return {
         role: 'bendahara',
         isAdmin: true,
-        displayName: 'Ardiansyah Zein',
+        displayName: 'Andriansyah',
         roleLabel: 'Admin — Bendahara',
-        unitId: 'B3-20',
+        unitId: 'B7-16',
         loginAt: new Date().toISOString(),
       };
     }
@@ -419,7 +419,7 @@ export default function App() {
           <button
             type="button"
             onClick={handleLogout}
-            className="rounded-lg border border-white/25 bg-white/10 px-2.5 py-1.5 text-xs font-semibold text-white"
+            className="rounded-lg border border-white/25 bg-white/10 px-2.5 py-1.5 text-xs font-semibold text-white cursor-pointer"
           >
             Keluar
           </button>
@@ -718,6 +718,7 @@ export default function App() {
             {activeTab === 'settings' && (
               <AdminSettingsView
                 settings={db.settings}
+                residents={db.residents}
                 isAdmin={isAdmin}
                 isBendahara={session?.role === 'bendahara'}
                 onSaveSettings={async (updated) => {

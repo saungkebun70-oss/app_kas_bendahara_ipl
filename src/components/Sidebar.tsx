@@ -37,6 +37,7 @@ interface SidebarProps {
   session: AuthSession;
   onLogout: () => void;
   onOpenMyUnit?: (unitId: string) => void;
+  onOpenTrialHub?: () => void;
   mobileOpen: boolean;
   onCloseMobile: () => void;
   pendingVerificationCount?: number;
@@ -78,6 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   session,
   onLogout,
   onOpenMyUnit,
+  onOpenTrialHub,
   mobileOpen,
   onCloseMobile,
   pendingVerificationCount,

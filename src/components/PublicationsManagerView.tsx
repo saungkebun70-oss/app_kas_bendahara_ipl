@@ -36,6 +36,7 @@ import type {
   SecuritySituationStatus,
 } from '../types/finance';
 import type { AuthSession } from '../lib/auth';
+import { generateSatpamPortalShare } from '../lib/shareLinks';
 import {
   formatMonthLabel,
   formatRupiah,
@@ -1300,19 +1301,20 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                           <div className="flex items-center gap-2 pt-1">
                             <a
                               href={`tel:${officer.phone}`}
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-50 border border-teal-200 px-3 py-2 text-xs font-bold text-teal-800 hover:bg-teal-100 transition-colors"
+                              className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-50 border border-teal-200 px-3 py-2 text-xs font-bold text-teal-800 hover:bg-teal-100 transition-colors"
                             >
                               <Phone className="h-3.5 w-3.5 text-teal-700" />
-                              <span>Telepon Rekan</span>
+                              <span>Telepon</span>
                             </a>
                             <a
-                              href={`https://wa.me/${officer.phone.replace(/[^0-9]/g, '').replace(/^0/, '62')}`}
+                              href={generateSatpamPortalShare(officer, state.settings.housingName).waLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition-colors"
+                              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-700 px-3 py-2 text-xs font-bold text-white hover:bg-teal-800 transition-colors shadow-2xs"
+                              title="Kirim tautan portal pos satpam & PIN ke WhatsApp petugas"
                             >
                               <Send className="h-3.5 w-3.5" />
-                              <span>WhatsApp</span>
+                              <span>Kirim Link Pos Satpam WA</span>
                             </a>
                           </div>
                         </div>

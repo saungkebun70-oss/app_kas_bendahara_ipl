@@ -28,8 +28,20 @@ import {
   FileText,
   AlertTriangle,
   Lock,
+  Users,
+  Plus,
+  Pencil,
+  Trash2,
+  Crown,
+  Shield,
+  Wallet,
+  Megaphone,
+  Activity,
+  Check,
+  Phone,
 } from 'lucide-react';
-import type { AdminSettings } from '../types/finance';
+import type { AdminSettings, CommitteeMember, ResidentUnit } from '../types/finance';
+import { DEFAULT_COMMITTEE_MEMBERS } from '../lib/seedData';
 import { formatRupiah, formatShortDate } from '../lib/finance';
 import {
   DEFAULT_QRIS_IMAGE_DATA_URL,
@@ -40,6 +52,7 @@ import { StrukturPengurusTable } from './StrukturPengurusTable';
 
 interface AdminSettingsViewProps {
   settings: AdminSettings;
+  residents?: ResidentUnit[];
   isAdmin: boolean;
   isBendahara?: boolean;
   onSaveSettings: (updated: AdminSettings) => Promise<void>;
@@ -50,6 +63,7 @@ interface AdminSettingsViewProps {
 
 export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
   settings,
+  residents = [],
   isAdmin,
   isBendahara = false,
   onSaveSettings,
@@ -77,6 +91,223 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
   const [resettingKas, setResettingKas] = useState(false);
   const [resetKasMessage, setResetKasMessage] = useState<string | null>(null);
   const [hasDownloadedBackup, setHasDownloadedBackup] = useState(false);
+
+  // Committee Management States
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<CommitteeMember | null>(null);
+  const [deleteConfirmMemberId, setDeleteConfirmMemberId] = useState<string | null>(null);
+  const [memberForm, setMemberForm] = useState<{
+    id: string;
+    role: string;
+    category: CommitteeMember['category'];
+    name: string;
+    block: string;
+    houseNumber: string;
+    unitId: string;
+    addressDisplay: string;
+    duties: string;
+    status: CommitteeMember['status'];
+    phone: string;
+  }>({
+    id: '',
+    role: 'HUMAS',
+    category: 'humas',
+    name: '',
+    block: 'B5',
+    houseNumber: '21',
+    unitId: 'B5-21',
+    addressDisplay: 'Blok B05 / 21',
+    duties: '',
+    status: 'Aktif',
+    phone: '',
+  });
+
+  const openAddMemberModal = () => {
+    const existingUnitIds = new Set((formData.committeeMembers || []).map((m) => m.unitId));
+    const availableResident = residents.find((r) => !existingUnitIds.has(r.id)) || residents[0];
+
+    const unitId = availableResident?.id || 'B5-21';
+    const block = availableResident?.block || 'B5';
+    const houseNumber = availableResident?.houseNumber || '21';
+    const name = availableResident?.headOfFamily || '';
+
+    setEditingMember(null);
+    setMemberForm({
+      id: `PENGURUS-${Date.now()}`,
+      role: 'HUMAS',
+      category: 'humas',
+      name,
+      block,
+      houseNumber,
+      unitId,
+      addressDisplay: `Blok ${block} / ${houseNumber}`,
+      duties: 'Penyambung informasi dan aspirasi warga lingkungan Saung Kebun.',
+      status: 'Aktif',
+      phone: availableResident?.whatsapp || '',
+    });
+    setMemberModalOpen(true);
+  };
+
+  const openEditMemberModal = (member: CommitteeMember) => {
+    setEditingMember(member);
+    setMemberForm({
+      id: member.id,
+      role: member.role,
+      category: member.category,
+      name: member.name,
+      block: member.block,
+      houseNumber: member.houseNumber,
+      unitId: member.unitId,
+      addressDisplay: member.addressDisplay,
+      duties: member.duties,
+      status: member.status,
+      phone: member.phone || '',
+    });
+    setMemberModalOpen(true);
+  };
+
+  const handleSelectResidentForMember = (selectedUnitId: string) => {
+    const resident = residents.find((r) => r.id === selectedUnitId);
+    if (!resident) return;
+    setMemberForm((prev) => ({
+      ...prev,
+      unitId: resident.id,
+      name: resident.headOfFamily,
+      block: resident.block,
+      houseNumber: resident.houseNumber,
+      addressDisplay: `Blok ${resident.block} / ${resident.houseNumber}`,
+      phone: resident.whatsapp || prev.phone,
+    }));
+  };
+
+  const handleRolePresetSelect = (presetRole: string) => {
+    let cat: CommitteeMember['category'] = 'lainnya';
+    let defaultDuty = '';
+    const upper = presetRole.toUpperCase();
+
+    if (upper === 'PEMBINA') {
+      cat = 'pembina';
+      defaultDuty = 'Pengarah umum, penasihat kebijakan paguyuban, serta pengawas kerukunan warga.';
+    } else if (upper === 'KETUA') {
+      cat = 'ketua';
+      defaultDuty = 'Penanggung jawab utama operasional lingkungan, pengambil keputusan kebijakan & pengesahan kas.';
+    } else if (upper === 'BENDAHARA') {
+      cat = 'bendahara';
+      defaultDuty = 'Pengelolaan pembukuan kas lingkungan, pencatatan mutasi realtime, penerimaan iuran & LPJ berkala.';
+    } else if (upper === 'HUMAS' || upper === 'SEKRETARIS') {
+      cat = 'humas';
+      defaultDuty = 'Penyambung komunikasi antarwarga, penyerapan aspirasi, dan publikasi edaran resmi lingkungan.';
+    } else if (upper === 'SEKSI OLAH RAGA') {
+      cat = 'olahraga';
+      defaultDuty = 'Pengorganisasian senam bersama, turnamen olahraga, dan kegiatan kebugaran warga.';
+    } else if (upper === 'SEKSI KEAMANAN') {
+      cat = 'lainnya';
+      defaultDuty = 'Koordinasi dengan pos satpam, sistem satu pintu (one gate system), dan jadwal ronda lingkungan.';
+    } else if (upper === 'SEKSI KEBERSIHAN') {
+      cat = 'lainnya';
+      defaultDuty = 'Pengawasan jadwal pengangkutan sampah, kebersihan saluran drainase, dan kerja bakti warga.';
+    } else {
+      cat = 'lainnya';
+      defaultDuty = 'Mendukung kelancaran program paguyuban lingkungan Saung Kebun.';
+    }
+
+    setMemberForm((prev) => ({
+      ...prev,
+      role: presetRole,
+      category: cat,
+      duties: prev.duties.trim() ? prev.duties : defaultDuty,
+    }));
+  };
+
+  const handleSaveMember = () => {
+    if (!memberForm.name.trim() || !memberForm.role.trim() || !memberForm.unitId.trim()) {
+      alert('Nama pengurus, jabatan, dan unit rumah wajib diisi.');
+      return;
+    }
+
+    const currentMembers = formData.committeeMembers && formData.committeeMembers.length > 0
+      ? [...formData.committeeMembers]
+      : [...DEFAULT_COMMITTEE_MEMBERS];
+
+    const cleanRole = memberForm.role.trim().toUpperCase();
+    const cleanName = memberForm.name.trim().toUpperCase();
+    const cleanUnitId = memberForm.unitId.trim().toUpperCase();
+
+    const newOrUpdatedMember: CommitteeMember = {
+      id: memberForm.id || `PENGURUS-${Date.now()}`,
+      role: cleanRole,
+      category: memberForm.category,
+      name: cleanName,
+      block: memberForm.block.trim().toUpperCase(),
+      houseNumber: memberForm.houseNumber.trim(),
+      unitId: cleanUnitId,
+      addressDisplay: memberForm.addressDisplay.trim() || `Blok ${memberForm.block} / ${memberForm.houseNumber}`,
+      duties: memberForm.duties.trim() || 'Bertanggung jawab dalam kepengurusan lingkungan.',
+      status: memberForm.status,
+      phone: memberForm.phone.trim() || undefined,
+    };
+
+    let updatedList: CommitteeMember[];
+    const existingIndex = currentMembers.findIndex((m) => m.id === newOrUpdatedMember.id);
+    if (existingIndex !== -1) {
+      currentMembers[existingIndex] = newOrUpdatedMember;
+      updatedList = currentMembers;
+    } else {
+      updatedList = [...currentMembers, newOrUpdatedMember];
+    }
+
+    const newSettings: AdminSettings = {
+      ...formData,
+      committeeMembers: updatedList,
+    };
+
+    if (newOrUpdatedMember.category === 'ketua' || cleanRole.includes('KETUA')) {
+      newSettings.chairpersonName = cleanName;
+    }
+    if (newOrUpdatedMember.category === 'bendahara' || cleanRole.includes('BENDAHARA')) {
+      newSettings.treasurerName = cleanName;
+    }
+    if (newOrUpdatedMember.category === 'pembina' || cleanRole.includes('PEMBINA')) {
+      newSettings.supervisorName = cleanName;
+    }
+    if (newOrUpdatedMember.category === 'humas' || cleanRole.includes('SEKRETARIS') || cleanRole.includes('HUMAS')) {
+      newSettings.secretaryName = cleanName;
+    }
+
+    setFormData(newSettings);
+    setMemberModalOpen(false);
+    setEditingMember(null);
+    showSuccessMessage(`Pengurus ${newOrUpdatedMember.role} (${newOrUpdatedMember.name} - Unit ${newOrUpdatedMember.unitId}) berhasil disimpan.`);
+  };
+
+  const handleDeleteMember = (memberId: string) => {
+    const currentMembers = formData.committeeMembers && formData.committeeMembers.length > 0
+      ? formData.committeeMembers
+      : DEFAULT_COMMITTEE_MEMBERS;
+    const target = currentMembers.find((m) => m.id === memberId);
+    const updatedList = currentMembers.filter((m) => m.id !== memberId);
+    setFormData((prev) => ({
+      ...prev,
+      committeeMembers: updatedList,
+    }));
+    setDeleteConfirmMemberId(null);
+    showSuccessMessage(`Pejabat ${target?.name || ''} telah dihapus dari struktur pengurus.`);
+  };
+
+  const handleResetDefaultCommittee = () => {
+    if (!window.confirm('Kembalikan struktur pengurus ke susunan resmi default:\n- IWAN (Pembina)\n- ERLANGGA (Ketua)\n- ANDRIANSYAH (Bendahara)\n- DONI (Humas)\n- WAHYU (Humas)\n- DENI (Seksi Olahraga)?')) {
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      committeeMembers: DEFAULT_COMMITTEE_MEMBERS,
+      chairpersonName: 'ERLANGGA',
+      treasurerName: 'ANDRIANSYAH',
+      supervisorName: 'IWAN',
+      secretaryName: 'WAHYU',
+    }));
+    showSuccessMessage('Struktur pengurus dikembalikan ke susunan resmi default.');
+  };
 
   const handleDownloadBackup = () => {
     const link = document.createElement('a');
@@ -894,16 +1125,182 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
             </div>
           </div>
 
-          {/* Dedicated Struktur Pengurus Table Preview in Settings */}
-          <div className="pt-4 border-t border-slate-100">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">
-              Tabel Susunan Kepengurusan Saung Kebun Resmi:
-            </h3>
-            <StrukturPengurusTable
-              committeeMembers={formData.committeeMembers}
-              housingName={formData.housingName}
-              rtRwLabel={formData.rtRwLabel}
-            />
+          {/* Dedicated Kelola Struktur & Personel Pengurus Lingkungan in Settings */}
+          <div className="pt-6 border-t border-slate-200/90 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-display text-sm font-bold text-slate-900">
+                    Kelola Struktur &amp; Personel Kepengurusan Lingkungan
+                  </h3>
+                  <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full">
+                    {(formData.committeeMembers || DEFAULT_COMMITTEE_MEMBERS).length} Pejabat Terdaftar
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 max-w-2xl">
+                  Tentukan personil pembina, ketua, bendahara, humas, dan seksi lingkungan. Pejabat yang tercatat di sini otomatis berstatus <strong>Pengurus Aktif</strong> dan <strong>Bebas Iuran Kas Bulanan</strong> di seluruh sistem.
+                </p>
+              </div>
+
+              {isAdmin && (
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={openAddMemberModal}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#1547b8] hover:bg-[#103896] rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Tambah Pengurus</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetDefaultCommittee}
+                    title="Kembalikan susunan ke 6 pengurus resmi default (Iwan, Erlangga, Andriansyah, Doni, Wahyu, Deni)"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset Default</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Ardiansyah Note Clarification Banner */}
+            <div className="bg-sky-50/70 border border-sky-200 rounded-xl px-3.5 py-2.5 flex items-start gap-2.5 text-xs text-sky-950">
+              <ShieldCheck className="w-4 h-4 text-[#1547b8] shrink-0 mt-0.5" />
+              <div className="text-[11px] leading-relaxed">
+                <strong>Catatan Validasi Pengurus:</strong> Sesuai penetapan paguyuban, <strong>Bp. ANDRIANSYAH</strong> di Unit <strong>Blok B07 / 16 (B7-16)</strong> adalah <strong>Bendahara Kas Resmi</strong>. Sedangkan <strong>Bp. ARDIANSYAH ZEIN</strong> di Unit <strong>Blok B03 / 20 (B3-20)</strong> adalah <strong>Warga Biasa Aktif</strong> (bukan pengurus). Anda dapat mengubah, menambah, atau mencopot jabatan pengurus kapan saja melalui daftar di bawah.
+              </div>
+            </div>
+
+            {/* List of current committee members */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              {(formData.committeeMembers && formData.committeeMembers.length > 0
+                ? formData.committeeMembers
+                : DEFAULT_COMMITTEE_MEMBERS
+              ).map((member, idx) => {
+                const getRoleColor = (cat: string) => {
+                  switch (cat) {
+                    case 'pembina':
+                      return 'bg-amber-100 text-amber-900 border-amber-300';
+                    case 'ketua':
+                      return 'bg-blue-100 text-blue-900 border-blue-300';
+                    case 'bendahara':
+                      return 'bg-emerald-100 text-emerald-900 border-emerald-300';
+                    case 'humas':
+                      return 'bg-teal-100 text-teal-900 border-teal-300';
+                    case 'olahraga':
+                      return 'bg-orange-100 text-orange-900 border-orange-300';
+                    default:
+                      return 'bg-slate-100 text-slate-800 border-slate-300';
+                  }
+                };
+
+                const getRoleIcon = (cat: string) => {
+                  switch (cat) {
+                    case 'pembina':
+                      return <Shield className="w-3.5 h-3.5 text-amber-600" />;
+                    case 'ketua':
+                      return <Crown className="w-3.5 h-3.5 text-blue-600" />;
+                    case 'bendahara':
+                      return <Wallet className="w-3.5 h-3.5 text-emerald-600" />;
+                    case 'humas':
+                      return <Megaphone className="w-3.5 h-3.5 text-teal-600" />;
+                    case 'olahraga':
+                      return <Activity className="w-3.5 h-3.5 text-orange-600" />;
+                    default:
+                      return <Users className="w-3.5 h-3.5 text-slate-500" />;
+                  }
+                };
+
+                return (
+                  <div
+                    key={member.id || `pm-${idx}`}
+                    className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-slate-300 transition-all flex flex-col justify-between gap-2.5 shadow-2xs"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${getRoleColor(
+                            member.category
+                          )}`}
+                        >
+                          {getRoleIcon(member.category)}
+                          <span>{member.role}</span>
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            member.status === 'Aktif'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-slate-200 text-slate-700'
+                          }`}
+                        >
+                          {member.status}
+                        </span>
+                      </div>
+
+                      {isAdmin && (
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => openEditMemberModal(member)}
+                            className="p-1.5 text-slate-600 hover:text-[#1547b8] hover:bg-sky-50 rounded-lg transition-colors cursor-pointer"
+                            title="Edit data & jabatan pengurus"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`Hapus ${member.role} (${member.name}) dari susunan pengurus? Unit ${member.unitId} akan kembali berstatus Warga Biasa.`)) {
+                                handleDeleteMember(member.id);
+                              }
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                            title="Hapus dari pengurus"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <h4 className="text-xs font-bold text-slate-900 tracking-tight">
+                          {member.name}
+                        </h4>
+                        <span className="text-[11px] font-mono font-semibold text-[#1547b8] bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
+                          Unit {member.unitId}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        {member.addressDisplay}
+                        {member.phone && ` · WA: ${member.phone}`}
+                      </p>
+                      <p className="text-[11px] text-slate-600 mt-1.5 line-clamp-2 leading-relaxed bg-white/70 p-2 rounded-lg border border-slate-100">
+                        {member.duties}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Formal Organization Table Preview */}
+            <div className="pt-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-2.5">
+                Pratinjau Tabel Resmi yang Dipublikasikan ke Warga:
+              </h4>
+              <StrukturPengurusTable
+                committeeMembers={formData.committeeMembers}
+                housingName={formData.housingName}
+                rtRwLabel={formData.rtRwLabel}
+              />
+            </div>
           </div>
         </div>
 
@@ -1640,6 +2037,258 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
               >
                 <RotateCcw className={`w-3.5 h-3.5 ${resettingKas ? 'animate-spin' : ''}`} />
                 <span>{resettingKas ? 'Memproses Reset...' : 'Saya Yakin, Reset Transaksi Kas'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Tambah / Edit Pengurus Lingkungan */}
+      {memberModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+        >
+          <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden my-6">
+            <div className="bg-gradient-to-r from-[#0b2273] to-[#1547b8] text-white px-5 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="h-8 w-8 rounded-lg bg-white/15 flex items-center justify-center">
+                  <Users className="w-4 h-4 text-sky-200" />
+                </div>
+                <div>
+                  <h3 className="font-display text-sm font-bold text-white">
+                    {editingMember ? 'Edit Data Pengurus Lingkungan' : 'Tambah Jabatan / Pengurus Baru'}
+                  </h3>
+                  <p className="text-[11px] text-sky-100">
+                    Tentukan nama pejabat, unit rumah, dan tanggung jawab lingkungan
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMemberModalOpen(false)}
+                className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+              {/* Preset Jabatan Quick Chips */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Pilih Cepat Jabatan Resmi:
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: 'Pembina', role: 'PEMBINA' },
+                    { label: 'Ketua', role: 'KETUA' },
+                    { label: 'Bendahara', role: 'BENDAHARA' },
+                    { label: 'Humas', role: 'HUMAS' },
+                    { label: 'Sekretaris', role: 'SEKRETARIS' },
+                    { label: 'Seksi Olahraga', role: 'SEKSI OLAH RAGA' },
+                    { label: 'Seksi Keamanan', role: 'SEKSI KEAMANAN' },
+                    { label: 'Seksi Kebersihan', role: 'SEKSI KEBERSIHAN' },
+                    { label: 'Koordinator Blok', role: 'KOORDINATOR BLOK' },
+                  ].map((preset) => {
+                    const isSelected = memberForm.role.toUpperCase() === preset.role.toUpperCase();
+                    return (
+                      <button
+                        key={preset.role}
+                        type="button"
+                        onClick={() => handleRolePresetSelect(preset.role)}
+                        className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg border transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#1547b8] text-white border-[#1547b8]'
+                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Jabatan / Role & Kategori */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Nama Jabatan / Posisi <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.role}
+                    onChange={(e) => setMemberForm({ ...memberForm, role: e.target.value })}
+                    placeholder="Contoh: BENDAHARA, HUMAS"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] uppercase font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Kategori Organisasi
+                  </label>
+                  <select
+                    value={memberForm.category}
+                    onChange={(e) =>
+                      setMemberForm({
+                        ...memberForm,
+                        category: e.target.value as CommitteeMember['category'],
+                      })
+                    }
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] bg-white"
+                  >
+                    <option value="pembina">Pembina (Penasihat Paguyuban)</option>
+                    <option value="ketua">Ketua (Penanggung Jawab)</option>
+                    <option value="bendahara">Bendahara (Pengelola Kas)</option>
+                    <option value="humas">Humas / Sekretariat</option>
+                    <option value="olahraga">Seksi Olah Raga</option>
+                    <option value="lainnya">Seksi Lainnya / Koordinator</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Select Warga dari Data Warga */}
+              <div className="bg-sky-50/60 border border-sky-200/80 rounded-xl p-3 space-y-2">
+                <label className="block text-xs font-bold text-[#0b2273]">
+                  Pilih Warga dari Daftar Hunian ({residents.length} Rumah):
+                </label>
+                <select
+                  value={memberForm.unitId}
+                  onChange={(e) => handleSelectResidentForMember(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-sky-300 rounded-lg focus:outline-none focus:border-[#1547b8] bg-white"
+                >
+                  <option value="">-- Pilih Unit Warga --</option>
+                  {residents.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.id} — {r.headOfFamily} ({r.occupancyStatus})
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[10px] text-sky-800">
+                  Memilih unit warga otomatis mengisi nama, blok, nomor rumah, dan nomor telepon.
+                </p>
+              </div>
+
+              {/* Nama Pejabat & No Telp */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Nama Lengkap Pejabat <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.name}
+                    onChange={(e) => setMemberForm({ ...memberForm, name: e.target.value })}
+                    placeholder="Contoh: ANDRIANSYAH"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] uppercase font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    No. WhatsApp / HP
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.phone}
+                    onChange={(e) => setMemberForm({ ...memberForm, phone: e.target.value })}
+                    placeholder="Contoh: 0812-8410-7016"
+                    className="w-full px-3 py-2 text-xs font-mono border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8]"
+                  />
+                </div>
+              </div>
+
+              {/* Unit ID, Alamat Display, dan Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Kode Unit <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.unitId}
+                    onChange={(e) => setMemberForm({ ...memberForm, unitId: e.target.value })}
+                    placeholder="B7-16"
+                    className="w-full px-3 py-2 text-xs font-mono border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] uppercase font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Alamat Tampilan
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.addressDisplay}
+                    onChange={(e) => setMemberForm({ ...memberForm, addressDisplay: e.target.value })}
+                    placeholder="Blok B07 / 16"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Status Jabatan
+                  </label>
+                  <select
+                    value={memberForm.status}
+                    onChange={(e) =>
+                      setMemberForm({
+                        ...memberForm,
+                        status: e.target.value as CommitteeMember['status'],
+                      })
+                    }
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8] bg-white font-semibold"
+                  >
+                    <option value="Aktif">Aktif (Bebas Iuran)</option>
+                    <option value="Cuti">Cuti Sementara</option>
+                    <option value="Purna">Purna Tugas</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Uraian Tugas */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Uraian Tugas &amp; Tanggung Jawab
+                </label>
+                <textarea
+                  rows={2}
+                  value={memberForm.duties}
+                  onChange={(e) => setMemberForm({ ...memberForm, duties: e.target.value })}
+                  placeholder="Deskripsikan wewenang atau tugas jabatan ini..."
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-[#1547b8]"
+                />
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-950 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <span>
+                  Jika Anda menetapkan jabatan sebagai <strong>Ketua</strong>, <strong>Bendahara</strong>, atau <strong>Pembina</strong>, nama penandatangan laporan PDF dan kuitansi kas akan otomatis diperbarui.
+                </span>
+              </div>
+            </div>
+
+            <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setMemberModalOpen(false)}
+                className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 rounded-xl cursor-pointer"
+              >
+                Batalkan
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSaveMember}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#1547b8] hover:bg-[#103896] rounded-xl cursor-pointer shadow-xs transition-colors"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Simpan Pengurus</span>
               </button>
             </div>
           </div>

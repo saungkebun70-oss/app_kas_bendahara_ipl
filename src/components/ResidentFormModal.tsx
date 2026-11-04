@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, UserPlus, Edit3, Home, User, Phone, AlertCircle, Shuffle, KeyRound } from 'lucide-react';
-import type { BlockCode, BlockConfig, OccupancyStatus, ResidentUnit } from '../types/finance';
+import { X, UserPlus, Edit3, Home, User, Phone, AlertCircle, Shuffle, KeyRound, ShieldCheck, Briefcase } from 'lucide-react';
+import type { BlockCode, BlockConfig, OccupancyStatus, ResidentMemberType, ResidentUnit } from '../types/finance';
 
 interface ResidentFormModalProps {
   isOpen: boolean;
@@ -60,6 +60,9 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
   const [vehiclePlate, setVehiclePlate] = useState('');
   const [accessPin, setAccessPin] = useState('');
   const [notes, setNotes] = useState('');
+  const [memberType, setMemberType] = useState<ResidentMemberType>('warga');
+  const [officerRole, setOfficerRole] = useState<string>('PEMBINA');
+  const [customRoleInput, setCustomRoleInput] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,6 +84,27 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
         setVehiclePlate(resident.vehiclePlate || '');
         setAccessPin(resident.accessPin || '');
         setNotes(resident.notes || '');
+
+        const isPengurus = resident.memberType === 'pengurus';
+        setMemberType(isPengurus ? 'pengurus' : 'warga');
+        const rRole = resident.officerRole?.toUpperCase() || 'PEMBINA';
+        const standardRoles = [
+          'PEMBINA',
+          'KETUA',
+          'BENDAHARA',
+          'HUMAS',
+          'SEKSI OLAH RAGA',
+          'SEKSI KEAMANAN',
+          'SEKSI KEBERSIHAN',
+          'SEKSI SARANA PRASARANA',
+        ];
+        if (standardRoles.includes(rRole)) {
+          setOfficerRole(rRole);
+          setCustomRoleInput('');
+        } else {
+          setOfficerRole('LAINNYA');
+          setCustomRoleInput(resident.officerRole || '');
+        }
       } else {
         const defaultBlk = blocks[0]?.id || 'B3';
         const autoCode = generateUniqueCode(defaultBlk, existingIds);
@@ -97,6 +121,9 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
         setVehiclePlate('');
         setAccessPin(String(Math.floor(1000 + Math.random() * 9000)));
         setNotes('');
+        setMemberType('warga');
+        setOfficerRole('PEMBINA');
+        setCustomRoleInput('');
       }
     }
   }, [isOpen, mode, resident, blocks, existingIds]);
@@ -130,6 +157,13 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
     setLoading(true);
 
     try {
+      const resolvedRole =
+        memberType === 'pengurus'
+          ? officerRole === 'LAINNYA'
+            ? customRoleInput.trim().toUpperCase() || 'PENGURUS'
+            : officerRole
+          : undefined;
+
       if (mode === 'add') {
         const finalUnitId = unitId.trim() || generateUniqueCode(block, existingIds);
         await onSave({
@@ -147,6 +181,8 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
           joinedYear: 2026,
           notes: notes.trim(),
           accessPin: cleanPin,
+          memberType,
+          officerRole: resolvedRole,
         });
       } else if (resident) {
         // Edit mode: ID Unit selalu dipertahankan dari kode unik resident.id
@@ -164,6 +200,8 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
           vehiclePlate: vehiclePlate.trim() || '-',
           notes: notes.trim(),
           accessPin: cleanPin,
+          memberType,
+          officerRole: resolvedRole,
         });
       }
       onClose();
@@ -286,6 +324,85 @@ export const ResidentFormModal: React.FC<ResidentFormModalProps> = ({
                 />
               </div>
             </div>
+          </div>
+
+          {/* Membership Type & Committee Structure Selection */}
+          <div className="rounded-xl border border-stone-200 bg-stone-50/70 p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <Briefcase className="h-3.5 w-3.5 text-emerald-800" />
+                <span>Status Keanggotaan &amp; Struktur Kepengurusan</span>
+              </span>
+              {memberType === 'pengurus' && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-[10px] font-bold text-emerald-900">
+                  <ShieldCheck className="w-3 h-3 text-emerald-700" />
+                  <span>Bebas Tagihan Iuran</span>
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setMemberType('warga')}
+                className={`flex items-center justify-center gap-2 rounded-lg border p-2.5 text-xs font-bold transition-all cursor-pointer ${
+                  memberType === 'warga'
+                    ? 'border-emerald-700 bg-white text-emerald-950 shadow-xs ring-1 ring-emerald-700'
+                    : 'border-stone-200 bg-white/70 text-slate-600 hover:bg-white'
+                }`}
+              >
+                <User className="h-4 w-4" />
+                <span>Warga Biasa</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setMemberType('pengurus')}
+                className={`flex items-center justify-center gap-2 rounded-lg border p-2.5 text-xs font-bold transition-all cursor-pointer ${
+                  memberType === 'pengurus'
+                    ? 'border-emerald-700 bg-white text-emerald-950 shadow-xs ring-1 ring-emerald-700'
+                    : 'border-stone-200 bg-white/70 text-slate-600 hover:bg-white'
+                }`}
+              >
+                <ShieldCheck className="h-4 w-4 text-emerald-700" />
+                <span>Pengurus Lingkungan</span>
+              </button>
+            </div>
+
+            {memberType === 'pengurus' && (
+              <div className="mt-2 space-y-2 pt-2 border-t border-stone-200/80 animate-in fade-in">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Pilih Jabatan / Struktur Kepengurusan <span className="text-rose-600">*</span>
+                </label>
+                <select
+                  value={officerRole}
+                  onChange={(e) => setOfficerRole(e.target.value)}
+                  className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-800 focus:outline-none"
+                >
+                  <option value="PEMBINA">PEMBINA (Pembina Lingkungan Saung Kebun)</option>
+                  <option value="KETUA">KETUA (Ketua Pengurus / RT)</option>
+                  <option value="BENDAHARA">BENDAHARA (Bendahara Pengelola Kas)</option>
+                  <option value="HUMAS">HUMAS (Hubungan Masyarakat)</option>
+                  <option value="SEKSI OLAH RAGA">SEKSI OLAH RAGA (Seksi Olahraga &amp; Kegiatan)</option>
+                  <option value="SEKSI KEAMANAN">SEKSI KEAMANAN (Koordinator Keamanan)</option>
+                  <option value="SEKSI KEBERSIHAN">SEKSI KEBERSIHAN (Koordinator Lingkungan &amp; Kebersihan)</option>
+                  <option value="SEKSI SARANA PRASARANA">SEKSI SARANA PRASARANA (Perlengkapan &amp; Aset)</option>
+                  <option value="LAINNYA">LAINNYA (Tuliskan Jabatan Khusus)</option>
+                </select>
+
+                {officerRole === 'LAINNYA' && (
+                  <input
+                    type="text"
+                    placeholder="Ketik nama jabatan pengurus..."
+                    value={customRoleInput}
+                    onChange={(e) => setCustomRoleInput(e.target.value)}
+                    className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-800 focus:outline-none uppercase"
+                  />
+                )}
+                <p className="text-[11px] text-emerald-800/90 leading-tight">
+                  * Unit yang diatur sebagai Pengurus Lingkungan otomatis disematkan lencana struktur jabatan di tabel warga dan dibebaskan dari kewajiban penagihan iuran bulanan.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Resident Profile Section */}

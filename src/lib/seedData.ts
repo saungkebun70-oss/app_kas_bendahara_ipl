@@ -163,7 +163,7 @@ export const DEFAULT_ANNOUNCEMENTS: CommunityActivityAnnouncement[] = [
     location: 'Pendopo Utama Perumahan Saung Kebun',
     content:
       'Penyampaian laporan pertanggungjawaban (LPJ) kas lingkungan periode Juli–September 2026 serta pembahasan rencana peremajaan lampu penerangan jalan umum (PJU) LED dan CCTV pos satpam.',
-    authorName: 'ARDIANSYAH ZEIN (Bendahara)',
+    authorName: 'ANDRIANSYAH (Bendahara)',
     published: true,
     createdAt: '2026-10-22T14:30:00.000Z',
     photos: [ACTIVITY_PHOTOS.rapatLPJ, ACTIVITY_PHOTOS.rapatPJU],
@@ -312,7 +312,7 @@ export const DEFAULT_PAYMENT_CONFIRMATIONS: PaymentConfirmation[] = [
     status: 'DISETUJUI',
     submittedAt: '2026-10-05T08:30:00.000Z',
     verifiedAt: '2026-10-05T09:00:00.000Z',
-    verifiedBy: 'ARDIANSYAH ZEIN (Bendahara)',
+    verifiedBy: 'ANDRIANSYAH (Bendahara)',
     resultingTransactionId: 'TRX-20261005-001',
     resultingReceiptNumber: 'SK/KW/2026/10/B301',
   },
@@ -636,7 +636,7 @@ const SEED_RESIDENTS: ResidentUnit[] = [
     "familyMembers": 4,
     "vehiclePlate": "T 1360 BGR",
     "joinedYear": 2026,
-    "notes": "Bendahara Kas (Bebas Iuran)",
+    "notes": "Warga tetap aktif",
     "accessPin": "3020"
   },
   {
@@ -1667,7 +1667,7 @@ const SEED_RESIDENTS: ResidentUnit[] = [
     "id": "B7-16",
     "block": "B7",
     "houseNumber": "16",
-    "headOfFamily": "ANDRI",
+    "headOfFamily": "ANDRIANSYAH",
     "nik": "",
     "kkNumber": "",
     "whatsapp": "",
@@ -1676,8 +1676,10 @@ const SEED_RESIDENTS: ResidentUnit[] = [
     "familyMembers": 3,
     "vehiclePlate": "T 2205 KBN",
     "joinedYear": 2026,
-    "notes": "Warga tetap aktif",
-    "accessPin": "7016"
+    "notes": "BENDAHARA Kas Lingkungan Saung Kebun",
+    "accessPin": "7016",
+    "memberType": "pengurus",
+    "officerRole": "BENDAHARA"
   },
   {
     "id": "B7-17",
@@ -2188,7 +2190,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-01T09:00:00.000Z"
   },
   {
@@ -2202,7 +2204,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-01T09:00:00.000Z"
   },
   {
@@ -2216,7 +2218,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-01T09:00:00.000Z"
   },
   {
@@ -2230,7 +2232,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-01T09:00:00.000Z"
   },
   {
@@ -2244,7 +2246,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-01T09:00:00.000Z"
   },
   {
@@ -2258,7 +2260,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2272,7 +2274,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2286,7 +2288,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2300,7 +2302,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2314,7 +2316,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-21 (CHOLIL) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2328,7 +2330,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2342,7 +2344,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2356,7 +2358,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-02T09:00:00.000Z"
   },
   {
@@ -2370,7 +2372,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-03T09:00:00.000Z"
   },
   {
@@ -2384,7 +2386,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-03T09:00:00.000Z"
   },
   {
@@ -2398,7 +2400,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-03T09:00:00.000Z"
   },
   {
@@ -2412,7 +2414,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-03T09:00:00.000Z"
   },
   {
@@ -2426,7 +2428,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-03T09:00:00.000Z"
   },
   {
@@ -2440,7 +2442,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2454,7 +2456,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2468,7 +2470,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2482,7 +2484,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2496,7 +2498,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2510,7 +2512,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-04T09:00:00.000Z"
   },
   {
@@ -2524,7 +2526,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2538,7 +2540,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2552,7 +2554,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-04 (Belum Dihuni (B6-04)) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2566,7 +2568,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2580,7 +2582,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-04 (DEVI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2594,7 +2596,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T09:00:00.000Z"
   },
   {
@@ -2608,7 +2610,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Token listrik penerangan jalan umum Blok B3-B8 & pos jaga Feb 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-05T10:00:00.000Z"
   },
   {
@@ -2622,7 +2624,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-15",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-15 (WENDY ROCHIMAT S) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-06T09:00:00.000Z"
   },
   {
@@ -2636,7 +2638,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-06T09:00:00.000Z"
   },
   {
@@ -2650,7 +2652,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-06T09:00:00.000Z"
   },
   {
@@ -2664,7 +2666,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2678,7 +2680,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2692,7 +2694,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2706,7 +2708,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2720,7 +2722,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2734,7 +2736,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2748,7 +2750,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-07T09:00:00.000Z"
   },
   {
@@ -2762,7 +2764,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-08T09:00:00.000Z"
   },
   {
@@ -2776,7 +2778,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-08T09:00:00.000Z"
   },
   {
@@ -2790,7 +2792,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-08T09:00:00.000Z"
   },
   {
@@ -2804,7 +2806,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2818,7 +2820,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2832,7 +2834,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2846,7 +2848,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2860,7 +2862,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2874,7 +2876,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-18 (MUHAMMAD DAUD SYAH) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-09T09:00:00.000Z"
   },
   {
@@ -2888,7 +2890,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-10T09:00:00.000Z"
   },
   {
@@ -2902,7 +2904,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-10T09:00:00.000Z"
   },
   {
@@ -2916,7 +2918,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-02",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-10T09:00:00.000Z"
   },
   {
@@ -2930,7 +2932,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pemangkasan pohon peneduh & pembersihan drainase jalan lingkungan",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-15T10:00:00.000Z"
   },
   {
@@ -2944,7 +2946,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Retribusi pengangkutan sampah warga Blok B3-B8 Feb 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-25T10:00:00.000Z"
   },
   {
@@ -2958,7 +2960,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan pos jaga shift siang & malam Feb 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-02-28T10:00:00.000Z"
   },
   {
@@ -2972,7 +2974,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-01T09:00:00.000Z"
   },
   {
@@ -2986,7 +2988,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-01T09:00:00.000Z"
   },
   {
@@ -3000,7 +3002,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-01T09:00:00.000Z"
   },
   {
@@ -3014,7 +3016,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-01T09:00:00.000Z"
   },
   {
@@ -3028,7 +3030,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3042,7 +3044,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3056,7 +3058,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3070,7 +3072,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3084,7 +3086,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3098,7 +3100,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3112,7 +3114,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-02T09:00:00.000Z"
   },
   {
@@ -3126,7 +3128,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-03T09:00:00.000Z"
   },
   {
@@ -3140,7 +3142,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-03T09:00:00.000Z"
   },
   {
@@ -3154,7 +3156,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-03T09:00:00.000Z"
   },
   {
@@ -3168,7 +3170,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-03T09:00:00.000Z"
   },
   {
@@ -3182,7 +3184,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-03T09:00:00.000Z"
   },
   {
@@ -3196,7 +3198,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3210,7 +3212,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3224,7 +3226,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3238,7 +3240,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3252,7 +3254,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3266,7 +3268,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-04T09:00:00.000Z"
   },
   {
@@ -3280,7 +3282,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3294,7 +3296,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3308,7 +3310,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-04 (Belum Dihuni (B6-04)) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3322,7 +3324,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3336,7 +3338,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-04 (DEVI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3350,7 +3352,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T09:00:00.000Z"
   },
   {
@@ -3364,7 +3366,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pembayaran listrik PJU Blok B3-B8 dan pompa air Maret 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-05T10:00:00.000Z"
   },
   {
@@ -3378,7 +3380,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-15",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-15 (WENDY ROCHIMAT S) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-06T09:00:00.000Z"
   },
   {
@@ -3392,7 +3394,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-06T09:00:00.000Z"
   },
   {
@@ -3406,7 +3408,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-06T09:00:00.000Z"
   },
   {
@@ -3420,7 +3422,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3434,7 +3436,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3448,7 +3450,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3462,7 +3464,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3476,7 +3478,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3490,7 +3492,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3504,7 +3506,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-07T09:00:00.000Z"
   },
   {
@@ -3518,7 +3520,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-08T09:00:00.000Z"
   },
   {
@@ -3532,7 +3534,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-08T09:00:00.000Z"
   },
   {
@@ -3546,7 +3548,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-08T09:00:00.000Z"
   },
   {
@@ -3560,7 +3562,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-08T09:00:00.000Z"
   },
   {
@@ -3574,7 +3576,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3588,7 +3590,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3602,7 +3604,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3616,7 +3618,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3630,7 +3632,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3644,7 +3646,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-18 (MUHAMMAD DAUD SYAH) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3658,7 +3660,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-09T09:00:00.000Z"
   },
   {
@@ -3672,7 +3674,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-10T09:00:00.000Z"
   },
   {
@@ -3686,7 +3688,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-10T09:00:00.000Z"
   },
   {
@@ -3700,7 +3702,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-10T09:00:00.000Z"
   },
   {
@@ -3714,7 +3716,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-19 (SAMSURI) periode 2026-03",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-10T09:00:00.000Z"
   },
   {
@@ -3728,7 +3730,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Retribusi operasional kebersihan dan armada sampah Maret 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-25T10:00:00.000Z"
   },
   {
@@ -3742,7 +3744,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan shift siang dan malam Maret 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-03-28T10:00:00.000Z"
   },
   {
@@ -3756,7 +3758,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-01T09:00:00.000Z"
   },
   {
@@ -3770,7 +3772,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-01T09:00:00.000Z"
   },
   {
@@ -3784,7 +3786,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-01T09:00:00.000Z"
   },
   {
@@ -3798,7 +3800,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-01T09:00:00.000Z"
   },
   {
@@ -3812,7 +3814,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-01T09:00:00.000Z"
   },
   {
@@ -3826,7 +3828,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3840,7 +3842,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3854,7 +3856,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3868,7 +3870,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3882,7 +3884,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-21 (CHOLIL) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3896,7 +3898,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3910,7 +3912,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3924,7 +3926,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-02T09:00:00.000Z"
   },
   {
@@ -3938,7 +3940,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-03T09:00:00.000Z"
   },
   {
@@ -3952,7 +3954,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-03T09:00:00.000Z"
   },
   {
@@ -3966,7 +3968,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-03T09:00:00.000Z"
   },
   {
@@ -3980,7 +3982,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-03T09:00:00.000Z"
   },
   {
@@ -3994,7 +3996,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-03T09:00:00.000Z"
   },
   {
@@ -4008,7 +4010,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4022,7 +4024,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4036,7 +4038,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4050,7 +4052,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4064,7 +4066,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4078,7 +4080,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-04T09:00:00.000Z"
   },
   {
@@ -4092,7 +4094,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T09:00:00.000Z"
   },
   {
@@ -4106,7 +4108,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T09:00:00.000Z"
   },
   {
@@ -4120,7 +4122,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-04 (Belum Dihuni (B6-04)) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T09:00:00.000Z"
   },
   {
@@ -4134,7 +4136,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T09:00:00.000Z"
   },
   {
@@ -4148,7 +4150,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T09:00:00.000Z"
   },
   {
@@ -4162,7 +4164,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pembayaran tagihan listrik PJU jalan lingkungan April 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-05T10:00:00.000Z"
   },
   {
@@ -4176,7 +4178,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-15",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-15 (WENDY ROCHIMAT S) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-06T09:00:00.000Z"
   },
   {
@@ -4190,7 +4192,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-06T09:00:00.000Z"
   },
   {
@@ -4204,7 +4206,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-06T09:00:00.000Z"
   },
   {
@@ -4218,7 +4220,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4232,7 +4234,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4246,7 +4248,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4260,7 +4262,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4274,7 +4276,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4288,7 +4290,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4302,7 +4304,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-07T09:00:00.000Z"
   },
   {
@@ -4316,7 +4318,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-08T09:00:00.000Z"
   },
   {
@@ -4330,7 +4332,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-08T09:00:00.000Z"
   },
   {
@@ -4344,7 +4346,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-08T09:00:00.000Z"
   },
   {
@@ -4358,7 +4360,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-08T09:00:00.000Z"
   },
   {
@@ -4372,7 +4374,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-08T09:00:00.000Z"
   },
   {
@@ -4386,7 +4388,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4400,7 +4402,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4414,7 +4416,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4428,7 +4430,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4442,7 +4444,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4456,7 +4458,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-18 (MUHAMMAD DAUD SYAH) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4470,7 +4472,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-09T09:00:00.000Z"
   },
   {
@@ -4484,7 +4486,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-10T09:00:00.000Z"
   },
   {
@@ -4498,7 +4500,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-10T09:00:00.000Z"
   },
   {
@@ -4512,7 +4514,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-10T09:00:00.000Z"
   },
   {
@@ -4526,7 +4528,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-19 (SAMSURI) periode 2026-04",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-10T09:00:00.000Z"
   },
   {
@@ -4540,7 +4542,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Servis engsel portal jalan & penggantian 3 lampu LED PJU rusak",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-18T10:00:00.000Z"
   },
   {
@@ -4554,7 +4556,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Operasional pengangkutan sampah warga April 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-25T10:00:00.000Z"
   },
   {
@@ -4568,7 +4570,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan pos jaga April 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-04-28T10:00:00.000Z"
   },
   {
@@ -4582,7 +4584,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-01T09:00:00.000Z"
   },
   {
@@ -4596,7 +4598,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-01T09:00:00.000Z"
   },
   {
@@ -4610,7 +4612,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-01T09:00:00.000Z"
   },
   {
@@ -4624,7 +4626,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-01T09:00:00.000Z"
   },
   {
@@ -4638,7 +4640,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-01T09:00:00.000Z"
   },
   {
@@ -4652,7 +4654,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4666,7 +4668,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4680,7 +4682,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4694,7 +4696,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4708,7 +4710,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4722,7 +4724,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4736,7 +4738,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-02T09:00:00.000Z"
   },
   {
@@ -4750,7 +4752,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-03T09:00:00.000Z"
   },
   {
@@ -4764,7 +4766,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-03T09:00:00.000Z"
   },
   {
@@ -4778,7 +4780,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-03T09:00:00.000Z"
   },
   {
@@ -4792,7 +4794,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-03T09:00:00.000Z"
   },
   {
@@ -4806,7 +4808,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-03T09:00:00.000Z"
   },
   {
@@ -4820,7 +4822,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4834,7 +4836,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4848,7 +4850,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4862,7 +4864,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4876,7 +4878,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4890,7 +4892,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-04T09:00:00.000Z"
   },
   {
@@ -4904,7 +4906,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T09:00:00.000Z"
   },
   {
@@ -4918,7 +4920,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T09:00:00.000Z"
   },
   {
@@ -4932,7 +4934,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-04 (Belum Dihuni (B6-04)) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T09:00:00.000Z"
   },
   {
@@ -4946,7 +4948,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T09:00:00.000Z"
   },
   {
@@ -4960,7 +4962,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T09:00:00.000Z"
   },
   {
@@ -4974,7 +4976,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Listrik PJU jalan lingkungan & pos jaga Mei 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-05T10:00:00.000Z"
   },
   {
@@ -4988,7 +4990,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-15",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-15 (WENDY ROCHIMAT S) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-06T09:00:00.000Z"
   },
   {
@@ -5002,7 +5004,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-06T09:00:00.000Z"
   },
   {
@@ -5016,7 +5018,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-06T09:00:00.000Z"
   },
   {
@@ -5030,7 +5032,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5044,7 +5046,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5058,7 +5060,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5072,7 +5074,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5086,7 +5088,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5100,7 +5102,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5114,7 +5116,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-07T09:00:00.000Z"
   },
   {
@@ -5128,7 +5130,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-08T09:00:00.000Z"
   },
   {
@@ -5142,7 +5144,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-08T09:00:00.000Z"
   },
   {
@@ -5156,7 +5158,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-08T09:00:00.000Z"
   },
   {
@@ -5170,7 +5172,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-08T09:00:00.000Z"
   },
   {
@@ -5184,7 +5186,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-08T09:00:00.000Z"
   },
   {
@@ -5198,7 +5200,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5212,7 +5214,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5226,7 +5228,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5240,7 +5242,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5254,7 +5256,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5268,7 +5270,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-18 (MUHAMMAD DAUD SYAH) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5282,7 +5284,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-09T09:00:00.000Z"
   },
   {
@@ -5296,7 +5298,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-10T09:00:00.000Z"
   },
   {
@@ -5310,7 +5312,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-10T09:00:00.000Z"
   },
   {
@@ -5324,7 +5326,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-10T09:00:00.000Z"
   },
   {
@@ -5338,7 +5340,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-19 (SAMSURI) periode 2026-05",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-10T09:00:00.000Z"
   },
   {
@@ -5352,7 +5354,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Retribusi kebersihan lingkungan Mei 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-25T10:00:00.000Z"
   },
   {
@@ -5366,7 +5368,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan pos jaga Mei 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-05-28T10:00:00.000Z"
   },
   {
@@ -5380,7 +5382,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-01T09:00:00.000Z"
   },
   {
@@ -5394,7 +5396,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-01T09:00:00.000Z"
   },
   {
@@ -5408,7 +5410,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-01T09:00:00.000Z"
   },
   {
@@ -5422,7 +5424,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-01T09:00:00.000Z"
   },
   {
@@ -5436,7 +5438,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-01T09:00:00.000Z"
   },
   {
@@ -5450,7 +5452,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5464,7 +5466,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5478,7 +5480,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5492,7 +5494,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5506,7 +5508,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5520,7 +5522,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5534,7 +5536,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-02T09:00:00.000Z"
   },
   {
@@ -5548,7 +5550,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5562,7 +5564,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5576,7 +5578,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5590,7 +5592,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5604,7 +5606,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5618,7 +5620,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-12 (ARGA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-03T09:00:00.000Z"
   },
   {
@@ -5632,7 +5634,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5646,7 +5648,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5660,7 +5662,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5674,7 +5676,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5688,7 +5690,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5702,7 +5704,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-04T09:00:00.000Z"
   },
   {
@@ -5716,7 +5718,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-05T09:00:00.000Z"
   },
   {
@@ -5730,7 +5732,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-05T09:00:00.000Z"
   },
   {
@@ -5744,7 +5746,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-05T09:00:00.000Z"
   },
   {
@@ -5758,7 +5760,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-05T09:00:00.000Z"
   },
   {
@@ -5772,7 +5774,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Listrik PJU jalan lingkungan & pompa air Juni 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-05T10:00:00.000Z"
   },
   {
@@ -5786,7 +5788,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-06T09:00:00.000Z"
   },
   {
@@ -5800,7 +5802,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-06T09:00:00.000Z"
   },
   {
@@ -5814,7 +5816,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5828,7 +5830,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5842,7 +5844,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5856,7 +5858,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5870,7 +5872,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5884,7 +5886,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5898,7 +5900,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-07T09:00:00.000Z"
   },
   {
@@ -5912,7 +5914,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-08T09:00:00.000Z"
   },
   {
@@ -5926,7 +5928,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-08T09:00:00.000Z"
   },
   {
@@ -5940,7 +5942,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-08T09:00:00.000Z"
   },
   {
@@ -5954,7 +5956,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-08T09:00:00.000Z"
   },
   {
@@ -5968,7 +5970,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-08T09:00:00.000Z"
   },
   {
@@ -5982,7 +5984,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -5996,7 +5998,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6010,7 +6012,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6024,7 +6026,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6038,7 +6040,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6052,7 +6054,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-18 (MUHAMMAD DAUD SYAH) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6066,7 +6068,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-09T09:00:00.000Z"
   },
   {
@@ -6080,7 +6082,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-10T09:00:00.000Z"
   },
   {
@@ -6094,7 +6096,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-10T09:00:00.000Z"
   },
   {
@@ -6108,7 +6110,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-10T09:00:00.000Z"
   },
   {
@@ -6122,7 +6124,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-19 (SAMSURI) periode 2026-06",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-10T09:00:00.000Z"
   },
   {
@@ -6136,7 +6138,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Operasional armada sampah lingkungan Juni 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-25T10:00:00.000Z"
   },
   {
@@ -6150,7 +6152,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan pos jaga Juni 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-06-28T10:00:00.000Z"
   },
   {
@@ -6164,7 +6166,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-01T09:00:00.000Z"
   },
   {
@@ -6178,7 +6180,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-01T09:00:00.000Z"
   },
   {
@@ -6192,7 +6194,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-01T09:00:00.000Z"
   },
   {
@@ -6206,7 +6208,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-01T09:00:00.000Z"
   },
   {
@@ -6220,7 +6222,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-01T09:00:00.000Z"
   },
   {
@@ -6234,7 +6236,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6248,7 +6250,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6262,7 +6264,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6276,7 +6278,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6290,7 +6292,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6304,7 +6306,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6318,7 +6320,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6332,7 +6334,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-11 (PA HUSNI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-02T09:00:00.000Z"
   },
   {
@@ -6346,7 +6348,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6360,7 +6362,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6374,7 +6376,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6388,7 +6390,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6402,7 +6404,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6416,7 +6418,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-12 (ARGA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-03T09:00:00.000Z"
   },
   {
@@ -6430,7 +6432,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-04T09:00:00.000Z"
   },
   {
@@ -6444,7 +6446,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-04T09:00:00.000Z"
   },
   {
@@ -6458,7 +6460,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-04T09:00:00.000Z"
   },
   {
@@ -6472,7 +6474,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-04T09:00:00.000Z"
   },
   {
@@ -6486,7 +6488,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-04T09:00:00.000Z"
   },
   {
@@ -6500,7 +6502,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T09:00:00.000Z"
   },
   {
@@ -6514,7 +6516,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T09:00:00.000Z"
   },
   {
@@ -6528,7 +6530,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T09:00:00.000Z"
   },
   {
@@ -6542,7 +6544,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-04 (DEVI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T09:00:00.000Z"
   },
   {
@@ -6556,7 +6558,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T09:00:00.000Z"
   },
   {
@@ -6570,7 +6572,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Token listrik PJU gerbang utama, pos jaga, dan pompa air Saung Kebun",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-05T10:00:00.000Z"
   },
   {
@@ -6584,7 +6586,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-06T09:00:00.000Z"
   },
   {
@@ -6598,7 +6600,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-06T09:00:00.000Z"
   },
   {
@@ -6612,7 +6614,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6626,7 +6628,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-16 (TRI SEPTIONO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6640,7 +6642,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6654,7 +6656,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6668,7 +6670,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6682,7 +6684,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6696,7 +6698,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-07T09:00:00.000Z"
   },
   {
@@ -6710,7 +6712,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-08T09:00:00.000Z"
   },
   {
@@ -6724,7 +6726,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-08T09:00:00.000Z"
   },
   {
@@ -6738,7 +6740,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-08T09:00:00.000Z"
   },
   {
@@ -6752,7 +6754,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-08T09:00:00.000Z"
   },
   {
@@ -6766,7 +6768,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-08T09:00:00.000Z"
   },
   {
@@ -6780,7 +6782,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6794,7 +6796,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6808,7 +6810,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6822,7 +6824,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6836,7 +6838,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6850,7 +6852,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-09T09:00:00.000Z"
   },
   {
@@ -6864,7 +6866,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-10T09:00:00.000Z"
   },
   {
@@ -6878,7 +6880,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-10T09:00:00.000Z"
   },
   {
@@ -6892,7 +6894,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-07",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-10T09:00:00.000Z"
   },
   {
@@ -6906,7 +6908,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pemangkasan pohon peneduh & pupuk tanaman kebun warga",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-18T10:00:00.000Z"
   },
   {
@@ -6920,7 +6922,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Retribusi pengangkutan sampah warga Blok B3-B8 Juli 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-25T10:00:00.000Z"
   },
   {
@@ -6934,7 +6936,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan Juli 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-07-28T10:00:00.000Z"
   },
   {
@@ -6948,7 +6950,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-10 (DEVA CAHYONO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-01T09:00:00.000Z"
   },
   {
@@ -6962,7 +6964,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-01T09:00:00.000Z"
   },
   {
@@ -6976,7 +6978,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-10 (AJE) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-01T09:00:00.000Z"
   },
   {
@@ -6990,7 +6992,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-01T09:00:00.000Z"
   },
   {
@@ -7004,7 +7006,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-01T09:00:00.000Z"
   },
   {
@@ -7018,7 +7020,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7032,7 +7034,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-21 (CECEP SUGIANTO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7046,7 +7048,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-01 (IKBAL) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7060,7 +7062,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7074,7 +7076,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-21 (CHOLIL) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7088,7 +7090,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7102,7 +7104,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7116,7 +7118,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7130,7 +7132,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-11 (PA HUSNI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-02T09:00:00.000Z"
   },
   {
@@ -7144,7 +7146,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7158,7 +7160,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7172,7 +7174,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7186,7 +7188,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-02 (DEFRY) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7200,7 +7202,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7214,7 +7216,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-12 (ARGA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-03T09:00:00.000Z"
   },
   {
@@ -7228,7 +7230,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7242,7 +7244,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7256,7 +7258,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7270,7 +7272,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7284,7 +7286,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7298,7 +7300,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-04T09:00:00.000Z"
   },
   {
@@ -7312,7 +7314,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-05T09:00:00.000Z"
   },
   {
@@ -7326,7 +7328,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-05T09:00:00.000Z"
   },
   {
@@ -7340,7 +7342,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-05T09:00:00.000Z"
   },
   {
@@ -7354,7 +7356,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-04 (DEVI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-05T09:00:00.000Z"
   },
   {
@@ -7368,7 +7370,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-05T09:00:00.000Z"
   },
   {
@@ -7382,7 +7384,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-06T09:00:00.000Z"
   },
   {
@@ -7396,7 +7398,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-06T09:00:00.000Z"
   },
   {
@@ -7410,7 +7412,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pembayaran listrik PJU jalan lingkungan Blok B3-B8 Agustus 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-06T10:00:00.000Z"
   },
   {
@@ -7424,7 +7426,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7438,7 +7440,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7452,7 +7454,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7466,7 +7468,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7480,7 +7482,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7494,7 +7496,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-07T09:00:00.000Z"
   },
   {
@@ -7508,7 +7510,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-08T09:00:00.000Z"
   },
   {
@@ -7522,7 +7524,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-08T09:00:00.000Z"
   },
   {
@@ -7536,7 +7538,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-08T09:00:00.000Z"
   },
   {
@@ -7550,7 +7552,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-08T09:00:00.000Z"
   },
   {
@@ -7564,7 +7566,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-09T09:00:00.000Z"
   },
   {
@@ -7578,7 +7580,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-09T09:00:00.000Z"
   },
   {
@@ -7592,7 +7594,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-09T09:00:00.000Z"
   },
   {
@@ -7606,7 +7608,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-09T09:00:00.000Z"
   },
   {
@@ -7620,7 +7622,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-09T09:00:00.000Z"
   },
   {
@@ -7634,7 +7636,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-10T09:00:00.000Z"
   },
   {
@@ -7648,7 +7650,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-10T09:00:00.000Z"
   },
   {
@@ -7662,7 +7664,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-19 (MUHAMMAD SIDIK) periode 2026-08",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-10T09:00:00.000Z"
   },
   {
@@ -7676,7 +7678,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pengecatan kanstin jalan utama & penggantian 4 lampu LED PJU",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-15T10:00:00.000Z"
   },
   {
@@ -7690,7 +7692,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Biaya operasional kebersihan lingkungan & armada sampah Agustus 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-25T10:00:00.000Z"
   },
   {
@@ -7704,7 +7706,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan lingkungan Agustus 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-08-28T10:00:00.000Z"
   },
   {
@@ -7718,7 +7720,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-20 (ARDIANSYAH ZEIN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-01T09:00:00.000Z"
   },
   {
@@ -7732,7 +7734,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-10",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-10 (AKBAR) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-01T09:00:00.000Z"
   },
   {
@@ -7746,7 +7748,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-20",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-20 (RISKY ALVIN NOVIANTO) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-01T09:00:00.000Z"
   },
   {
@@ -7760,7 +7762,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-01 (ASEP SUKARMA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7774,7 +7776,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-11 (JODI KURNIAWAN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7788,7 +7790,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-11 (YUKI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7802,7 +7804,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-21",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-21 (RIZKI NURMANSYAH) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7816,7 +7818,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-01",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-01 (CANDRA ARIS SANDI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7830,7 +7832,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-11 (PA HUSNI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-02T09:00:00.000Z"
   },
   {
@@ -7844,7 +7846,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-02",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-02 (SUBHAN HUMAMI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-03T09:00:00.000Z"
   },
   {
@@ -7858,7 +7860,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-12 (PUGUH DWI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-03T09:00:00.000Z"
   },
   {
@@ -7872,7 +7874,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-22",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-22 (DICKY YANDA ALVIANA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-03T09:00:00.000Z"
   },
   {
@@ -7886,7 +7888,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-12 (RULLY) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-03T09:00:00.000Z"
   },
   {
@@ -7900,7 +7902,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-12",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-12 (ARGA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-03T09:00:00.000Z"
   },
   {
@@ -7914,7 +7916,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-23 (FAISAL) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7928,7 +7930,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-03 (BUDYANTO) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7942,7 +7944,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-23 (MULYONO) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7956,7 +7958,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-03 (DEDE NURHIDAYAT) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7970,7 +7972,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-23",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-23 (SUGIH) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7984,7 +7986,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-03",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-03 (DICKY) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-04T09:00:00.000Z"
   },
   {
@@ -7998,7 +8000,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-04 (ADITYA PRAYOGA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T09:00:00.000Z"
   },
   {
@@ -8012,7 +8014,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-14 (ARDI MAULANA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T09:00:00.000Z"
   },
   {
@@ -8026,7 +8028,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-14 (ADE JAHIDI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T09:00:00.000Z"
   },
   {
@@ -8040,7 +8042,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-04",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-04 (DEVI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T09:00:00.000Z"
   },
   {
@@ -8054,7 +8056,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-14",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-14 (ABDU NAFI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T09:00:00.000Z"
   },
   {
@@ -8068,7 +8070,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Tagihan listrik penerangan jalan umum (PJU) & pos satpam September 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-05T10:00:00.000Z"
   },
   {
@@ -8082,7 +8084,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-05 (ABIDZAR) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-06T09:00:00.000Z"
   },
   {
@@ -8096,7 +8098,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-05",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-05 (IWAN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-06T09:00:00.000Z"
   },
   {
@@ -8110,7 +8112,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-06 (AFAN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8124,7 +8126,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-06 (ANGKASA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8138,7 +8140,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-16 (WIDODO) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8152,7 +8154,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B7-06 (ANDRI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8166,7 +8168,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-16",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-16 (ANDRI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8180,7 +8182,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-06",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B8-06 (DENY) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-07T09:00:00.000Z"
   },
   {
@@ -8194,7 +8196,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-07 (DION YULIANA/ERLANGGA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-08T09:00:00.000Z"
   },
   {
@@ -8208,7 +8210,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B6-07 (NOVI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-08T09:00:00.000Z"
   },
   {
@@ -8222,7 +8224,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B7-07 (BAGAS A) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-08T09:00:00.000Z"
   },
   {
@@ -8236,7 +8238,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-17",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-17 (MUTIARA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-08T09:00:00.000Z"
   },
   {
@@ -8250,7 +8252,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-07",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B8-07 (ANI FATIMAH) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-08T09:00:00.000Z"
   },
   {
@@ -8264,7 +8266,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B3-08 (RAKA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8278,7 +8280,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B3-18 (CASMAT) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8292,7 +8294,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B6-08 (M JODI RAMADHAN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8306,7 +8308,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-18",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-18 (SUTRISMAN) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8320,7 +8322,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B7-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B7-08 (CECEP) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8334,7 +8336,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-08",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-08 (BINTANG) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-09T09:00:00.000Z"
   },
   {
@@ -8348,7 +8350,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B3-19",
     "paymentMethod": "QRIS Saung Kebun",
     "description": "Iuran bulanan lingkungan B3-19 (SARMA) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-10T09:00:00.000Z"
   },
   {
@@ -8362,7 +8364,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B6-09",
     "paymentMethod": "Transfer BCA Kas",
     "description": "Iuran bulanan lingkungan B6-09 (HASMI) periode 2026-09",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-10T09:00:00.000Z"
   },
   {
@@ -8376,7 +8378,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Perawatan gazebo saung & pembersihan drainase September 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-19T10:00:00.000Z"
   },
   {
@@ -8390,7 +8392,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Operasional pengangkutan sampah rumah tangga September 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-25T10:00:00.000Z"
   },
   {
@@ -8404,7 +8406,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan lingkungan September 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-09-28T10:00:00.000Z"
   },
   {
@@ -8418,7 +8420,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-11 (PA HUSNI) periode 2026-10",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-10-02T09:00:00.000Z"
   },
   {
@@ -8432,7 +8434,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Pembayaran listrik PJU Blok B3-B8 dan pompa sumur Oktober 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-10-05T10:00:00.000Z"
   },
   {
@@ -8446,7 +8448,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Perbaikan engsel portal gerbang & servis CCTV pos satpam",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-10-14T10:00:00.000Z"
   },
   {
@@ -8460,7 +8462,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Retribusi kebersihan & armada sampah lingkungan Oktober 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-10-20T10:00:00.000Z"
   },
   {
@@ -8474,7 +8476,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": null,
     "paymentMethod": "Transfer BCA Kas",
     "description": "Honorarium petugas keamanan lingkungan Oktober 2026",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-10-22T10:00:00.000Z"
   },
   {
@@ -8488,7 +8490,7 @@ const SEED_TRANSACTIONS: LedgerTransaction[] = [
     "unitId": "B8-11",
     "paymentMethod": "Tunai Bendahara",
     "description": "Iuran bulanan lingkungan B8-11 (PA HUSNI) periode 2026-11",
-    "recordedBy": "ARDIANSYAH ZEIN (Bendahara)",
+    "recordedBy": "ANDRIANSYAH (Bendahara)",
     "createdAt": "2026-11-02T09:00:00.000Z"
   }
 ];

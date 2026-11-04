@@ -21,6 +21,7 @@ import {
   getUnpaidResidentsForBilling,
   type UnpaidResidentBillingItem,
 } from '../lib/finance';
+import { generateWargaPortalShare } from '../lib/shareLinks';
 import { api } from '../lib/api';
 
 interface WhatsAppBillingViewProps {
@@ -477,18 +478,37 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                     </span>
                   </button>
 
-                  {isAdmin && (
-                    <button
-                      type="button"
-                      onClick={() => handleSendOne(activePreviewItem)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-emerald-900 text-white hover:bg-emerald-800 rounded-lg cursor-pointer"
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <a
+                      href={
+                        generateWargaPortalShare(
+                          activePreviewItem.resident,
+                          state.settings.housingName,
+                          state.settings.rtRwLabel
+                        ).waLink
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-teal-700 text-white hover:bg-teal-800 rounded-lg cursor-pointer"
+                      title="Kirim link portal warga mandiri dan PIN ke WhatsApp"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>
-                        Kirim Sekarang{activePreviewItem.resident.whatsapp ? ` ke ${activePreviewItem.resident.whatsapp}` : ''}
-                      </span>
-                    </button>
-                  )}
+                      <span>Link Portal WA</span>
+                    </a>
+
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => handleSendOne(activePreviewItem)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-emerald-900 text-white hover:bg-emerald-800 rounded-lg cursor-pointer"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        <span>
+                          Tagih Iuran Sekarang{activePreviewItem.resident.whatsapp ? ` ke ${activePreviewItem.resident.whatsapp}` : ''}
+                        </span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (

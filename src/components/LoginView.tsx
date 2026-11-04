@@ -250,8 +250,80 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
         </div>
       </header>
 
+      {/* Clean Portal Selection Tabs */}
+      <div className="mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8">
+        <div className="rounded-2xl bg-white border border-slate-200/90 p-2 shadow-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.hash = '#ketua';
+                setPortal('ketua');
+                setError(null);
+              }}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                portal === 'ketua'
+                  ? 'bg-[#0b2273] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <UserCheck className="h-4 w-4" />
+              <span>Ketua Lingkungan</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.hash = '#bendahara';
+                setPortal('bendahara');
+                setError(null);
+              }}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                portal === 'bendahara'
+                  ? 'bg-[#1547b8] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>Bendahara Kas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.hash = '#warga';
+                setPortal('warga');
+                setError(null);
+              }}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                portal === 'warga'
+                  ? 'bg-sky-700 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Home className="h-4 w-4" />
+              <span>Warga Lingkungan</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.hash = '#keamanan';
+                setPortal('satpam');
+                setError(null);
+              }}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                portal === 'satpam'
+                  ? 'bg-[#0f766e] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Shield className="h-4 w-4" />
+              <span>Pos Keamanan &amp; Satpam</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Single-Portal Container */}
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-8 lg:py-12 flex items-center">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-8 lg:py-10 flex items-center">
         <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch">
           {/* ======================================================== */}
           {/* 1. PORTAL KHUSUS KETUA (#ketua)                         */}

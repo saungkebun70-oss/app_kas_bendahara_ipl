@@ -1,5 +1,6 @@
 import type {
   BlockCode,
+  CommitteeMember,
   CommunityActivityAnnouncement,
   DatabaseState,
   ExpenseCategory,
@@ -368,12 +369,24 @@ export const EXEMPT_OFFICER_UNIT_IDS = [
   'B5-21', // Humas: Bp. Doni
   'B5-24', // Humas: Bp. Wahyu
   'B8-06', // Seksi Olahraga: Bp. Deni
-  'B3-20',
   'A-01',
   'A-09',
 ] as const;
 
-export function isUnitExemptFromIuran(unitId: string): boolean {
+export function isUnitExemptFromIuran(
+  unitIdOrResident: string | ResidentUnit,
+  customCommitteeMembers?: CommitteeMember[]
+): boolean {
+  if (!unitIdOrResident) return false;
+  if (typeof unitIdOrResident === 'object') {
+    if (unitIdOrResident.memberType === 'pengurus') return true;
+    return isUnitExemptFromIuran(unitIdOrResident.id, customCommitteeMembers);
+  }
+  const unitId = unitIdOrResident;
+  if (customCommitteeMembers && customCommitteeMembers.length > 0) {
+    const match = customCommitteeMembers.find((m) => m.unitId === unitId && m.status !== 'Purna');
+    if (match) return true;
+  }
   return (
     unitId === 'B3-07' ||
     unitId === 'B7-16' ||
@@ -381,29 +394,61 @@ export function isUnitExemptFromIuran(unitId: string): boolean {
     unitId === 'B5-21' ||
     unitId === 'B5-24' ||
     unitId === 'B8-06' ||
-    unitId === 'B3-20' ||
     unitId === 'A-01' ||
     unitId === 'A-09'
   );
 }
 
-export function getUnitExemptionInfo(unitId: string): {
+export function getUnitExemptionInfo(
+  unitIdOrResident: string | ResidentUnit,
+  customCommitteeMembers?: CommitteeMember[]
+): {
   isExempt: boolean;
   roleLabel?: string;
   roleTitle?: string;
 } {
+  if (!unitIdOrResident) return { isExempt: false };
+  const resident = typeof unitIdOrResident === 'object' ? unitIdOrResident : null;
+  const unitId = typeof unitIdOrResident === 'string' ? unitIdOrResident : unitIdOrResident.id;
+
+  if (resident?.memberType === 'pengurus' && resident.officerRole) {
+    const roleUpper = resident.officerRole.toUpperCase();
+    return {
+      isExempt: true,
+      roleLabel: `${roleUpper} (Pengurus)`,
+      roleTitle: roleUpper,
+    };
+  }
+
+  if (customCommitteeMembers && customCommitteeMembers.length > 0) {
+    const match = customCommitteeMembers.find((m) => m.unitId === unitId && m.status !== 'Purna');
+    if (match) {
+      const roleUpper = match.role.toUpperCase();
+      return {
+        isExempt: true,
+        roleLabel: `${roleUpper} (Pengurus)`,
+        roleTitle: roleUpper,
+      };
+    }
+  }
+
   if (unitId === 'B3-07' || unitId === 'A-01')
-    return { isExempt: true, roleLabel: 'Ketua Pengurus (Bebas Iuran)', roleTitle: 'Ketua Pengurus' };
-  if (unitId === 'B7-16' || unitId === 'B3-20' || unitId === 'A-09')
-    return { isExempt: true, roleLabel: 'Bendahara Kas (Bebas Iuran)', roleTitle: 'Bendahara Kas' };
+    return { isExempt: true, roleLabel: 'KETUA (Pengurus)', roleTitle: 'KETUA' };
+  if (unitId === 'B7-16' || unitId === 'A-09')
+    return { isExempt: true, roleLabel: 'BENDAHARA (Pengurus)', roleTitle: 'BENDAHARA' };
   if (unitId === 'B8-05')
-    return { isExempt: true, roleLabel: 'Pembina (Bebas Iuran)', roleTitle: 'Pembina' };
+    return { isExempt: true, roleLabel: 'PEMBINA (Pengurus)', roleTitle: 'PEMBINA' };
   if (unitId === 'B5-21')
-    return { isExempt: true, roleLabel: 'Humas (Bebas Iuran)', roleTitle: 'Humas' };
+    return { isExempt: true, roleLabel: 'HUMAS (Pengurus)', roleTitle: 'HUMAS' };
   if (unitId === 'B5-24')
-    return { isExempt: true, roleLabel: 'Humas (Bebas Iuran)', roleTitle: 'Humas' };
+    return { isExempt: true, roleLabel: 'HUMAS (Pengurus)', roleTitle: 'HUMAS' };
   if (unitId === 'B8-06')
-    return { isExempt: true, roleLabel: 'Seksi Olahraga (Bebas Iuran)', roleTitle: 'Seksi Olahraga' };
+    return { isExempt: true, roleLabel: 'SEKSI OLAH RAGA (Pengurus)', roleTitle: 'SEKSI OLAH RAGA' };
+
+  if (resident?.memberType === 'pengurus') {
+    return { isExempt: true, roleLabel: 'PENGURUS (Bebas Iuran)', roleTitle: 'PENGURUS' };
+  }
+
   return { isExempt: false };
 }
 

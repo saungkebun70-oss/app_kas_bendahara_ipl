@@ -11,16 +11,154 @@ import {
   AlertTriangle,
   Layers,
   MapPin,
+  Send,
 } from 'lucide-react';
 import type { BlockCode, BlockConfig, DatabaseState, ResidentUnit } from '../types/finance';
 import {
   formatMonthLabel,
   formatRupiah,
+  getUnitExemptionInfo,
   isUnitExemptFromIuran,
   maskNik,
 } from '../lib/finance';
+import { generateWargaPortalShare } from '../lib/shareLinks';
 import { ResidentFormModal } from './ResidentFormModal';
 import { ManageBlocksModal } from './ManageBlocksModal';
+
+export function getRoleBadge(resident: ResidentUnit) {
+  const exemption = getUnitExemptionInfo(resident);
+  if (!exemption.isExempt) return null;
+  const role = (exemption.roleTitle || resident.officerRole || 'PENGURUS').toUpperCase();
+
+  if (role.includes('PEMBINA')) {
+    return {
+      title: 'PEMBINA',
+      icon: '🛡️',
+      badgeClass: 'bg-blue-100 text-blue-900 border-blue-300',
+      tagText: 'Pembina Saung Kebun',
+    };
+  }
+  if (role.includes('KETUA')) {
+    return {
+      title: 'KETUA',
+      icon: '👑',
+      badgeClass: 'bg-amber-100 text-amber-950 border-amber-300',
+      tagText: 'Ketua Pengurus',
+    };
+  }
+  if (role.includes('BENDAHARA')) {
+    return {
+      title: 'BENDAHARA',
+      icon: '💰',
+      badgeClass: 'bg-emerald-100 text-emerald-950 border-emerald-300',
+      tagText: 'Bendahara Kas',
+    };
+  }
+  if (role.includes('HUMAS')) {
+    return {
+      title: 'HUMAS',
+      icon: '📢',
+      badgeClass: 'bg-purple-100 text-purple-900 border-purple-300',
+      tagText: 'Humas Lingkungan',
+    };
+  }
+  if (role.includes('OLAHRAGA') || role.includes('OLAH RAGA')) {
+    return {
+      title: 'SEKSI OLAH RAGA',
+      icon: '⚽',
+      badgeClass: 'bg-orange-100 text-orange-950 border-orange-300',
+      tagText: 'Seksi Olah Raga',
+    };
+  }
+  if (role.includes('KEAMANAN')) {
+    return {
+      title: 'SEKSI KEAMANAN',
+      icon: '👮',
+      badgeClass: 'bg-teal-100 text-teal-950 border-teal-300',
+      tagText: 'Seksi Keamanan',
+    };
+  }
+  if (role.includes('KEBERSIHAN')) {
+    return {
+      title: 'SEKSI KEBERSIHAN',
+      icon: '🌿',
+      badgeClass: 'bg-lime-100 text-lime-950 border-lime-300',
+      tagText: 'Seksi Kebersihan',
+    };
+  }
+  return {
+    title: role,
+    icon: '🛡️',
+    badgeClass: 'bg-slate-200 text-slate-900 border-slate-300',
+    tagText: 'Pengurus Lingkungan',
+  };
+}
+
+export function matchResidentSearch(r: ResidentUnit, query: string): boolean {
+  if (!query) return true;
+  const rawQ = query.trim().toLowerCase();
+  const cleanQ = rawQ.replace(/[^a-z0-9]/g, '');
+
+  const rawId = r.id.toLowerCase();
+  const cleanId = rawId.replace(/[^a-z0-9]/g, '');
+
+  const blockDigits = r.block.toLowerCase().replace(/[^0-9]/g, '');
+  const houseNum = (r.houseNumber || '').toLowerCase().replace(/[^0-9]/g, '');
+  const houseNumPad = houseNum.padStart(2, '0');
+  const houseNumInt = parseInt(houseNum, 10);
+
+  const combo1 = `b${blockDigits}/${houseNumPad}`;
+  const combo2 = `b0${blockDigits}/${houseNumPad}`;
+  const combo3 = `b${blockDigits}-${houseNumPad}`;
+  const combo4 = `b0${blockDigits}-${houseNumPad}`;
+  const combo5 = `b${blockDigits}${houseNumPad}`;
+  const combo6 = `b0${blockDigits}${houseNumPad}`;
+  const combo7 = `b${blockDigits}/${houseNumInt}`;
+  const combo8 = `blok b${blockDigits}`;
+
+  const ex = getUnitExemptionInfo(r);
+  const roleText = [
+    r.memberType || '',
+    r.officerRole || '',
+    ex.roleTitle || '',
+    ex.roleLabel || '',
+    ex.isExempt ? 'pengurus bebas iuran pengelola pembina ketua bendahara humas olahraga' : 'warga biasa',
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  if (
+    rawId.includes(rawQ) ||
+    cleanId.includes(cleanQ) ||
+    combo1.includes(rawQ) ||
+    combo2.includes(rawQ) ||
+    combo3.includes(rawQ) ||
+    combo4.includes(rawQ) ||
+    combo5.includes(cleanQ) ||
+    combo6.includes(cleanQ) ||
+    combo7.includes(rawQ) ||
+    combo8.includes(rawQ) ||
+    r.headOfFamily.toLowerCase().includes(rawQ) ||
+    r.block.toLowerCase().includes(rawQ) ||
+    (r.houseNumber && r.houseNumber.toLowerCase().includes(rawQ)) ||
+    (r.whatsapp && r.whatsapp.toLowerCase().includes(rawQ)) ||
+    (r.vehiclePlate && r.vehiclePlate.toLowerCase().includes(rawQ)) ||
+    (r.occupancyStatus && r.occupancyStatus.toLowerCase().includes(rawQ)) ||
+    (r.notes && r.notes.toLowerCase().includes(rawQ)) ||
+    roleText.includes(rawQ)
+  ) {
+    return true;
+  }
+
+  if (/^\d+$/.test(rawQ)) {
+    const qInt = parseInt(rawQ, 10);
+    if (!isNaN(qInt) && houseNumInt === qInt) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 interface ResidentsViewProps {
   state: DatabaseState;
@@ -65,6 +203,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [blockFilter, setBlockFilter] = useState<'ALL' | BlockCode>('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'UNPAID' | 'EXEMPT'>('ALL');
+  const [roleFilter, setRoleFilter] = useState<'ALL' | 'PENGURUS' | 'WARGA'>('ALL');
   const [payingUnitId, setPayingUnitId] = useState<string | null>(null);
 
   // Modals state for Add, Edit, Delete, Manage Blocks
@@ -122,26 +261,25 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
   }, [state.transactions, activePeriodMonth]);
 
   const exemptTotal = useMemo(() => {
-    return state.residents.filter((r) => isUnitExemptFromIuran(r.id)).length;
+    return state.residents.filter((r) => isUnitExemptFromIuran(r)).length;
   }, [state.residents]);
 
   const paidTotal = useMemo(() => {
     return state.residents.filter(
-      (r) => !isUnitExemptFromIuran(r.id) && paidUnitMap.map.has(r.id)
+      (r) => !isUnitExemptFromIuran(r) && paidUnitMap.map.has(r.id)
     ).length;
   }, [state.residents, paidUnitMap.map]);
 
   const unpaidTotal = useMemo(() => {
     return state.residents.filter(
-      (r) => !isUnitExemptFromIuran(r.id) && !paidUnitMap.map.has(r.id)
+      (r) => !isUnitExemptFromIuran(r) && !paidUnitMap.map.has(r.id)
     ).length;
   }, [state.residents, paidUnitMap.map]);
 
   const filteredResidents = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
     return state.residents.filter((r) => {
       if (blockFilter !== 'ALL' && r.block !== blockFilter) return false;
-      const isExempt = isUnitExemptFromIuran(r.id);
+      const isExempt = isUnitExemptFromIuran(r);
       const isPaid = paidUnitMap.map.has(r.id);
 
       if (statusFilter === 'PAID') {
@@ -152,16 +290,12 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
         if (!isExempt) return false;
       }
 
-      if (!q) return true;
-      return (
-        r.id.toLowerCase().includes(q) ||
-        r.headOfFamily.toLowerCase().includes(q) ||
-        r.block.toLowerCase().includes(q) ||
-        r.whatsapp.toLowerCase().includes(q) ||
-        r.vehiclePlate.toLowerCase().includes(q)
-      );
+      if (roleFilter === 'PENGURUS' && !isExempt) return false;
+      if (roleFilter === 'WARGA' && isExempt) return false;
+
+      return matchResidentSearch(r, searchQuery);
     });
-  }, [state.residents, blockFilter, statusFilter, searchQuery, paidUnitMap.map]);
+  }, [state.residents, blockFilter, statusFilter, roleFilter, searchQuery, paidUnitMap.map]);
 
 
   const handleQuickPay = async (unitId: string) => {
@@ -244,12 +378,50 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
-            aria-label="Cari unit rumah, nama kepala keluarga, WhatsApp, atau plat kendaraan"
-            placeholder="Cari unit (B3-01, B5-18, B6-01, B7-03, B8-01), nama warga, nomor WA, plat..."
+            aria-label="Cari unit rumah, nama kepala keluarga, WhatsApp, struktur, atau nomor rumah"
+            placeholder="Cari warga / pengurus (contoh: Iwan, Erlangga, B8-05, b08/05, Pembina, Ketua, Humas, Deni, 05, WA, plat)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border border-stone-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-800 focus:outline-none"
           />
+        </div>
+
+        {/* Quick Filter: Struktur Pengurus vs Warga */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-stone-100">
+          <span className="text-xs font-semibold text-slate-600 mr-1">Kategori:</span>
+          <button
+            type="button"
+            onClick={() => setRoleFilter('ALL')}
+            className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+              roleFilter === 'ALL'
+                ? 'bg-slate-900 text-white shadow-2xs'
+                : 'bg-stone-100 text-slate-700 hover:bg-stone-200'
+            }`}
+          >
+            Semua ({state.residents.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setRoleFilter('PENGURUS')}
+            className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-colors cursor-pointer ${
+              roleFilter === 'PENGURUS'
+                ? 'bg-amber-500 text-slate-950 shadow-2xs'
+                : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
+            }`}
+          >
+            👑 Pengurus Lingkungan ({exemptTotal})
+          </button>
+          <button
+            type="button"
+            onClick={() => setRoleFilter('WARGA')}
+            className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+              roleFilter === 'WARGA'
+                ? 'bg-emerald-800 text-white shadow-2xs'
+                : 'bg-stone-100 text-slate-700 hover:bg-stone-200'
+            }`}
+          >
+            🏡 Warga Biasa ({state.residents.length - exemptTotal})
+          </button>
         </div>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 w-full">
@@ -333,13 +505,12 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                 onClick={() => setStatusFilter('EXEMPT')}
                 className={`flex-1 sm:flex-initial text-center justify-center rounded-lg px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
                   statusFilter === 'EXEMPT'
-                    ? 'bg-slate-200 text-slate-900 shadow-xs font-bold ring-1 ring-slate-300'
+                    ? 'bg-amber-100 text-amber-950 shadow-xs font-bold ring-1 ring-amber-300'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
-                Pengelola ({exemptTotal})
+                Pengurus ({exemptTotal})
               </button>
-
             </div>
           </div>
         </div>
@@ -373,6 +544,8 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
               {filteredResidents.map((res) => {
                 const paidInfo = paidUnitMap.map.get(res.id);
                 const txCount = paidUnitMap.countByUnit.get(res.id) ?? 0;
+                const roleBadge = getRoleBadge(res);
+                const isExempt = isUnitExemptFromIuran(res);
 
                 return (
                   <div
@@ -385,9 +558,17 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           {res.id}
                         </span>
                         <div>
-                          <h3 className="font-semibold text-xs text-slate-900 leading-tight">
-                            {res.headOfFamily}
-                          </h3>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h3 className="font-semibold text-xs text-slate-900 leading-tight">
+                              {res.headOfFamily}
+                            </h3>
+                            {roleBadge && (
+                              <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold border ${roleBadge.badgeClass}`}>
+                                <span>{roleBadge.icon}</span>
+                                <span>{roleBadge.title}</span>
+                              </span>
+                            )}
+                          </div>
                           <p className="text-[10px] text-slate-500 font-mono mt-0.5">
                             NIK {maskNik(res.nik, isAdmin)} · {res.familyMembers} jiwa
                           </p>
@@ -395,14 +576,14 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                       </div>
 
                       <div className="text-right shrink-0">
-                        {isUnitExemptFromIuran(res.id) ? (
+                        {roleBadge ? (
                           <div className="text-right">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                              <ShieldCheck className="h-3 w-3 text-slate-500" />
-                              <span>Pengelola ({res.id === 'A-01' ? 'Ketua' : 'Bendahara'})</span>
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border shadow-2xs ${roleBadge.badgeClass}`}>
+                              <span>{roleBadge.icon}</span>
+                              <span>{roleBadge.title}</span>
                             </span>
-                            <span className="block text-[10px] text-slate-400 mt-0.5">
-                              Bagian Pengelolaan
+                            <span className="block text-[10px] font-semibold text-emerald-800 mt-0.5">
+                              Bebas Iuran Pengurus
                             </span>
                           </div>
                         ) : paidInfo ? (
@@ -449,7 +630,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                       </span>
 
                       <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                        {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
+                        {isAdmin && !isExempt && !paidInfo && (
                           <button
                             type="button"
                             disabled={payingUnitId === res.id}
@@ -460,6 +641,16 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                             <span>{payingUnitId === res.id ? '...' : 'Bayar'}</span>
                           </button>
                         )}
+                        <a
+                          href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel).waLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Kirim tautan portal warga via WhatsApp"
+                          className="inline-flex items-center gap-1 rounded-lg bg-teal-700 px-2 py-1.5 text-xs font-semibold text-white hover:bg-teal-800 cursor-pointer shadow-2xs"
+                        >
+                          <Send className="h-3.5 w-3.5" />
+                          <span>Link WA</span>
+                        </a>
                         <button
                           type="button"
                           onClick={() => onSelectUnit(res.id)}
@@ -482,13 +673,13 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         {canManageResidents && onDeleteResident && (
                           <button
                             type="button"
-                            disabled={isUnitExemptFromIuran(res.id)}
+                            disabled={isExempt}
                             onClick={() => {
                               setDeleteError(null);
                               setDeleteConfirmResident(res);
                             }}
                             title={
-                              isUnitExemptFromIuran(res.id)
+                              isExempt
                                 ? 'Unit Pengurus Lingkungan tidak dapat dihapus'
                                 : `Hapus unit ${res.id}`
                             }
@@ -523,6 +714,8 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                   {filteredResidents.map((res) => {
                     const paidInfo = paidUnitMap.map.get(res.id);
                     const txCount = paidUnitMap.countByUnit.get(res.id) ?? 0;
+                    const roleBadge = getRoleBadge(res);
+                    const isExempt = isUnitExemptFromIuran(res);
 
                     return (
                       <tr key={res.id} className="hover:bg-stone-50/80 transition-colors">
@@ -530,7 +723,15 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           {res.id}
                         </td>
                         <td className="px-3 py-3">
-                          <div className="font-semibold text-slate-900">{res.headOfFamily}</div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <div className="font-semibold text-slate-900">{res.headOfFamily}</div>
+                            {roleBadge && (
+                              <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold border ${roleBadge.badgeClass}`}>
+                                <span>{roleBadge.icon}</span>
+                                <span>{roleBadge.title}</span>
+                              </span>
+                            )}
+                          </div>
                           <div className="font-mono text-xs text-slate-500 tabular-nums">
                             {res.familyMembers} jiwa · Sejak {res.joinedYear}
                           </div>
@@ -544,14 +745,14 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           <div className="text-slate-500">{res.vehiclePlate || '-'}</div>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap">
-                          {isUnitExemptFromIuran(res.id) ? (
+                          {roleBadge ? (
                             <div className="text-xs">
-                              <span className="inline-flex items-center gap-1 font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                                <ShieldCheck className="h-3.5 w-3.5 text-slate-500" />
-                                <span>Pengelola ({res.id === 'A-01' ? 'Ketua' : 'Bendahara'})</span>
+                              <span className={`inline-flex items-center gap-1.5 font-bold border px-2.5 py-1 rounded-md shadow-2xs ${roleBadge.badgeClass}`}>
+                                <span>{roleBadge.icon}</span>
+                                <span>{roleBadge.title}</span>
                               </span>
-                              <div className="text-[11px] text-slate-400 mt-0.5">
-                                Bagian Pengelolaan
+                              <div className="text-[11px] font-medium text-emerald-800 mt-0.5">
+                                Pengurus (Bebas Iuran)
                               </div>
                             </div>
                           ) : paidInfo ? (
@@ -578,7 +779,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                         </td>
                         <td className="py-3 pl-3 pr-5 text-right whitespace-nowrap">
                           <div className="inline-flex items-center justify-end gap-1.5">
-                            {isAdmin && !isUnitExemptFromIuran(res.id) && !paidInfo && (
+                            {isAdmin && !isExempt && !paidInfo && (
                               <button
                                 type="button"
                                 disabled={payingUnitId === res.id}
@@ -590,6 +791,17 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                                 <span>{payingUnitId === res.id ? '...' : 'Bayar'}</span>
                               </button>
                             )}
+
+                            <a
+                              href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel).waLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={`Kirim tautan portal warga dan PIN ke WhatsApp ${res.headOfFamily}`}
+                              className="inline-flex items-center gap-1 rounded-md bg-teal-700 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-teal-800 whitespace-nowrap shrink-0 cursor-pointer shadow-2xs"
+                            >
+                              <Send className="h-3.5 w-3.5" />
+                              <span>Link WA</span>
+                            </a>
 
                             <button
                               type="button"
@@ -617,14 +829,14 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                             {canManageResidents && onDeleteResident && (
                               <button
                                 type="button"
-                                disabled={isUnitExemptFromIuran(res.id)}
+                                disabled={isExempt}
                                 onClick={() => {
-                                  setDeleteError(null);
-                                  setDeleteConfirmResident(res);
+                                   setDeleteError(null);
+                                   setDeleteConfirmResident(res);
                                 }}
                                 aria-label={`Hapus data warga Unit ${res.id}`}
                                 title={
-                                  isUnitExemptFromIuran(res.id)
+                                  isExempt
                                     ? 'Unit Pengurus Lingkungan tidak dapat dihapus'
                                     : `Hapus data Unit ${res.id}`
                                 }
