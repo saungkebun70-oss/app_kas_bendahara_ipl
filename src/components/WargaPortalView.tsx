@@ -85,9 +85,14 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
   const [showQRISBox, setShowQRISBox] = useState(true);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  const unitId = session.unitId || 'A-05';
+  const [currentUnitId, setCurrentUnitId] = useState<string>(
+    session.unitId || state.residents[0]?.id || 'B3-01'
+  );
+
   const resident =
-    state.residents.find((r) => r.id === unitId) || state.residents[0];
+    state.residents.find((r) => r.id === currentUnitId) ||
+    state.residents.find((r) => r.id === session.unitId) ||
+    state.residents[0];
 
   const isExempt = isUnitExemptFromIuran(resident.id);
   const exemptionInfo = getUnitExemptionInfo(resident.id);
@@ -145,6 +150,26 @@ export const WargaPortalView: React.FC<WargaPortalViewProps> = ({
             <p className="mt-1 text-xs text-sky-100 max-w-2xl">
               Portal mandiri Perumahan Saung Kebun untuk cek status iuran, bayar QRIS, unduh kwitansi, pantau agenda warga, laporan keamanan satpam, dan laporan keuangan resmi.
             </p>
+
+            {/* Asynchronous Multi-Resident Unit Switcher */}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <label htmlFor="warga-unit-switcher" className="text-xs font-semibold text-sky-200">
+                Pilih Unit Rumah (Akses Asinkron 55 Warga):
+              </label>
+              <select
+                id="warga-unit-switcher"
+                aria-label="Pilih Unit Rumah yang Dilihat"
+                value={resident.id}
+                onChange={(e) => setCurrentUnitId(e.target.value)}
+                className="rounded-lg bg-white/20 border border-white/30 text-white font-bold text-xs px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#5eead4] cursor-pointer"
+              >
+                {state.residents.map((r) => (
+                  <option key={r.id} value={r.id} className="text-slate-900 bg-white">
+                    Unit {r.id} · {r.headOfFamily} (Blok {r.block})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0">

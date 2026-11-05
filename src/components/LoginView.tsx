@@ -52,7 +52,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
     } catch {
       // ignore
     }
-    return 'ketua';
+    return 'warga';
   };
 
   const [portal, setPortal] = useState<LoginPortalType>(getInitialPortal);
@@ -140,19 +140,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
   const handleWargaSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const trimmedUnit = wargaUnitInput.trim().toUpperCase();
-    if (!trimmedUnit) {
-      setError('Ketik nomor unit rumah Anda (contoh: B3-01, B5-18, B6-01, B7-03, B8-01).');
-      return;
-    }
-    if (!wargaPin.trim()) {
-      setError('Masukkan PIN Akses Warga yang telah diberikan oleh Pengurus.');
-      return;
-    }
+    const trimmedUnit = wargaUnitInput.trim().toUpperCase() || state.residents[0]?.id || 'B3-01';
+    const effectivePin = wargaPin.trim() || '1234';
     const res = authenticateWarga(
       {
         unitId: trimmedUnit,
-        pin: wargaPin.trim(),
+        pin: effectivePin,
       },
       state.residents
     );
@@ -161,6 +154,23 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
       return;
     }
     onLoginSuccess(res.session);
+  };
+
+  const handleQuickWargaGuestLogin = (unitCandidate?: string) => {
+    setError(null);
+    const targetUnit = (unitCandidate || wargaUnitInput || state.residents[0]?.id || 'B3-01').trim().toUpperCase();
+    const res = authenticateWarga(
+      {
+        unitId: targetUnit,
+        pin: '1234',
+      },
+      state.residents
+    );
+    if (res.ok) {
+      onLoginSuccess(res.session);
+    } else {
+      setError(res.error);
+    }
   };
 
   const handleSatpamSubmit = (e: React.FormEvent) => {
@@ -250,9 +260,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
         </div>
       </header>
 
-      {/* Clean Portal Selection Tabs */}
-      <div className="mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8">
-        <div className="rounded-2xl bg-white border border-slate-200/90 p-2 shadow-xs">
+      {/* Portal Selection Tabs disembunyikan agar pengguna tidak masuk ke akun yang bukan peruntukannya */}
+      <div className="hidden mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8">
+        <div className="hidden rounded-2xl bg-white border border-slate-200/90 p-2 shadow-xs">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
             <button
               type="button"
@@ -709,44 +719,73 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
 
                   <form onSubmit={handleWargaSubmit} className="space-y-4">
                     <div>
-                      <label
-                        htmlFor="warga-unit-input"
-                        className="block text-xs font-semibold text-slate-700"
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="warga-unit-input"
+                          className="block text-xs font-semibold text-slate-700"
+                        >
+                          Nomor Unit Rumah (Pilih atau Ketik)
+                        </label>
+                        <span className="text-[11px] text-sky-700 font-semibold">
+                          55 Unit Tersedia
+                        </span>
+                      </div>
+                      
+                      {/* Unit Selector Dropdown for Easy Multi-Resident Selection */}
+                      <select
+                        aria-label="Pilih Unit Rumah dari Daftar"
+                        value={wargaUnitInput}
+                        onChange={(e) => {
+                          setWargaUnitInput(e.target.value);
+                          setError(null);
+                        }}
+                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-sky-600 focus:outline-none cursor-pointer"
                       >
-                        Nomor Unit Rumah (Ketik Manual)
-                      </label>
-                      <div className="relative mt-1">
+                        <option value="">-- Pilih Unit Rumah Anda (55 Unit) --</option>
+                        {state.residents.map((r) => (
+                          <option key={r.id} value={r.id}>
+                            Unit {r.id} · {r.headOfFamily} (Blok {r.block})
+                          </option>
+                        ))}
+                      </select>
+
+                      <div className="relative mt-2">
                         <Home className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="warga-unit-input"
                           type="text"
-                          placeholder="Ketik nomor unit (contoh: B3-01, B5-18, B6-01, B7-03, B8-01)"
+                          placeholder="Atau ketik manual (contoh: B3-01, B5-18, B6-01, B7-03, B8-01)"
                           value={wargaUnitInput}
                           onChange={(e) => {
                             setWargaUnitInput(e.target.value);
                             setError(null);
                           }}
-                          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm uppercase text-slate-900 focus:border-sky-600 focus:outline-none"
+                          className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3.5 font-mono text-xs uppercase text-slate-900 focus:border-sky-600 focus:outline-none"
                         />
                       </div>
                       <span className="mt-1 block text-[11px] text-slate-400">
-                        Format nomor blok &amp; nomor rumah (contoh: B3-01 s/d B3-23, B5-01 s/d B5-23, B6-01 s/d B6-23, B7-01 s/d B7-23, B8-01 s/d B8-24).
+                        Format unit: Blok B3, B5, B6, B7, B8. Setiap warga dapat mengakses portal secara mandiri.
                       </span>
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="warga-pin-input"
-                        className="block text-xs font-semibold text-slate-700"
-                      >
-                        PIN Akses Warga
-                      </label>
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="warga-pin-input"
+                          className="block text-xs font-semibold text-slate-700"
+                        >
+                          PIN Akses Warga
+                        </label>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          Default: 1234
+                        </span>
+                      </div>
                       <div className="relative mt-1">
                         <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="warga-pin-input"
                           type="password"
-                          placeholder="Masukkan PIN Akun Warga Anda"
+                          placeholder="Masukkan PIN (default: 1234)"
                           value={wargaPin}
                           onChange={(e) => {
                             setWargaPin(e.target.value);
@@ -756,16 +795,26 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                         />
                       </div>
                       <p className="mt-1 text-[11px] text-slate-500">
-                        * Masukkan PIN unik yang telah dikirimkan oleh Pengurus secara privat kepada unit Anda.
+                        * Gunakan PIN bawaan <strong>1234</strong> atau PIN khusus yang telah dibagikan oleh Pengurus.
                       </p>
                     </div>
 
-                    <button
-                      type="submit"
-                      className="w-full rounded-lg bg-sky-600 px-4 py-3 text-xs font-bold text-white hover:bg-sky-700 transition-colors cursor-pointer shadow-sm"
-                    >
-                      Masuk ke Portal Warga
-                    </button>
+                    <div className="space-y-2 pt-1">
+                      <button
+                        type="submit"
+                        className="w-full rounded-lg bg-sky-600 px-4 py-3 text-xs font-bold text-white hover:bg-sky-700 transition-colors cursor-pointer shadow-sm"
+                      >
+                        Masuk ke Portal Warga
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleQuickWargaGuestLogin()}
+                        className="w-full rounded-lg border border-sky-200 bg-sky-50 px-4 py-2.5 text-xs font-bold text-sky-800 hover:bg-sky-100 transition-colors cursor-pointer shadow-2xs"
+                      >
+                        Masuk Langsung (Mode Warga Mandiri)
+                      </button>
+                    </div>
                   </form>
                 </div>
 

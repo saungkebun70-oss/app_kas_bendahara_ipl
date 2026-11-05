@@ -55,7 +55,7 @@ function getCurrentPortalRole(): PortalRole {
     if (path.includes('warga')) return 'warga';
     if (path.includes('keamanan') || path.includes('satpam')) return 'satpam';
   } catch {}
-  return 'ketua';
+  return 'warga';
 }
 
 function getClientSessionId(): string {

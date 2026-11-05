@@ -642,7 +642,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                           </button>
                         )}
                         <a
-                          href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel).waLink}
+                          href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel, state.settings.whatsappPaymentLink).waLink}
                           target="_blank"
                           rel="noopener noreferrer"
                           title="Kirim tautan portal warga via WhatsApp"
@@ -793,7 +793,7 @@ export const ResidentsView: React.FC<ResidentsViewProps> = ({
                             )}
 
                             <a
-                              href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel).waLink}
+                              href={generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel, state.settings.whatsappPaymentLink).waLink}
                               target="_blank"
                               rel="noopener noreferrer"
                               title={`Kirim tautan portal warga dan PIN ke WhatsApp ${res.headOfFamily}`}

@@ -1,16 +1,36 @@
 import type { ResidentUnit, SecurityOfficer } from '../types/finance';
 
 /**
- * Mendapatkan basis URL aplikasi secara dinamis
- * Bekerja mulus baik di localhost maupun domain Vercel (https://xxx.vercel.app)
+ * Mendapatkan basis URL aplikasi secara cerdas
+ * - Jika admin mengisi domain Vercel kustom sendiri (selain placeholder yang belum ada), gunakan domain tersebut.
+ * - Secara default menggunakan window.location.origin aktif (sehingga langsung bisa dibuka dan diuji coba tanpa error 404).
+ * - Ketika aplikasi dideploy ke Vercel dan dibuka dari domain Vercel, window.location.origin otomatis adalah domain Vercel Anda!
  */
-export function getAppBaseUrl(): string {
+export function getAppBaseUrl(customBaseUrl?: string): string {
+  // 1. Jika admin secara eksplisit mengisi custom URL Vercel (bukan placeholder mati saung-kebun.vercel.app)
+  if (customBaseUrl && customBaseUrl.trim()) {
+    let clean = customBaseUrl.trim().replace(/\/+$/, '');
+    clean = clean.replace(/#.*$/, '').replace(/\/+$/, '');
+    if (
+      !clean.includes('saung-kebun.vercel.app') &&
+      clean.length > 8
+    ) {
+      return clean;
+    }
+  }
+
+  // 2. Gunakan origin aktif browser saat ini (bekerja langsung di AI Studio preview maupun ketika dibuka di Vercel)
   try {
     if (typeof window !== 'undefined' && window.location && window.location.origin) {
-      return window.location.origin;
+      const origin = window.location.origin;
+      if (origin && origin !== 'null' && !origin.startsWith('file:')) {
+        return origin;
+      }
     }
   } catch {}
-  return 'https://saung-kebun.vercel.app';
+
+  // 3. Fallback preview link yang aktif dan dapat dibuka
+  return 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app';
 }
 
 /**
@@ -27,18 +47,18 @@ export function formatWhatsAppNumber(phone: string): string {
 }
 
 /**
- * Tautan Portal Warga
+ * Tautan Portal Warga (Domain Vercel Resmi)
  */
-export function getWargaPortalUrl(unitId?: string): string {
-  const base = getAppBaseUrl();
+export function getWargaPortalUrl(unitId?: string, customBaseUrl?: string): string {
+  const base = getAppBaseUrl(customBaseUrl);
   return `${base}/#warga${unitId ? `?unit=${encodeURIComponent(unitId)}` : ''}`;
 }
 
 /**
- * Tautan Portal Pos Keamanan
+ * Tautan Portal Pos Keamanan (Domain Vercel Resmi)
  */
-export function getKeamananPortalUrl(): string {
-  const base = getAppBaseUrl();
+export function getKeamananPortalUrl(customBaseUrl?: string): string {
+  const base = getAppBaseUrl(customBaseUrl);
   return `${base}/#keamanan`;
 }
 
@@ -48,9 +68,10 @@ export function getKeamananPortalUrl(): string {
 export function generateWargaPortalShare(
   resident: ResidentUnit,
   housingName = 'Saung Kebun',
-  rtRwLabel = 'RT 05 / RW 08'
+  rtRwLabel = 'RT 05 / RW 08',
+  customBaseUrl?: string
 ): { url: string; message: string; waLink: string } {
-  const portalUrl = getWargaPortalUrl(resident.id);
+  const portalUrl = getWargaPortalUrl(resident.id, customBaseUrl);
   const pin = resident.accessPin || '1234';
 
   const message = [

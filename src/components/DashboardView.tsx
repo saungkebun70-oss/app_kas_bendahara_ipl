@@ -106,7 +106,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [portalFeedbackToast, setPortalFeedbackToast] = useState<string | null>(null);
 
   const handleCopyPortalShare = (res: ResidentUnit) => {
-    const share = generateWargaPortalShare(res, state.settings.housingName, state.settings.rtRwLabel);
+    const share = generateWargaPortalShare(
+      res,
+      state.settings.housingName,
+      state.settings.rtRwLabel,
+      state.settings.whatsappPaymentLink
+    );
     navigator.clipboard.writeText(share.message).then(() => {
       setCopiedUnitId(res.id);
       setPortalFeedbackToast(`Tautan & PIN Warga Unit ${res.id} (${res.headOfFamily}) berhasil disalin!`);
@@ -739,11 +744,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
                 {isMultiArrearsExpanded && (
                   <div className="space-y-3 pt-1">
-                    {/* Desktop & Tablet Table List */}
-                    <div className="overflow-x-auto rounded-xl border border-rose-200/90 bg-white shadow-2xs">
+                    {/* Desktop & Tablet Table List with Scroll Boundary */}
+                    <div className="overflow-x-auto max-h-[380px] overflow-y-auto rounded-xl border border-rose-200/90 bg-white shadow-2xs table-scroll-container">
                       <table className="w-full text-left text-xs border-collapse">
-                        <thead>
-                          <tr className="border-b border-rose-200 bg-rose-50/90 text-rose-950 font-bold uppercase tracking-wider text-[11px]">
+                        <thead className="sticky top-0 z-10 bg-rose-100/95 backdrop-blur-xs">
+                          <tr className="border-b border-rose-200 text-rose-950 font-bold uppercase tracking-wider text-[11px]">
                             <th className="py-3 px-3.5">Unit &amp; Blok</th>
                             <th className="py-3 px-3.5">Nama Warga / Kontak</th>
                             <th className="py-3 px-3.5">Status Hunian</th>
@@ -757,7 +762,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             const shareInfo = generateWargaPortalShare(
                               item.resident,
                               state.settings.housingName,
-                              state.settings.rtRwLabel
+                              state.settings.rtRwLabel,
+                              state.settings.whatsappPaymentLink
                             );
                             const isCopied = copiedUnitId === item.resident.id;
 
@@ -873,10 +879,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       </table>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 bg-rose-50/50 rounded-xl px-4 py-2 border border-rose-200/60">
-                      <span>
-                        Menampilkan <strong>{multiMonthArrearsUnits.length}</strong> unit rumah dengan tunggakan lebih dari 1 bulan.
-                      </span>
+                    <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 bg-rose-50/70 rounded-xl px-4 py-2.5 border border-rose-200/70">
+                      <div className="flex items-center gap-2">
+                        <span>
+                          Menampilkan <strong>{multiMonthArrearsUnits.length}</strong> unit rumah dengan tunggakan &gt; 1 bulan.
+                        </span>
+                        <span className="text-[10px] font-semibold text-rose-700 bg-rose-100/90 px-2 py-0.5 rounded">
+                          ↕️ Batas gulir aktif (maks. tinggi terkunci)
+                        </span>
+                      </div>
                       <span className="font-semibold text-rose-800">
                         Total akumulasi tunggakan: <strong className="font-mono text-sm">{formatRupiah(totalMultiMonthArrearsAmount)}</strong>
                       </span>
@@ -1213,7 +1224,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         const shareInfo = generateWargaPortalShare(
                           res,
                           state.settings.housingName,
-                          state.settings.rtRwLabel
+                          state.settings.rtRwLabel,
+                          state.settings.whatsappPaymentLink
                         );
                         const isCopied = copiedUnitId === res.id;
 

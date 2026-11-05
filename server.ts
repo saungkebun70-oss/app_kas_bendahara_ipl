@@ -1062,9 +1062,10 @@ app.get('/api/state', (_req, res) => {
     const logsToAdd: WhatsAppNotificationLog[] = [];
     const remindedIds = new Set<string>();
 
-    const linkBayar =
-      settings.whatsappPaymentLink ||
-      'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+    let linkBayar = settings.whatsappPaymentLink?.trim();
+    if (!linkBayar || linkBayar.includes('saung-kebun.vercel.app')) {
+      linkBayar = 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+    }
     const instruksiBayar =
       settings.whatsappPaymentInstructions ||
       `1. Transfer Bank BCA: ${settings.bankAccountInfo}\n2. Atau Scan QRIS via link Portal Warga di bawah\n3. Unggah bukti transfer melalui Portal Warga agar diverifikasi`;

@@ -484,7 +484,8 @@ export const WhatsAppBillingView: React.FC<WhatsAppBillingViewProps> = ({
                         generateWargaPortalShare(
                           activePreviewItem.resident,
                           state.settings.housingName,
-                          state.settings.rtRwLabel
+                          state.settings.rtRwLabel,
+                          state.settings.whatsappPaymentLink
                         ).waLink
                       }
                       target="_blank"

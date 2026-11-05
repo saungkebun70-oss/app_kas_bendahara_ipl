@@ -1477,24 +1477,39 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
           {/* Payment Link & Payment Instructions inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700">
-                URL Link Pembayaran Warga &amp; Portal QRIS ({'{link_bayar}'})
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold text-slate-700">
+                  URL Link Pembayaran Warga &amp; Portal QRIS ({'{link_bayar}'})
+                </label>
+                <div className="flex items-center gap-1.5 text-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = typeof window !== 'undefined' ? `${window.location.origin}/#warga` : '';
+                      if (cur) setFormData({ ...formData, whatsappPaymentLink: cur });
+                    }}
+                    className="font-bold text-sky-700 hover:underline cursor-pointer"
+                  >
+                    Gunakan Domain Aktif
+                  </button>
+                </div>
+              </div>
               <input
                 type="text"
                 disabled={!isAdmin}
                 value={
-                  formData.whatsappPaymentLink ??
-                  'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga'
+                  formData.whatsappPaymentLink && !formData.whatsappPaymentLink.includes('saung-kebun.vercel.app')
+                    ? formData.whatsappPaymentLink
+                    : (typeof window !== 'undefined' && window.location?.origin ? `${window.location.origin}/#warga` : 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga')
                 }
                 onChange={(e) =>
                   setFormData({ ...formData, whatsappPaymentLink: e.target.value })
                 }
-                placeholder="https://.../#warga"
+                placeholder="Otomatis mengikuti domain aktif aplikasi"
                 className="w-full px-3 py-2 text-xs font-mono border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-700 disabled:bg-slate-100"
               />
               <p className="text-[11px] text-slate-500">
-                Warga dapat mengklik tautan ini dari WhatsApp untuk melihat tagihan &amp; scan QRIS.
+                Otomatis menggunakan domain aktif agar link WhatsApp langsung dapat dibuka tanpa error 404. Anda juga dapat mengetik domain Vercel Anda jika sudah dideploy.
               </p>
             </div>
 
@@ -1598,8 +1613,11 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                     .replace(/\{rekening\}/g, formData.bankAccountInfo)
                     .replace(
                       /\{link_bayar\}/g,
-                      formData.whatsappPaymentLink ||
-                        'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga'
+                      formData.whatsappPaymentLink && !formData.whatsappPaymentLink.includes('saung-kebun.vercel.app')
+                        ? formData.whatsappPaymentLink
+                        : (typeof window !== 'undefined' && window.location?.origin
+                            ? `${window.location.origin}/#warga`
+                            : 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga')
                     )
                     .replace(
                       /\{instruksi_bayar\}/g,

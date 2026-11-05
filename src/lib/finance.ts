@@ -988,7 +988,20 @@ export function formatWhatsAppReminderMessage(
     instruksiBayar?: string;
   }
 ): string {
-  const link = params.linkBayar || 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+  let link = params.linkBayar?.trim();
+  if (!link || link.includes('saung-kebun.vercel.app')) {
+    try {
+      if (typeof window !== 'undefined' && window.location && window.location.origin) {
+        const origin = window.location.origin;
+        if (origin && origin !== 'null' && !origin.startsWith('file:') && !origin.includes('saung-kebun.vercel.app')) {
+          link = `${origin}/#warga`;
+        }
+      }
+    } catch {}
+    if (!link || link.includes('saung-kebun.vercel.app')) {
+      link = 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga';
+    }
+  }
   const instruksi =
     params.instruksiBayar ||
     `1. Transfer Bank BCA: ${params.rekening}\n2. Atau Scan QRIS via link Portal Warga\n3. Unggah bukti pembayaran melalui link Portal Warga`;

@@ -279,7 +279,7 @@ export const UnitDetailModal: React.FC<UnitDetailModalProps> = ({
 
           <div className="flex items-center gap-2">
             <a
-              href={generateWargaPortalShare(resident, state.settings.housingName, state.settings.rtRwLabel).waLink}
+              href={generateWargaPortalShare(resident, state.settings.housingName, state.settings.rtRwLabel, state.settings.whatsappPaymentLink).waLink}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 px-3 py-2 text-xs font-bold text-white shadow-sm transition-colors cursor-pointer"

@@ -120,7 +120,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     hPlus5Overdue: true,
   },
   autoReminderTriggerDay: 10,
-  whatsappPaymentLink: 'https://ais-pre-jvxodjqg27n6kf6g4ukblc-547004294471.asia-east1.run.app/#warga',
+  whatsappPaymentLink: '',
   whatsappPaymentInstructions:
     '1. Transfer Bank BCA Rek: 7410-8892-10 a/n Kas Perumahan Saung Kebun\n2. Atau Scan QRIS resmi Saung Kebun via link Portal Warga di bawah\n3. Unggah bukti pembayaran melalui link Portal Warga agar otomatis terverifikasi',
   whatsappTemplate:
