@@ -7,7 +7,7 @@ import { getUnpaidResidentsForBilling } from './lib/finance';
 import { createSeedDatabase } from './lib/seedData';
 import { downloadMonthlyReportPDF } from './lib/pdfExport';
 import { Sidebar, type NavTab } from './components/Sidebar';
-import { LoginView } from './components/LoginView';
+import { LoginView, type LoginPortalType } from './components/LoginView';
 import { DashboardView } from './components/DashboardView';
 import { ResidentsView } from './components/ResidentsView';
 import { TransactionsView } from './components/TransactionsView';
@@ -25,7 +25,7 @@ import { DatabaseHealthIndicator } from './components/DatabaseHealthIndicator';
 import { BottomNav } from './components/BottomNav';
 import type { PresenceSummary } from './lib/api';
 
-export type PortalRole = 'ketua' | 'bendahara' | 'warga' | 'satpam' | 'admin';
+export type PortalRole = LoginPortalType;
 
 const STORAGE_KEYS: Record<string, string> = {
   ketua: 'saung_kebun_session_ketua_v2',
@@ -38,22 +38,24 @@ const STORAGE_KEYS: Record<string, string> = {
 function getCurrentPortalRole(): PortalRole {
   try {
     const hash = window.location.hash.toLowerCase();
-    if (hash === '#ketua') return 'ketua';
-    if (hash === '#bendahara') return 'bendahara';
-    if (hash === '#warga') return 'warga';
-    if (hash === '#keamanan' || hash === '#satpam') return 'satpam';
-    const search = new URLSearchParams(window.location.search);
-    const p = search.get('portal');
-    if (p === 'ketua') return 'ketua';
-    if (p === 'bendahara') return 'bendahara';
-    if (p === 'warga') return 'warga';
-    if (p === 'keamanan' || p === 'satpam') return 'satpam';
-    if (p === 'admin') return 'admin';
+    if (hash.includes('ketua')) return 'ketua';
+    if (hash.includes('bendahara')) return 'bendahara';
+    if (hash.includes('keamanan') || hash.includes('satpam')) return 'satpam';
+    if (hash.includes('warga')) return 'warga';
+
     const path = window.location.pathname.toLowerCase();
     if (path.includes('ketua')) return 'ketua';
     if (path.includes('bendahara')) return 'bendahara';
-    if (path.includes('warga')) return 'warga';
     if (path.includes('keamanan') || path.includes('satpam')) return 'satpam';
+    if (path.includes('warga')) return 'warga';
+
+    const search = new URLSearchParams(window.location.search);
+    const p = search.get('portal')?.toLowerCase();
+    if (p === 'ketua') return 'ketua';
+    if (p === 'bendahara') return 'bendahara';
+    if (p === 'keamanan' || p === 'satpam') return 'satpam';
+    if (p === 'warga') return 'warga';
+    if (p === 'admin') return 'ketua';
   } catch {}
   return 'warga';
 }
@@ -72,33 +74,11 @@ function isSessionMatchingPortal(s: AuthSession, portal: PortalRole): boolean {
   if (portal === 'bendahara') return s.role === 'bendahara';
   if (portal === 'warga') return s.role === 'warga';
   if (portal === 'satpam') return s.role === 'satpam';
-  return s.isAdmin || s.role === 'ketua' || s.role === 'bendahara';
+  return false;
 }
 
 function loadSessionForCurrentPortal(): AuthSession | null {
   try {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('autostart') === '1') {
-      return {
-        role: 'bendahara',
-        isAdmin: true,
-        displayName: 'Andriansyah',
-        roleLabel: 'Admin — Bendahara',
-        unitId: 'B7-16',
-        loginAt: new Date().toISOString(),
-      };
-    }
-    if (params.get('warga') === '1') {
-      return {
-        role: 'warga',
-        isAdmin: false,
-        displayName: 'Asep Sukarma',
-        roleLabel: 'Warga Unit B3-01',
-        unitId: 'B3-01',
-        loginAt: new Date().toISOString(),
-      };
-    }
-
     const portal = getCurrentPortalRole();
     const tabRaw = sessionStorage.getItem(`saung_kebun_session_${portal}`);
     if (tabRaw) {
@@ -110,15 +90,6 @@ function loadSessionForCurrentPortal(): AuthSession | null {
     if (localRaw) {
       const parsed = JSON.parse(localRaw) as AuthSession;
       if (isSessionMatchingPortal(parsed, portal)) return parsed;
-    }
-
-    // Also check generic admin fallback if portal is ketua or bendahara
-    if (portal === 'ketua' || portal === 'bendahara' || portal === 'admin') {
-      const adminRaw = localStorage.getItem(STORAGE_KEYS.admin);
-      if (adminRaw) {
-        const parsed = JSON.parse(adminRaw) as AuthSession;
-        if (parsed.isAdmin) return parsed;
-      }
     }
   } catch {}
   return null;
@@ -227,9 +198,9 @@ export default function App() {
     };
   }, []);
 
-  // Handle URL hash changes (e.g. switching between #warga, #keamanan, #admin)
+  // Handle URL changes & Route Guard enforcement
   useEffect(() => {
-    const handleHashChange = () => {
+    const handleUrlChange = () => {
       const targetSession = loadSessionForCurrentPortal();
       setSession(targetSession);
       if (targetSession?.role === 'satpam') {
@@ -238,16 +209,20 @@ export default function App() {
         setActiveTab('dashboard');
       }
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
+    };
   }, []);
 
   // Multi-User Presence Heartbeat Effect
   const pingPresence = useCallback(async () => {
     const portal = getCurrentPortalRole();
     if (!session) {
-      // Even when logged out, if viewing admin portal, fetch active presence
-      if (portal === 'admin') {
+      // Even when logged out, if viewing ketua or bendahara portal, fetch active presence
+      if (portal === 'ketua' || portal === 'bendahara') {
         try {
           const sum = await api.getPresenceSummary();
           setPresenceSummary(sum);
@@ -280,9 +255,18 @@ export default function App() {
     setSession(newSession);
     if (newSession.role === 'satpam') {
       setActiveTab('publications');
-    } else {
+      window.location.hash = '#keamanan';
+    } else if (newSession.role === 'ketua') {
       setActiveTab('dashboard');
+      window.location.hash = '#ketua';
+    } else if (newSession.role === 'bendahara') {
+      setActiveTab('dashboard');
+      window.location.hash = '#bendahara';
+    } else {
+      setWargaTab('iuran');
+      window.location.hash = '#warga';
     }
+
     const roleKey =
       newSession.role === 'warga'
         ? 'warga'
@@ -300,7 +284,6 @@ export default function App() {
       }
     } catch {}
 
-
     // Trigger immediate presence heartbeat on login
     api.sendPresenceHeartbeat({
       sessionId: getClientSessionId(),
@@ -316,11 +299,19 @@ export default function App() {
     try {
       localStorage.removeItem(STORAGE_KEYS[portal]);
       sessionStorage.removeItem(`saung_kebun_session_${portal}`);
+      if (portal === 'ketua' || portal === 'bendahara') {
+        localStorage.removeItem(STORAGE_KEYS.admin);
+        sessionStorage.removeItem('saung_kebun_session_admin');
+      }
       api.sendPresenceLogout(getClientSessionId()).then(setPresenceSummary).catch(() => {});
     } catch {}
     setSession(null);
     setSelectedUnitId(null);
     setOpenUnitWithQRIS(false);
+
+    // Explicit redirect to dedicated gatekeeper URL
+    const loginHash = portal === 'satpam' ? '#login-keamanan' : `#login-${portal}`;
+    window.location.hash = loginHash;
   };
 
   const handleOpenUnitModal = (unitId: string, showQRIS = false) => {
@@ -363,7 +354,13 @@ export default function App() {
   }
 
   if (!session) {
-    return <LoginView state={db} onLoginSuccess={handleLoginSuccess} />;
+    return (
+      <LoginView
+        state={db}
+        onLoginSuccess={handleLoginSuccess}
+        targetPortal={getCurrentPortalRole()}
+      />
+    );
   }
 
   const isAdmin = session.isAdmin;

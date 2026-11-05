@@ -584,30 +584,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {[
                 {
                   id: 'warga',
-                  hash: 'warga',
-                  name: 'Portal Warga',
-                  desc: 'Cek status iuran, konfirmasi bayar QRIS & unduh kwitansi',
+                  hash: 'login-warga',
+                  name: 'Pintu Masuk Warga (/login-warga)',
+                  desc: 'Input nomor unit rumah & PIN untuk cek iuran, bayar QRIS & kwitansi',
                   color: 'sky',
                 },
                 {
                   id: 'ketua',
-                  hash: 'ketua',
-                  name: 'Ketua Lingkungan',
-                  desc: 'Dashboard ringkasan kas, persetujuan dan monitoring tunggakan',
+                  hash: 'login-ketua',
+                  name: 'Pintu Masuk Ketua (/login-ketua)',
+                  desc: 'Akses khusus Ketua untuk supervisi kas, LPJ triwulan & persetujuan',
                   color: 'blue',
                 },
                 {
                   id: 'bendahara',
-                  hash: 'bendahara',
-                  name: 'Bendahara Kas',
-                  desc: 'Pencatatan iuran, transaksi buku kas, dan verifikasi mutasi',
+                  hash: 'login-bendahara',
+                  name: 'Pintu Masuk Bendahara (/login-bendahara)',
+                  desc: 'Akses khusus Bendahara untuk pencatatan iuran, mutasi kas & kwitansi',
                   color: 'indigo',
                 },
                 {
                   id: 'keamanan',
-                  hash: 'keamanan',
-                  name: 'Pos Keamanan / Satpam',
-                  desc: 'Checklist patroli ronda, buku tamu, dan laporan keamanan',
+                  hash: 'login-keamanan',
+                  name: 'Pintu Masuk Pos Satpam (/login-keamanan)',
+                  desc: 'Akses pos jaga untuk checklist patroli ronda & laporan situasi',
                   color: 'emerald',
                 },
               ].map((item) => (
@@ -621,7 +621,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {item.name}
                       </span>
                       <p className="text-[11px] text-slate-600 mt-0.5">{item.desc}</p>
-                      <code className="mt-1 inline-block font-mono text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+                      <code className="mt-1 inline-block font-mono text-[10px] text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
                         {typeof window !== 'undefined' ? `${window.location.origin}/#${item.hash}` : `/#${item.hash}`}
                       </code>
                     </div>
