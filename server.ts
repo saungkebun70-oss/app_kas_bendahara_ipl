@@ -30,6 +30,7 @@ import type {
 } from './src/types/finance.ts';
 import {
   syncStateToCloud,
+  scheduleDebouncedCloudSync,
   loadStateFromCloud,
   checkCloudConnection,
 } from './src/lib/cloudStorage.ts';
@@ -139,10 +140,8 @@ function saveDatabase(state: DatabaseState): void {
     }
   }
 
-  // Asynchronously sync mutations to Google Cloud Firestore online
-  syncStateToCloud(state).catch((cloudErr) => {
-    console.warn('[CloudDB] Asynchronous cloud sync notice:', cloudErr);
-  });
+  // Asynchronously schedule debounced sync to Google Cloud Firestore online (quota-safe)
+  scheduleDebouncedCloudSync(state);
 }
 
 let dbState: DatabaseState = loadDatabase();
@@ -221,14 +220,13 @@ let dbState: DatabaseState = loadDatabase();
         residents,
       };
       saveDatabase(dbState);
-      await syncStateToCloud(dbState);
-      console.log('[CloudDB] State loaded and synchronized with committee members in online Google Cloud Firestore.');
+      console.log('[CloudDB] State loaded from online Google Cloud Firestore and backed up locally.');
     } else {
-      console.log('[CloudDB] Seeding updated B3-B8 state to online Google Cloud Firestore...');
-      await syncStateToCloud(dbState);
+      console.log('[CloudDB] Initializing local state for Google Cloud Firestore sync...');
+      scheduleDebouncedCloudSync(dbState);
     }
   } catch (err) {
-    console.warn('[CloudDB] Auto-connection warning:', err);
+    console.warn('[CloudDB] Auto-connection notice:', err);
   }
 })();
 
@@ -316,7 +314,14 @@ app.get('/api/state', (_req, res) => {
 
   app.post('/api/database/sync-cloud', async (_req, res) => {
     const success = await syncStateToCloud(dbState);
-    res.json({ success, timestamp: new Date().toISOString() });
+    const status = await checkCloudConnection();
+    res.json({
+      success,
+      quotaExceeded: status.quotaExceeded,
+      upgradeUrl: status.upgradeUrl,
+      message: status.message,
+      timestamp: new Date().toISOString(),
+    });
   });
 
   app.get('/api/health', async (_req, res) => {
@@ -326,7 +331,11 @@ app.get('/api/state', (_req, res) => {
       res.json({
         status: 'ok',
         database: isDbPresent ? 'connected' : 'memory_only',
-        cloudDatabase: cloudStatus.connected ? 'connected' : 'syncing',
+        cloudDatabase: cloudStatus.connected
+          ? (cloudStatus.quotaExceeded ? 'quota_limited' : 'connected')
+          : 'offline',
+        quotaExceeded: cloudStatus.quotaExceeded,
+        upgradeUrl: cloudStatus.upgradeUrl,
         cloudProvider: 'Google Cloud Firestore',
         projectId: cloudStatus.projectId,
         databaseId: cloudStatus.databaseId,
@@ -2074,8 +2083,8 @@ export async function startServer() {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: process.env.DISABLE_HMR === 'true' ? false : true,
-        watch: process.env.DISABLE_HMR === 'true' ? null : {},
+        hmr: false,
+        watch: null,
       },
       appType: 'spa',
     });
@@ -2098,10 +2107,34 @@ export async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`  ➜  Local:   http://localhost:${PORT}/`);
     console.log(`  ➜  Network: http://0.0.0.0:${PORT}/`);
   });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`[Server] Port ${PORT} is momentarily in use. Retrying in 1s...`);
+      setTimeout(() => {
+        try {
+          server.close();
+        } catch {}
+        server.listen(PORT, '0.0.0.0');
+      }, 1000);
+    } else {
+      console.error('[Server] Server error:', err);
+      process.exit(1);
+    }
+  });
+
+  const onShutdown = () => {
+    try {
+      server.close();
+    } catch {}
+    process.exit(0);
+  };
+  process.on('SIGTERM', onShutdown);
+  process.on('SIGINT', onShutdown);
 }
 
 export default app;

@@ -79,9 +79,13 @@ export const DatabaseHealthIndicator: React.FC<DatabaseHealthIndicatorProps> = (
         setSyncSuccessMsg('Database berhasil disinkronkan ke Google Cloud Firestore!');
         await checkConnection();
         setTimeout(() => setSyncSuccessMsg(null), 4000);
+      } else if (res.quotaExceeded) {
+        setSyncSuccessMsg('Kuota tulis harian Firestore tercapai (reset besok). Data tetap aman di server lokal.');
+        await checkConnection();
+        setTimeout(() => setSyncSuccessMsg(null), 6000);
+      } else {
+        setSyncSuccessMsg(res.message || 'Gagal sinkronisasi');
       }
-    } catch (err) {
-      setSyncSuccessMsg(err instanceof Error ? err.message : 'Gagal sinkronisasi');
     } finally {
       setSyncingCloud(false);
     }

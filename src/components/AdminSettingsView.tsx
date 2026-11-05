@@ -86,6 +86,8 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
   } | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudSyncMessage, setCloudSyncMessage] = useState<string | null>(null);
+  const [cloudDbQuotaExceeded, setCloudDbQuotaExceeded] = useState(false);
+  const [cloudDbUpgradeUrl, setCloudDbUpgradeUrl] = useState<string | null>(null);
   const [resetKasModalOpen, setResetKasModalOpen] = useState(false);
   const [resetKasConfirmInput, setResetKasConfirmInput] = useState('');
   const [resettingKas, setResettingKas] = useState(false);
@@ -1707,8 +1709,17 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
                 try {
                   const res = await api.syncCloudDatabase();
                   if (res.success) {
+                    setCloudDbQuotaExceeded(false);
                     setCloudSyncMessage('Seluruh data berhasil disinkronkan ke Google Cloud Firestore!');
                     setTimeout(() => setCloudSyncMessage(null), 5000);
+                  } else if (res.quotaExceeded) {
+                    setCloudDbQuotaExceeded(true);
+                    if (res.upgradeUrl) setCloudDbUpgradeUrl(res.upgradeUrl);
+                    setCloudSyncMessage(
+                      'Batas kuota tulis harian gratis Google Cloud Firestore (Spark Plan) telah tercapai hari ini. Sistem otomatis menjeda sinkronisasi cloud dan kuota akan otomatis direset oleh Google besok hari. Data Anda tetap tersimpan aman di server lokal.'
+                    );
+                  } else {
+                    setCloudSyncMessage(res.message || 'Gagal sinkronisasi');
                   }
                 } catch (err) {
                   setCloudSyncMessage(err instanceof Error ? err.message : 'Gagal sinkronisasi');
@@ -1727,8 +1738,10 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
             <div className="bg-white/5 rounded-xl p-3 border border-white/10">
               <span className="text-slate-400 text-[11px] block">Status Koneksi</span>
               <div className="flex items-center gap-1.5 font-bold text-emerald-400 mt-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Terhubung Online Otomatis</span>
+                <span className={`w-2 h-2 rounded-full ${cloudDbQuotaExceeded ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'}`} />
+                <span className={cloudDbQuotaExceeded ? 'text-amber-300' : 'text-emerald-400'}>
+                  {cloudDbQuotaExceeded ? 'Kuota Harian Penuh (Reset Besok)' : 'Terhubung Online Otomatis'}
+                </span>
               </div>
             </div>
 
@@ -1748,7 +1761,34 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
             </div>
           </div>
 
-          {cloudSyncMessage && (
+          {cloudDbQuotaExceeded && (
+            <div className="mt-3 p-3.5 rounded-xl bg-amber-950/70 border border-amber-500/50 text-amber-200 text-xs space-y-2">
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold text-amber-300">
+                    Batas Kuota Tulis Harian Gratis Google Cloud Firestore (Spark Plan) Tercapai
+                  </p>
+                  <p className="text-[11px] text-amber-200/90 leading-relaxed">
+                    Google Cloud membatasi kuota tulis database gratis harian pada paket Spark. Kuota ini akan <strong>otomatis direset kembali besok hari</strong> oleh Google. Seluruh data warga dan transaksi keuangan Anda tetap tersimpan 100% normal dan aman di server lokal aplikasi.
+                  </p>
+                  <div className="pt-1">
+                    <a
+                      href={cloudDbUpgradeUrl || "https://console.firebase.google.com/project/xenodochial-clover-g6tvw/firestore/databases/ai-studio-saungkebunfinanc-e3d0992c-746a-4a12-a30e-55a15c113812/data?openUpgradeDialog=true"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition-colors shadow-2xs"
+                    >
+                      <span>Buka Upgrade Kuota di Firebase Console</span>
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {cloudSyncMessage && !cloudDbQuotaExceeded && (
             <div className="mt-3 p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 text-xs flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{cloudSyncMessage}</span>

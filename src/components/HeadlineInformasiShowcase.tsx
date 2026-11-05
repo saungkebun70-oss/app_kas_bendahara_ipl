@@ -18,6 +18,7 @@ import {
 import type { CommunityActivityAnnouncement, SecurityGuardReport } from '../types/finance';
 import { formatShortDate } from '../lib/finance';
 import { DocumentationPhotoGallery } from './DocumentationPhotoGallery';
+import { getDocumentationFallbackImage } from '../lib/documentationPhotos';
 
 interface HeadlineInformasiShowcaseProps {
   announcements: CommunityActivityAnnouncement[];
@@ -153,6 +154,13 @@ export const HeadlineInformasiShowcase: React.FC<HeadlineInformasiShowcaseProps>
                   <img
                     src={currentPhotos[activePhotoIndex % currentPhotos.length]}
                     alt={currentAnnouncement.title}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = getDocumentationFallbackImage(
+                        currentAnnouncement.title,
+                        currentAnnouncement.category
+                      );
+                    }}
                     className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
@@ -217,7 +225,15 @@ export const HeadlineInformasiShowcase: React.FC<HeadlineInformasiShowcaseProps>
                         : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={photo} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={photo}
+                      alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = getDocumentationFallbackImage();
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -297,6 +313,13 @@ export const HeadlineInformasiShowcase: React.FC<HeadlineInformasiShowcaseProps>
                   <img
                     src={currentPhotos[activePhotoIndex % currentPhotos.length]}
                     alt={currentSecurity.title}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = getDocumentationFallbackImage(
+                        currentSecurity.title,
+                        'Patroli Keamanan'
+                      );
+                    }}
                     className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
@@ -367,7 +390,15 @@ export const HeadlineInformasiShowcase: React.FC<HeadlineInformasiShowcaseProps>
                         : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={photo} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={photo}
+                      alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = getDocumentationFallbackImage(undefined, 'Patroli Keamanan');
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>

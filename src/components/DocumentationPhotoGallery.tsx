@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, ChevronLeft, ChevronRight, Download, Eye, Maximize2, X, Image as ImageIcon } from 'lucide-react';
+import { getDocumentationFallbackImage } from '../lib/documentationPhotos';
 
 interface DocumentationPhotoGalleryProps {
   photos?: string[];
@@ -46,6 +47,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
           <img
             src={validPhotos[0]}
             alt={title || 'Dokumentasi kegiatan'}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = getDocumentationFallbackImage(title, category);
+            }}
             className="w-full h-44 sm:h-52 object-cover object-center group-hover:scale-102 transition-transform duration-300"
             loading="lazy"
           />
@@ -75,6 +80,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
               <img
                 src={photo}
                 alt={`${title || 'Dokumentasi'} - Foto ${idx + 1}`}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = getDocumentationFallbackImage(title, category);
+                }}
                 className="w-full h-36 sm:h-44 object-cover object-center group-hover:scale-102 transition-transform duration-300"
                 loading="lazy"
               />
@@ -98,6 +107,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
             <img
               src={validPhotos[0]}
               alt={`${title || 'Dokumentasi'} - Foto 1`}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = getDocumentationFallbackImage(title, category);
+              }}
               className="w-full h-44 sm:h-52 object-cover object-center group-hover:scale-102 transition-transform duration-300"
               loading="lazy"
             />
@@ -117,6 +130,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
                 <img
                   src={photo}
                   alt={`${title || 'Dokumentasi'} - Foto ${idx + 2}`}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getDocumentationFallbackImage(title, category);
+                  }}
                   className="w-full h-[84px] sm:h-[98px] object-cover object-center group-hover:scale-102 transition-transform duration-300"
                   loading="lazy"
                 />
@@ -146,6 +163,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
                 <img
                   src={photo}
                   alt={`${title || 'Dokumentasi'} - Foto ${idx + 1}`}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = getDocumentationFallbackImage(title, category);
+                  }}
                   className="w-full h-28 sm:h-32 object-cover object-center group-hover:scale-102 transition-transform duration-300"
                   loading="lazy"
                 />
@@ -221,6 +242,10 @@ export const DocumentationPhotoGallery: React.FC<DocumentationPhotoGalleryProps>
               <img
                 src={validPhotos[activeLightboxIndex]}
                 alt={`Dokumentasi foto ke-${activeLightboxIndex + 1}`}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = getDocumentationFallbackImage(title, category);
+                }}
                 className="max-h-[64vh] max-w-full object-contain rounded-lg shadow-lg select-none"
               />
 

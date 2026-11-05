@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Check,
   CheckCircle2,
+  Copy,
   Home,
   KeyRound,
   Lock,
+  Share2,
   Shield,
   ShieldCheck,
   User,
@@ -56,12 +59,47 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
   };
 
   const [portal, setPortal] = useState<LoginPortalType>(getInitialPortal);
+  const [copiedRole, setCopiedRole] = useState<string | null>(null);
+
+  const switchPortal = (p: LoginPortalType) => {
+    const hash = p === 'satpam' ? '#keamanan' : `#${p}`;
+    window.location.hash = hash;
+    setPortal(p);
+    setError(null);
+  };
+
+  const handleCopyRoleLink = (
+    roleKey: 'warga' | 'ketua' | 'bendahara' | 'satpam',
+    e?: React.MouseEvent
+  ) => {
+    if (e) e.stopPropagation();
+    const hashName = roleKey === 'satpam' ? 'keamanan' : roleKey;
+    const fullUrl = `${window.location.origin}/#${hashName}`;
+    let roleName = 'Portal Warga (Cek Iuran & Kwitansi)';
+    if (roleKey === 'ketua') roleName = 'Portal Ketua Lingkungan (Dashboard Rekap & Persetujuan)';
+    if (roleKey === 'bendahara') roleName = 'Portal Bendahara Kas (Pencatatan Iuran & Mutasi)';
+    if (roleKey === 'satpam') roleName = 'Portal Pos Keamanan (Laporan Ronda & Pengumuman)';
+
+    const shareText = `Halo Bpk/Ibu, berikut tautan resmi akses ${roleName} ${state.settings.housingName}:\n${fullUrl}\n\nSilakan klik tautan di atas untuk langsung membuka portal tanpa perlu mencari menu login.`;
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText);
+      }
+    } catch {
+      // fallback
+    }
+    setCopiedRole(roleKey);
+    setTimeout(() => {
+      setCopiedRole(null);
+    }, 2500);
+  };
 
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.toLowerCase();
       if (hash === '#ketua') setPortal('ketua');
-      else if (hash === '#bendahara') return setPortal('bendahara');
+      else if (hash === '#bendahara') setPortal('bendahara');
       else if (hash === '#warga') setPortal('warga');
       else if (hash === '#keamanan' || hash === '#satpam') setPortal('satpam');
       else if (hash === '#admin') setPortal('ketua');
@@ -260,74 +298,218 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
         </div>
       </header>
 
-      {/* Portal Selection Tabs disembunyikan agar pengguna tidak masuk ke akun yang bukan peruntukannya */}
-      <div className="hidden mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8">
-        <div className="hidden rounded-2xl bg-white border border-slate-200/90 p-2 shadow-xs">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
-            <button
-              type="button"
-              onClick={() => {
-                window.location.hash = '#ketua';
-                setPortal('ketua');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'ketua'
-                  ? 'bg-[#0b2273] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <UserCheck className="h-4 w-4" />
-              <span>Ketua Lingkungan</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                window.location.hash = '#bendahara';
-                setPortal('bendahara');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                portal === 'bendahara'
-                  ? 'bg-[#1547b8] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <ShieldCheck className="h-4 w-4" />
-              <span>Bendahara Kas</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                window.location.hash = '#warga';
-                setPortal('warga');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+      {/* 4-Role Public Navigation Bar with WhatsApp Share Links */}
+      <div className="mx-auto w-full max-w-5xl px-4 pt-6 sm:px-8">
+        <div className="rounded-2xl bg-white border border-slate-200/90 p-3.5 sm:p-4 shadow-sm">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+            <div>
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Pilih Portal Akses Sesuai Peran
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Akses mandiri &amp; tautan resmi dapat dikirim langsung via WhatsApp oleh Admin
+              </p>
+            </div>
+            {copiedRole && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 animate-fade-in shadow-2xs">
+                <Check className="h-3.5 w-3.5 text-emerald-700" />
+                <span>Link WhatsApp Berhasil Disalin!</span>
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            {/* a. Portal Warga */}
+            <div
+              onClick={() => switchPortal('warga')}
+              className={`relative rounded-xl border p-3 cursor-pointer transition-all flex flex-col justify-between ${
                 portal === 'warga'
-                  ? 'bg-sky-700 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'border-sky-500 bg-sky-50/70 shadow-xs ring-1 ring-sky-400'
+                  : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 hover:border-slate-300'
               }`}
             >
-              <Home className="h-4 w-4" />
-              <span>Warga Lingkungan</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                window.location.hash = '#keamanan';
-                setPortal('satpam');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-sky-900">
+                    <Home className="h-4 w-4 text-sky-600" />
+                    <span>Portal Warga</span>
+                  </span>
+                  {portal === 'warga' && (
+                    <span className="h-2 w-2 rounded-full bg-sky-600 animate-pulse" />
+                  )}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-600 leading-snug">
+                  Cek Iuran, Bukti Bayar &amp; Kwitansi Digital
+                </p>
+                <div className="mt-1 font-mono text-[10px] text-sky-700 font-semibold">
+                  URL: /#warga
+                </div>
+              </div>
+              <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => switchPortal('warga')}
+                  className={`text-[11px] font-bold px-2 py-1 rounded-md transition-colors ${
+                    portal === 'warga' ? 'bg-sky-600 text-white' : 'text-sky-700 hover:bg-sky-100'
+                  }`}
+                >
+                  {portal === 'warga' ? 'Aktif' : 'Buka Portal'}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleCopyRoleLink('warga', e)}
+                  title="Salin Link untuk WhatsApp Warga"
+                  className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-emerald-700 px-2 py-1 rounded-md hover:bg-emerald-50 border border-slate-200 transition-colors"
+                >
+                  <Share2 className="h-3 w-3 text-emerald-600" />
+                  <span>Salin WA</span>
+                </button>
+              </div>
+            </div>
+
+            {/* b. Ketua Lingkungan */}
+            <div
+              onClick={() => switchPortal('ketua')}
+              className={`relative rounded-xl border p-3 cursor-pointer transition-all flex flex-col justify-between ${
+                portal === 'ketua'
+                  ? 'border-blue-600 bg-blue-50/70 shadow-xs ring-1 ring-blue-500'
+                  : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 hover:border-slate-300'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-[#0b2273]">
+                    <UserCheck className="h-4 w-4 text-[#0b2273]" />
+                    <span>Ketua Lingkungan</span>
+                  </span>
+                  {portal === 'ketua' && (
+                    <span className="h-2 w-2 rounded-full bg-[#0b2273] animate-pulse" />
+                  )}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-600 leading-snug">
+                  Dashboard Rekapitulasi Kas &amp; Persetujuan
+                </p>
+                <div className="mt-1 font-mono text-[10px] text-blue-800 font-semibold">
+                  URL: /#ketua
+                </div>
+              </div>
+              <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => switchPortal('ketua')}
+                  className={`text-[11px] font-bold px-2 py-1 rounded-md transition-colors ${
+                    portal === 'ketua' ? 'bg-[#0b2273] text-white' : 'text-[#0b2273] hover:bg-blue-100'
+                  }`}
+                >
+                  {portal === 'ketua' ? 'Aktif' : 'Buka Portal'}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleCopyRoleLink('ketua', e)}
+                  title="Salin Link untuk WhatsApp Ketua"
+                  className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-emerald-700 px-2 py-1 rounded-md hover:bg-emerald-50 border border-slate-200 transition-colors"
+                >
+                  <Share2 className="h-3 w-3 text-emerald-600" />
+                  <span>Salin WA</span>
+                </button>
+              </div>
+            </div>
+
+            {/* c. Bendahara */}
+            <div
+              onClick={() => switchPortal('bendahara')}
+              className={`relative rounded-xl border p-3 cursor-pointer transition-all flex flex-col justify-between ${
+                portal === 'bendahara'
+                  ? 'border-indigo-600 bg-indigo-50/70 shadow-xs ring-1 ring-indigo-500'
+                  : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 hover:border-slate-300'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-[#1547b8]">
+                    <ShieldCheck className="h-4 w-4 text-[#1547b8]" />
+                    <span>Bendahara Kas</span>
+                  </span>
+                  {portal === 'bendahara' && (
+                    <span className="h-2 w-2 rounded-full bg-[#1547b8] animate-pulse" />
+                  )}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-600 leading-snug">
+                  Pencatatan Iuran, Mutasi Kas &amp; Verifikasi
+                </p>
+                <div className="mt-1 font-mono text-[10px] text-indigo-800 font-semibold">
+                  URL: /#bendahara
+                </div>
+              </div>
+              <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => switchPortal('bendahara')}
+                  className={`text-[11px] font-bold px-2 py-1 rounded-md transition-colors ${
+                    portal === 'bendahara' ? 'bg-[#1547b8] text-white' : 'text-[#1547b8] hover:bg-indigo-100'
+                  }`}
+                >
+                  {portal === 'bendahara' ? 'Aktif' : 'Buka Portal'}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleCopyRoleLink('bendahara', e)}
+                  title="Salin Link untuk WhatsApp Bendahara"
+                  className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-emerald-700 px-2 py-1 rounded-md hover:bg-emerald-50 border border-slate-200 transition-colors"
+                >
+                  <Share2 className="h-3 w-3 text-emerald-600" />
+                  <span>Salin WA</span>
+                </button>
+              </div>
+            </div>
+
+            {/* d. Pos Keamanan / Satpam */}
+            <div
+              onClick={() => switchPortal('satpam')}
+              className={`relative rounded-xl border p-3 cursor-pointer transition-all flex flex-col justify-between ${
                 portal === 'satpam'
-                  ? 'bg-[#0f766e] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'border-emerald-600 bg-emerald-50/70 shadow-xs ring-1 ring-emerald-500'
+                  : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 hover:border-slate-300'
               }`}
             >
-              <Shield className="h-4 w-4" />
-              <span>Pos Keamanan &amp; Satpam</span>
-            </button>
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-[#064e3b]">
+                    <Shield className="h-4 w-4 text-[#0f766e]" />
+                    <span>Pos Keamanan</span>
+                  </span>
+                  {portal === 'satpam' && (
+                    <span className="h-2 w-2 rounded-full bg-[#0f766e] animate-pulse" />
+                  )}
+                </div>
+                <p className="mt-1 text-[11px] text-slate-600 leading-snug">
+                  Input Laporan Ronda &amp; Pengumuman Keamanan
+                </p>
+                <div className="mt-1 font-mono text-[10px] text-teal-800 font-semibold">
+                  URL: /#keamanan
+                </div>
+              </div>
+              <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => switchPortal('satpam')}
+                  className={`text-[11px] font-bold px-2 py-1 rounded-md transition-colors ${
+                    portal === 'satpam' ? 'bg-[#0f766e] text-white' : 'text-[#0f766e] hover:bg-teal-100'
+                  }`}
+                >
+                  {portal === 'satpam' ? 'Aktif' : 'Buka Portal'}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleCopyRoleLink('satpam', e)}
+                  title="Salin Link untuk WhatsApp Pos Keamanan"
+                  className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-emerald-700 px-2 py-1 rounded-md hover:bg-emerald-50 border border-slate-200 transition-colors"
+                >
+                  <Share2 className="h-3 w-3 text-emerald-600" />
+                  <span>Salin WA</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -724,48 +906,94 @@ export const LoginView: React.FC<LoginViewProps> = ({ state, onLoginSuccess }) =
                           htmlFor="warga-unit-input"
                           className="block text-xs font-semibold text-slate-700"
                         >
-                          Nomor Unit Rumah (Pilih atau Ketik)
+                          Nomor Unit Rumah (Input Manual)
                         </label>
                         <span className="text-[11px] text-sky-700 font-semibold">
-                          55 Unit Tersedia
+                          55 Unit Terdaftar
                         </span>
                       </div>
-                      
-                      {/* Unit Selector Dropdown for Easy Multi-Resident Selection */}
-                      <select
-                        aria-label="Pilih Unit Rumah dari Daftar"
-                        value={wargaUnitInput}
-                        onChange={(e) => {
-                          setWargaUnitInput(e.target.value);
-                          setError(null);
-                        }}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-sky-600 focus:outline-none cursor-pointer"
-                      >
-                        <option value="">-- Pilih Unit Rumah Anda (55 Unit) --</option>
-                        {state.residents.map((r) => (
-                          <option key={r.id} value={r.id}>
-                            Unit {r.id} · {r.headOfFamily} (Blok {r.block})
-                          </option>
-                        ))}
-                      </select>
 
-                      <div className="relative mt-2">
+                      {/* Manual Uppercase Text Input (No Dropdown) */}
+                      <div className="relative mt-1.5">
                         <Home className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
                           id="warga-unit-input"
                           type="text"
-                          placeholder="Atau ketik manual (contoh: B3-01, B5-18, B6-01, B7-03, B8-01)"
+                          autoCapitalize="characters"
+                          autoCorrect="off"
+                          spellCheck="false"
+                          placeholder="B3-02 (contoh: B3-02, A1-05)"
                           value={wargaUnitInput}
                           onChange={(e) => {
-                            setWargaUnitInput(e.target.value);
+                            setWargaUnitInput(e.target.value.toUpperCase());
                             setError(null);
                           }}
-                          className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3.5 font-mono text-xs uppercase text-slate-900 focus:border-sky-600 focus:outline-none"
+                          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3.5 font-mono text-sm font-semibold uppercase tracking-wider text-slate-900 focus:border-sky-600 focus:outline-none focus:ring-1 focus:ring-sky-600"
                         />
                       </div>
-                      <span className="mt-1 block text-[11px] text-slate-400">
-                        Format unit: Blok B3, B5, B6, B7, B8. Setiap warga dapat mengakses portal secara mandiri.
-                      </span>
+
+                      {/* Live database matching indicator */}
+                      {(() => {
+                        const q = wargaUnitInput.trim().toUpperCase();
+                        if (!q) return null;
+                        const match = state.residents.find(
+                          (r) =>
+                            r.id.toUpperCase() === q ||
+                            r.id.toUpperCase().replace('-', '') === q.replace('-', '')
+                        );
+                        if (match) {
+                          return (
+                            <div className="mt-2 flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800">
+                              <div className="flex items-center gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                                <div>
+                                  <span className="font-bold">Unit {match.id} Terverifikasi:</span>{' '}
+                                  <span className="font-medium">{match.headOfFamily}</span>
+                                  <span className="block text-[11px] text-emerald-700">
+                                    Blok {match.block} · Terdaftar aktif di database Saung Kebun
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="rounded bg-emerald-200/60 px-2 py-0.5 text-[10px] font-bold text-emerald-900">
+                                Cocok
+                              </span>
+                            </div>
+                          );
+                        }
+                        if (q.length >= 2) {
+                          return (
+                            <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                              <span className="font-semibold">Unit "{q}" belum ditemukan.</span>
+                              <span className="mt-0.5 block text-[11px] text-amber-700">
+                                Gunakan format nomor blok (contoh: B3-02, B5-18, B6-01, B7-16, B8-01).
+                              </span>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+
+                      {/* Quick click suggestions for testing */}
+                      <div className="mt-2.5">
+                        <span className="text-[11px] font-medium text-slate-500">
+                          Contoh unit terdaftar (klik untuk isi otomatis):
+                        </span>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {['B3-01', 'B3-02', 'B5-18', 'B6-01', 'B7-16'].map((sample) => (
+                            <button
+                              key={sample}
+                              type="button"
+                              onClick={() => {
+                                setWargaUnitInput(sample);
+                                setError(null);
+                              }}
+                              className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[11px] font-semibold text-slate-700 hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 transition-colors cursor-pointer"
+                            >
+                              {sample}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
                     <div>

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AlertTriangle,
   BookOpen,
+  Check,
   CheckCircle2,
+  Copy,
+  ExternalLink,
   FileSpreadsheet,
   Home,
   LayoutDashboard,
@@ -12,6 +15,7 @@ import {
   MessageSquareShare,
   QrCode,
   Settings,
+  Share2,
   ShieldCheck,
   User,
   X,
@@ -91,6 +95,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectSatpamTab,
   settings,
 }) => {
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const handleCopyLink = (roleKey: string, pathHash: string, roleName: string) => {
+    const fullUrl = `${window.location.origin}/#${pathHash}`;
+    const text = `Halo Bpk/Ibu, berikut tautan resmi akses ${roleName} ${settings?.housingName || 'Perumahan Saung Kebun'}:\n${fullUrl}\n\nSilakan klik tautan di atas untuk langsung membuka portal.`;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+    } catch {}
+    setCopiedKey(roleKey);
+    setTimeout(() => setCopiedKey(null), 2500);
+  };
+
   const handleSelect = (id: NavTab) => {
     onSelectTab(id);
     onCloseMobile();
@@ -515,6 +534,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <button
             type="button"
+            onClick={() => setShareModalOpen(true)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-emerald-400/40 bg-emerald-500/20 px-3 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/30 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+          >
+            <Share2 className="h-3.5 w-3.5 text-emerald-300" />
+            <span>Bagikan Link WA Peran</span>
+          </button>
+
+          <button
+            type="button"
             onClick={onLogout}
             aria-label="Keluar sesi login"
             className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-3 py-2 text-xs font-semibold text-white hover:bg-white/20 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
@@ -524,6 +552,118 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
       </aside>
+
+      {/* Share Role Links Modal for WhatsApp */}
+      {shareModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-5 sm:p-6 shadow-xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                  <Share2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="font-display text-sm font-bold text-slate-900">
+                    Tautan Publik WhatsApp Tiap Peran
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Kirim link langsung ke WhatsApp warga, pengurus, atau pos satpam
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShareModalOpen(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              {[
+                {
+                  id: 'warga',
+                  hash: 'warga',
+                  name: 'Portal Warga',
+                  desc: 'Cek status iuran, konfirmasi bayar QRIS & unduh kwitansi',
+                  color: 'sky',
+                },
+                {
+                  id: 'ketua',
+                  hash: 'ketua',
+                  name: 'Ketua Lingkungan',
+                  desc: 'Dashboard ringkasan kas, persetujuan dan monitoring tunggakan',
+                  color: 'blue',
+                },
+                {
+                  id: 'bendahara',
+                  hash: 'bendahara',
+                  name: 'Bendahara Kas',
+                  desc: 'Pencatatan iuran, transaksi buku kas, dan verifikasi mutasi',
+                  color: 'indigo',
+                },
+                {
+                  id: 'keamanan',
+                  hash: 'keamanan',
+                  name: 'Pos Keamanan / Satpam',
+                  desc: 'Checklist patroli ronda, buku tamu, dan laporan keamanan',
+                  color: 'emerald',
+                },
+              ].map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-xl border border-slate-200 bg-slate-50/60 p-3 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className="font-bold text-xs text-slate-900 block">
+                        {item.name}
+                      </span>
+                      <p className="text-[11px] text-slate-600 mt-0.5">{item.desc}</p>
+                      <code className="mt-1 inline-block font-mono text-[10px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+                        {typeof window !== 'undefined' ? `${window.location.origin}/#${item.hash}` : `/#${item.hash}`}
+                      </code>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyLink(item.id, item.hash, item.name)}
+                      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        copiedKey === item.id
+                          ? 'bg-emerald-600 text-white shadow-xs'
+                          : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                      }`}
+                    >
+                      {copiedKey === item.id ? (
+                        <>
+                          <Check className="h-3.5 w-3.5" />
+                          <span>Tersalin!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3.5 w-3.5" />
+                          <span>Salin Link WA</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Hosting: Vercel Production</span>
+              <button
+                type="button"
+                onClick={() => setShareModalOpen(false)}
+                className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

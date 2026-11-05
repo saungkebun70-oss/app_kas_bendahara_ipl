@@ -176,3 +176,20 @@ export async function readFilesAsDataUrls(files: FileList | File[]): Promise<str
 
   return results;
 }
+
+export const DEFAULT_DOCUMENTATION_FALLBACK = createSvgDataUrl(
+  'Dokumentasi Resmi Saung Kebun',
+  'Kegiatan Warga & Pengamanan Lingkungan RT 05 / RW 08',
+  'DOKUMENTASI RESMI',
+  'teal'
+);
+
+export function getDocumentationFallbackImage(title?: string, category?: string): string {
+  return createSvgDataUrl(
+    title || 'Dokumentasi Resmi Saung Kebun',
+    category ? `Kategori: ${category} · Saung Kebun` : 'Dokumentasi Lingkungan Warga & Pos Keamanan',
+    category ? category.toUpperCase().slice(0, 18) : 'DOKUMENTASI',
+    category?.toLowerCase().includes('keamanan') || category?.toLowerCase().includes('satpam') ? 'teal' : 'green'
+  );
+}
+

@@ -44,7 +44,7 @@ import {
   getUnpaidResidentsForBilling,
 } from '../lib/finance';
 import { DocumentationPhotoGallery } from './DocumentationPhotoGallery';
-import { PRESET_PHOTO_OPTIONS, readFilesAsDataUrls } from '../lib/documentationPhotos';
+import { PRESET_PHOTO_OPTIONS, readFilesAsDataUrls, getDocumentationFallbackImage } from '../lib/documentationPhotos';
 
 interface PublicationsManagerViewProps {
   state: DatabaseState;
@@ -560,6 +560,10 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                       <img
                         src={photo}
                         alt={`Dokumentasi ${pIdx + 1}`}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = getDocumentationFallbackImage();
+                        }}
                         className="w-full h-full object-cover"
                       />
                       <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1 rounded">
@@ -1058,6 +1062,10 @@ export const PublicationsManagerView: React.FC<PublicationsManagerViewProps> = (
                       <img
                         src={photo}
                         alt={`Dokumentasi Satpam ${pIdx + 1}`}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = getDocumentationFallbackImage(undefined, 'Patroli Keamanan');
+                        }}
                         className="w-full h-full object-cover"
                       />
                       <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1 rounded">

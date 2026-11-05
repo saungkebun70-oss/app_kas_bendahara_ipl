@@ -840,12 +840,27 @@ export default function App() {
             onClick={() => {
               setExpenseModalOpen(true);
             }}
-            className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-tr from-rose-600 via-rose-700 to-red-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ring-4 ring-white/80"
-            aria-label="Catat Pengeluaran Kas Baru"
-            title="Catat Pengeluaran Kas Baru"
+            className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-tr from-rose-600 via-rose-700 to-red-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer ring-4 ring-white/80 focus:outline-none focus-visible:ring-4 focus-visible:ring-rose-400"
+            aria-label="Catat pengeluaran baru"
+            aria-describedby="fab-expense-tooltip"
+            title="Catat pengeluaran baru"
           >
             <Receipt className="h-6 w-6 text-white group-hover:rotate-12 transition-transform" />
-            <span className="sr-only">Catat Pengeluaran Kas Baru</span>
+
+            {/* Descriptive Tooltip on Hover / Focus for Accessibility */}
+            <div
+              id="fab-expense-tooltip"
+              role="tooltip"
+              className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 flex items-center opacity-0 -translate-x-2 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0 z-40"
+            >
+              <span className="whitespace-nowrap rounded-xl bg-slate-900/95 px-3 py-1.5 text-xs font-semibold text-white shadow-xl backdrop-blur-xs border border-slate-700/60 flex items-center gap-1.5">
+                <Receipt className="h-3.5 w-3.5 text-rose-400" />
+                <span>Catat pengeluaran baru</span>
+              </span>
+              <span className="h-2 w-2 -ml-1 rotate-45 bg-slate-900/95 border-r border-t border-slate-700/60" />
+            </div>
+
+            <span className="sr-only">Catat pengeluaran baru</span>
           </button>
         </div>
       )}
